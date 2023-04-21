@@ -1,17 +1,18 @@
-// src/components/BlockData.js
+// components/BlockData.tsx
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import Block from './Block';
 
-const BlockData = () => {
-  const [data, setData] = useState(null);
+const BlockData: React.FC = () => {
+  const [dataList, setDataList] = useState<Record<string, any>[]>([]);
 
   useEffect(() => {
     // Connect to the WebSocket server
-    const socket = io('http://localhost:3000');
+    const socket = io('http://localhost:3030');
 
     // Listen for the 'block-data' event
-    socket.on('block-data', (receivedData) => {
-      setData(receivedData);
+    socket.on('block-data', (receivedData: Record<string, any>) => {
+      setDataList((prevDataList) => [...prevDataList, receivedData]);
     });
 
     // Clean up the socket connection when the component is unmounted
@@ -23,8 +24,8 @@ const BlockData = () => {
   return (
     <div>
       <h2>Block Data</h2>
-      {data ? (
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+      {dataList.length > 0 ? (
+        dataList.map((data, index) => <Block key={index} data={data} />)
       ) : (
         <p>Waiting for data...</p>
       )}
