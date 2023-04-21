@@ -1,15 +1,16 @@
 // components/Block.tsx
 import React from 'react';
+import { OpportunityData } from './BlockData';
 
 interface BlockProps {
-  data: Record<string, any>;
+  data: OpportunityData;
 }
 
 const Block: React.FC<BlockProps> = ({ data }) => {
   return (
     <div>
       {/* Render the block data however you'd like */}
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <p>Block : {data.blockNumber} Profit: {data.profit}</p>
     </div>
   );
 };
