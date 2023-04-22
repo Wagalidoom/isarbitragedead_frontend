@@ -1,16 +1,16 @@
 // components/Block.tsx
 import React from 'react';
-import { OpportunityData } from './BlockData';
+import { BlockData } from './Blocks';
 
-interface BlockProps {
-  data: OpportunityData;
-}
-
-const Block: React.FC<BlockProps> = ({ data }) => {
+const Block: React.FC<BlockData> = ({ blockNumber, opportunities }) => {
+  console.log(opportunities);
+  const content = opportunities.length === 0
+    ? (<p>No opportunities at this block</p>)
+    : (opportunities.map((opportunity, index) => <p key={index}>Profit: {opportunity.profit}</p>));
   return (
     <div className="block-box">
-      {/* Render the block data however you'd like */}
-      <p>Block : {data.blockNumber} Profit: {data.profit}</p>
+      <h3>Block : {blockNumber}</h3>
+      {content}
     </div>
   );
 };

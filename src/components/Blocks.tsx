@@ -4,7 +4,6 @@ import io from 'socket.io-client';
 import Block from './Block';
 
 export interface OpportunityData {
-  blockNumber: number,
   buyMarketAddress: string,
   sellMarketAddres: string,
   deltaXa: number,
@@ -14,15 +13,21 @@ export interface OpportunityData {
   profit: number
 }
 
-const BlockData: React.FC = () => {
-  const [dataList, setDataList] = useState<OpportunityData[]>([]);
+export interface BlockData {
+  blockNumber: number,
+  opportunities: OpportunityData[]
+}
+
+
+const Blocks: React.FC = () => {
+  const [blockList, setDataList] = useState<BlockData[]>([]);
 
   useEffect(() => {
     // Connect to the WebSocket server
     const socket = io('http://localhost:3030');
 
     // Listen for the 'block-data' event
-    socket.on('block-data', (receivedData: OpportunityData) => {
+    socket.on('block-data', (receivedData: BlockData) => {
       setDataList((prevDataList) => [receivedData, ...prevDataList]);
     });
 
@@ -34,11 +39,11 @@ const BlockData: React.FC = () => {
 
   return (
     <div>
-      <h2>Block Data</h2>
+      <h2 className="page-title">Block Data</h2>
       <div className="parent-container">
         <div className="box-container">
-          {dataList.length > 0 ? (
-            dataList.map((data, index) => <Block key={index} data={data} />)
+          {blockList.length > 0 ? (
+            blockList.map(({blockNumber, opportunities}, index) => <Block key={index} blockNumber={blockNumber} opportunities={opportunities} />)
           ) : (
             <p>Waiting for data...</p>
           )}
@@ -48,4 +53,4 @@ const BlockData: React.FC = () => {
   );
 };
 
-export default BlockData;
+export default Blocks;
