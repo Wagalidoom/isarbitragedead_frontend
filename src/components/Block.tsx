@@ -8,7 +8,7 @@ interface BlockProps {
 
 const Block: React.FC<BlockProps> = ({ data }) => {
   return (
-    <div>
+    <div className="block-box">
       {/* Render the block data however you'd like */}
       <p>Block : {data.blockNumber} Profit: {data.profit}</p>
     </div>

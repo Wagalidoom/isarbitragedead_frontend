@@ -35,11 +35,15 @@ const BlockData: React.FC = () => {
   return (
     <div>
       <h2>Block Data</h2>
-      {dataList.length > 0 ? (
-        dataList.map((data, index) => <Block key={index} data={data} />)
-      ) : (
-        <p>Waiting for data...</p>
-      )}
+      <div className="parent-container">
+        <div className="box-container">
+          {dataList.length > 0 ? (
+            dataList.map((data, index) => <Block key={index} data={data} />)
+          ) : (
+            <p>Waiting for data...</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
