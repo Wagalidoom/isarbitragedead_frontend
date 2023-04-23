@@ -1,4 +1,4 @@
-// components/BlockData.tsx
+import { Container, Grid, Typography, Fade } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Block from './Block';
@@ -38,19 +38,41 @@ const Blocks: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <h2 className="page-title">Block Data</h2>
-      <div className="parent-container">
-        <div className="box-container">
-          {blockList.length > 0 ? (
-            blockList.map(({blockNumber, opportunities}, index) => <Block key={index} blockNumber={blockNumber} opportunities={opportunities} />)
-          ) : (
-            <p>Waiting for data...</p>
-          )}
-        </div>
-      </div>
-    </div>
+    <Container maxWidth={false}>
+      <Typography variant="h4" sx={{ textAlign: 'center', marginBottom: 2 }}>Block Data</Typography>
+      <Grid container spacing={2} sx={{ width: '100%' }}>
+        {blockList.length > 0 ? (
+          blockList.map(({ blockNumber, opportunities }, index) => (
+            <Grid item xs={12} md={12} key={index}>
+              {index === 0 ? (
+                <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
+                  <div>
+                    <Block blockNumber={blockNumber} opportunities={opportunities} />
+                  </div>
+                </Fade>
+              ) : (
+                <Block blockNumber={blockNumber} opportunities={opportunities} />
+              )}
+            </Grid>
+          ))
+        ) : (
+          <Grid item xs={12} md={12}>
+            <Typography
+              variant="h3"
+              sx={{
+                textAlign: 'center',
+                fontWeight: 'bold',
+                color: 'gray',
+              }}
+            >
+              Waiting for data...
+            </Typography>
+          </Grid>
+        )}
+      </Grid>
+    </Container>
   );
+
 };
 
 export default Blocks;

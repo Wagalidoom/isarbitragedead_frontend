@@ -2,14 +2,9 @@
   text-align: center;
   background-color: #282c34;
   min-height: 100vh;
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: rgb(17, 14, 14);
-}
-
-.App-link {
-  color: #61dafb;
 }

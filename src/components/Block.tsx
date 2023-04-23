@@ -1,17 +1,17 @@
-// components/Block.tsx
+import { Paper, Typography } from '@mui/material';
 import React from 'react';
 import { BlockData } from './Blocks';
 
 const Block: React.FC<BlockData> = ({ blockNumber, opportunities }) => {
   console.log(opportunities);
   const content = opportunities.length === 0
-    ? (<p>No opportunities at this block</p>)
-    : (opportunities.map((opportunity, index) => <p key={index}>Profit: {opportunity.profit}</p>));
+    ? (<Typography variant="body1">No opportunities at this block</Typography>)
+    : (opportunities.map((opportunity, index) =>  <Typography key={index} variant="body1">Profit: {opportunity.profit}</Typography>));
   return (
-    <div className="block-box">
-      <h3>Block : {blockNumber}</h3>
+    <Paper sx={{ padding: 2, width: '60%', margin: '0 auto' }}>
+      <Typography variant="h5"><b>Block: {blockNumber}</b></Typography>
       {content}
-    </div>
+    </Paper>
   );
 };
 
