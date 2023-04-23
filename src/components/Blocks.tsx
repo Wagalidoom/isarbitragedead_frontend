@@ -24,7 +24,7 @@ const Blocks: React.FC = () => {
 
   useEffect(() => {
     // Connect to the WebSocket server
-    const socket = io('http://localhost:3030');
+    const socket = io('http://192.168.1.90:3030');
 
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {
