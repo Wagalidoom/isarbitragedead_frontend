@@ -14,13 +14,12 @@ const Opportunity: React.FC<OpportunityData> = ({ buyMarketAddress, sellMarketAd
 };
 
 const Block: React.FC<BlockData> = ({ blockNumber, opportunities }) => {
-  console.log(opportunities);
   const content = opportunities.length === 0
-    ? (<Typography variant="body1">No opportunities at this block</Typography>)
+    ? (<Typography variant="body1" sx={{ color: '#ffffff' }}>No opportunities at this block</Typography>)
     : (opportunities.map((opportunity, index) => <Opportunity key={index} {...opportunity} />));
   return (
-    <Paper sx={{ padding: 2, width: '60%', margin: '0 auto' }}>
-      <Typography variant="h5" sx={{ marginBottom: 2}}><b>Block: {blockNumber}</b></Typography>
+    <Paper square sx={{ padding: 2, width: '80%', height: '175px', margin: '0 auto', backgroundColor: '#f7dded', display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+      <Typography variant="h5" sx={{ marginBottom: 2, color: '#ffffff' }}><b>Block: {blockNumber}</b></Typography>
       {content}
     </Paper>
   );

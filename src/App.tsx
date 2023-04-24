@@ -1,11 +1,14 @@
 import './App.css';
-import BlockData from './components/Blocks';
+import Blocks from './components/Blocks';
+import Box from '@mui/material/Box';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <BlockData />
+        <Box paddingTop={5}>
+          <Blocks />
+        </Box>
       </header>
     </div>
   );

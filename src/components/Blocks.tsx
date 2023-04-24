@@ -24,7 +24,7 @@ const Blocks: React.FC = () => {
 
   useEffect(() => {
     // Connect to the WebSocket server
-    const socket = io('http://192.168.1.90:3030');
+    const socket = io('http://localhost:3030');
 
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {
@@ -39,12 +39,11 @@ const Blocks: React.FC = () => {
 
   return (
     <Container maxWidth={false}>
-      <Typography variant="h4" sx={{ textAlign: 'center', marginBottom: 2 }}>Block Data</Typography>
-      <Grid container spacing={2} sx={{ width: '100%' }}>
+      <Grid container rowSpacing={5} sx={{ width: '100%',height: '100%'}}>
         {blockList.length > 0 ? (
           blockList.map(({ blockNumber, opportunities }, index) => (
             <Grid item xs={12} md={12} key={index}>
-              {index === 0 ? (
+              {/* {index === 0 ? (
                 <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
                   <div>
                     <Block blockNumber={blockNumber} opportunities={opportunities} />
@@ -52,7 +51,8 @@ const Blocks: React.FC = () => {
                 </Fade>
               ) : (
                 <Block blockNumber={blockNumber} opportunities={opportunities} />
-              )}
+              )} */}
+              <Block blockNumber={blockNumber} opportunities={opportunities} />
             </Grid>
           ))
         ) : (
