@@ -7,13 +7,14 @@ import { BlockData } from './Blocks';
 
 
 export interface ISearchBar {
-    onSearch: (searchedBlocks: BlockData[]) => void;
+    onSearch: (searchedBlocks: BlockData[], searchActive?: boolean) => void;
+    onClearSearch: () => void;
 }
 
 export async function searchBlocks(searchBlock: string): Promise<BlockData[]> {
     try {
         const query = `searchBlock=${searchBlock}&regex=true`
-        const response = await fetch(`http://192.168.1.90:3001/api/searchy?${query}`);
+        const response = await fetch(`http://192.168.1.90:3001/api/search?${query}`);
         const data: BlockData[] = await response.json();
         return data;
     } catch (error) {
@@ -22,13 +23,19 @@ export async function searchBlocks(searchBlock: string): Promise<BlockData[]> {
     }
 }
 
-const SearchBar: React.FC<ISearchBar> = ({ onSearch }) => {
+const SearchBar: React.FC<ISearchBar> = ({ onSearch, onClearSearch }) => {
     const [searchInput, setSearchInput] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchInput(event.target.value);
-    };
+    
+        // Clear search when input is empty
+        if (event.target.value === '') {
+          onClearSearch();
+          onSearch([], false);
+        }
+      };
 
     const handleKeyPress = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter') {
@@ -37,6 +44,11 @@ const SearchBar: React.FC<ISearchBar> = ({ onSearch }) => {
     };
 
     const handleSearch = async () => {
+        // Return early if the search input is empty
+        if (searchInput.trim() === '') {
+            return;
+        }
+        
         setLoading(true);
         const results = await searchBlocks(searchInput);
         onSearch(results); // Call the onSearch prop with the search results
