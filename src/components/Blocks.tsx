@@ -2,6 +2,11 @@ import { Container, Grid, Typography, Fade } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Block from './Block';
+import SearchBar from './SearchBar';
+
+const INITIAL_DATA_TO_FETCH = 10;
+const SCROLLING_DATA_TO_FETCH = 20;
+const THROTTLE = 50;
 
 export interface OpportunityData {
   buyMarketAddress: string,
@@ -32,12 +37,13 @@ async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Prom
 
 const Blocks: React.FC = () => {
   const [lastDisplayedBlock, setCurrentBlockNumber] = useState(0);
-  const [blockList, setDataList] = useState<BlockData[]>([]);
+  const [blockList, setBlockList] = useState<BlockData[]>([]);
+  const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
 
   // Fetch the history asynchronously and update the state
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
     const history = await fetchBlocksHistory(limit, fromBlock);
-    setDataList((prevDataList) => [...prevDataList, ...history]);
+    setBlockList((prevDataList) => [...prevDataList, ...history]);
     setCurrentBlockNumber(history[history.length - 1].blockNumber);
   };
 
@@ -56,46 +62,70 @@ const Blocks: React.FC = () => {
     const handleScroll = throttle(() => {
       // Check if the user has scrolled to the near bottom of the page
       if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight - 100) return;
-      fetchDataHistory(2, lastDisplayedBlock);
-    }, 50);
+      fetchDataHistory(SCROLLING_DATA_TO_FETCH, lastDisplayedBlock);
+    }, THROTTLE);
 
-    // Add the 'handleScroll' function as an event listener for the 'scroll' event on the window object
-    window.addEventListener('scroll', handleScroll);
+    // Add the 'handleScroll' function as an event listener for the 'scroll' event on the window object only when search is not active
+    if (!isSearchActive) {
+      window.addEventListener('scroll', handleScroll);
+    }
 
     // Return a cleanup function that removes the event listener when the component is unmounted or when the dependencies change
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
     // The effect depends on 'lastDisplayedBlock', so it will run whenever 'lastDisplayedBlock' changes
-  }, [lastDisplayedBlock]);
+  }, [lastDisplayedBlock, isSearchActive]);
 
-
-  // On page loading to fetch history and to setup websocket
+  // When search is active, stop the connection
   useEffect(() => {
-    // Initial fetch on page loading
-    fetchDataHistory(5);
-
+    // Do not set up the WebSocket connection if a search is active
+    if (isSearchActive) {
+      return;
+    }
+  
     // Connect to the WebSocket server
-    const socket = io('http://localhost:3030');
-
+    const socket = io('http://192.168.1.90:3030');
+  
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {
-      setDataList((prevDataList) => [receivedData, ...prevDataList]);
+      setBlockList((prevDataList) => [receivedData, ...prevDataList]);
     });
-
-    // Clean up the socket connection when the component is unmounted
+  
+    // Clean up the socket connection when the component is unmounted or when isSearchActive changes
     return () => {
       socket.disconnect();
     };
+  }, [isSearchActive]);
+  
+
+  // On page loading : fetch history
+  useEffect(() => {
+    fetchDataHistory(INITIAL_DATA_TO_FETCH);
   }, []);
+  
+  // Clear searchbar handling
+  const clearSearch = () => {
+    setIsSearchActive(false);
+    fetchDataHistory(INITIAL_DATA_TO_FETCH);
+  };
+
+  // Search results
+  const updateBlockListForSearch = (searchedBlocks: BlockData[], searchActive: boolean = true) => {
+    setBlockList(searchedBlocks);
+    setIsSearchActive(searchActive);
+  };
 
   return (
     <Container maxWidth={false}>
-      <Grid container rowSpacing={5} sx={{ width: '100%', height: '100%' }}>
+      <Grid container rowSpacing={5} sx={{ width: '100%',height: '100%'}}>
+        <Grid item xs ={12} md = {12}>
+          <SearchBar onSearch={updateBlockListForSearch} onClearSearch={clearSearch} />
+        </Grid>
         {blockList.length > 0 ? (
           blockList.map(({ blockNumber, opportunities }, index) => (
             <Grid item xs={12} md={12} key={index}>
-              {/* {index === 0 ? (
+              {index === 0 ? (
                 <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
                   <div>
                     <Block blockNumber={blockNumber} opportunities={opportunities} />
@@ -103,21 +133,13 @@ const Blocks: React.FC = () => {
                 </Fade>
               ) : (
                 <Block blockNumber={blockNumber} opportunities={opportunities} />
-              )} */}
-              <Block blockNumber={blockNumber} opportunities={opportunities} />
+              )}
             </Grid>
           ))
         ) : (
           <Grid item xs={12} md={12}>
-            <Typography
-              variant="h3"
-              sx={{
-                textAlign: 'center',
-                fontWeight: 'bold',
-                color: 'gray',
-              }}
-            >
-              Waiting for data...
+            <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
+              No blocks to be shown
             </Typography>
           </Grid>
         )}
