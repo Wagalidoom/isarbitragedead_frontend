@@ -18,10 +18,13 @@ const Block: React.FC<BlockData> = ({ blockNumber, opportunities }) => {
     ? (<Typography variant="body1" sx={{ color: '#ffffff' }}>No opportunities at this block</Typography>)
     : (opportunities.map((opportunity, index) => <Opportunity key={index} {...opportunity} />));
   return (
-    <Paper square sx={{ padding: 2, width: '80%', height: '175px', margin: '0 auto', backgroundColor: '#f7dded', display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
-      <Typography variant="h5" sx={{ marginBottom: 2, color: '#ffffff' }}><b>Block: {blockNumber}</b></Typography>
-      {content}
-    </Paper>
+    <Box sx={{ display: 'flex', alignItems: 'flex-end', margin: '0 auto' }}>
+      <Typography paddingTop={8} sx={{ transform: 'rotate(-90deg)', height: 'fit-content' }}><b>BLOCK: {blockNumber}</b></Typography>
+      <Paper square sx={{ padding: 2, width: '80%', height: '175px', backgroundColor: '#6389be', display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
+        {/* <Typography variant="h5" sx={{ marginBottom: 2, color: '#ffffff' }}><b>Block: {blockNumber}</b></Typography> */}
+        {content}
+      </Paper>
+    </Box>
   );
 };
 

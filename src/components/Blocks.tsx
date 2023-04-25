@@ -52,7 +52,7 @@ const Blocks: React.FC = () => {
         return func(...args);
       };
     };
-    
+
     const handleScroll = throttle(() => {
       // Check if the user has scrolled to the near bottom of the page
       if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight - 100) return;
@@ -91,7 +91,7 @@ const Blocks: React.FC = () => {
 
   return (
     <Container maxWidth={false}>
-      <Grid container rowSpacing={5} sx={{ width: '100%',height: '100%'}}>
+      <Grid container rowSpacing={5} sx={{ width: '100%', height: '100%' }}>
         {blockList.length > 0 ? (
           blockList.map(({ blockNumber, opportunities }, index) => (
             <Grid item xs={12} md={12} key={index}>
