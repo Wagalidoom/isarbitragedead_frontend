@@ -14,7 +14,7 @@ export interface ISearchBar {
 export async function searchBlocks(searchBlock: string): Promise<BlockData[]> {
     try {
         const query = `searchBlock=${searchBlock}&regex=true`
-        const response = await fetch(`http://192.168.1.90:3001/api/search?${query}`);
+        const response = await fetch(`http://localhost:3001/api/search?${query}`);
         const data: BlockData[] = await response.json();
         return data;
     } catch (error) {

@@ -26,7 +26,7 @@ export interface BlockData {
 async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Promise<BlockData[]> {
   try {
     const query = fromBlockNumber === undefined ? `limit=${limit}` : `fromBlockNumber=${fromBlockNumber}&limit=${limit}`
-    const response = await fetch(`http://192.168.1.90:3001/api/blocks-history?${query}`);
+    const response = await fetch(`http://localhost:3001/api/blocks-history?${query}`);
     const data: BlockData[] = await response.json();
     return data;
   } catch (error) {
@@ -85,7 +85,7 @@ const Blocks: React.FC = () => {
     }
   
     // Connect to the WebSocket server
-    const socket = io('http://192.168.1.90:3030');
+    const socket = io('http://localhost:3030');
   
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {
@@ -138,9 +138,10 @@ const Blocks: React.FC = () => {
           ))
         ) : (
           <Grid item xs={12} md={12}>
-            <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
+            {/* <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
               No blocks to be shown
-            </Typography>
+            </Typography> */}
+            <Block blockNumber={178896} opportunities={[]}></Block>
           </Grid>
         )}
       </Grid>
