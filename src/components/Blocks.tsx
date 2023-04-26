@@ -2,7 +2,6 @@ import { Container, Grid, Typography, Fade } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Block from './Block';
-import SearchBar from './SearchBar';
 import { LOCAL_IP_ADDRESS } from '../App';
 
 const INITIAL_DATA_TO_FETCH = 10;
@@ -39,7 +38,6 @@ async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Prom
 const Blocks: React.FC = () => {
   const [lastDisplayedBlock, setCurrentBlockNumber] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
-  const [isSearchActive, setIsSearchActive] = useState<boolean>(false);
 
   // Fetch the history asynchronously and update the state
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
@@ -62,30 +60,23 @@ const Blocks: React.FC = () => {
 
     const handleScroll = throttle(() => {
       // Check if the user has scrolled to the near bottom of the page
-      if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight - 100) return;
+      if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.scrollHeight  - 100) return;
       fetchDataHistory(SCROLLING_DATA_TO_FETCH, lastDisplayedBlock);
     }, THROTTLE);
 
     // Add the 'handleScroll' function as an event listener for the 'scroll' event on the window object only when search is not active
-    if (!isSearchActive) {
-      window.addEventListener('scroll', handleScroll);
-    }
+    window.addEventListener('scroll', handleScroll);
 
     // Return a cleanup function that removes the event listener when the component is unmounted or when the dependencies change
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
     // The effect depends on 'lastDisplayedBlock', so it will run whenever 'lastDisplayedBlock' changes
-  }, [lastDisplayedBlock, isSearchActive]);
+  }, [lastDisplayedBlock]);
 
   // When search is active, stop the connection
   useEffect(() => {
-    // Do not set up the WebSocket connection if a search is active
-    if (isSearchActive) {
-      return;
-    }
-  
-    // Connect to the WebSocket server
+    // Connect to the Websocket server
     const socket = io(`http://${LOCAL_IP_ADDRESS}:3030`);
   
     // Listen for the 'block-data' event
@@ -97,32 +88,17 @@ const Blocks: React.FC = () => {
     return () => {
       socket.disconnect();
     };
-  }, [isSearchActive]);
+  }, []);
   
 
   // On page loading : fetch history
   useEffect(() => {
     fetchDataHistory(INITIAL_DATA_TO_FETCH);
   }, []);
-  
-  // Clear searchbar handling
-  const clearSearch = () => {
-    setIsSearchActive(false);
-    fetchDataHistory(INITIAL_DATA_TO_FETCH);
-  };
-
-  // Search results
-  const updateBlockListForSearch = (searchedBlocks: BlockData[], searchActive: boolean = true) => {
-    setBlockList(searchedBlocks);
-    setIsSearchActive(searchActive);
-  };
 
   return (
     <Container maxWidth={false}>
       <Grid container rowSpacing={5} sx={{ width: '100%',height: '100%'}}>
-        <Grid item xs ={12} md = {12}>
-          <SearchBar onSearch={updateBlockListForSearch} onClearSearch={clearSearch} />
-        </Grid>
         {blockList.length > 0 ? (
           blockList.map(({ blockNumber, opportunities }, index) => (
             <Grid item xs={12} md={12} key={index}>
