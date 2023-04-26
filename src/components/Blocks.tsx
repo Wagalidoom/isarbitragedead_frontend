@@ -138,10 +138,10 @@ const Blocks: React.FC = () => {
           ))
         ) : (
           <Grid item xs={12} md={12}>
-            {/* <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
+            <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
               No blocks to be shown
-            </Typography> */}
-            <Block blockNumber={178896} opportunities={[]}></Block>
+            </Typography>
+            {/* <Block blockNumber={178896} opportunities={[]}></Block> */}
           </Grid>
         )}
       </Grid>
