@@ -49,7 +49,7 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
           onChange={handleInputs}
           onKeyPress={handleKeyPress}
           InputProps={{
-            startAdornment: (
+            endAdornment: (
               <InputAdornment position="end">
                 {searchInput ? (
                   <IconButton edge="end" onClick={handleClearSearch}>
@@ -63,6 +63,7 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
               </InputAdornment>
             ),
           }}
+          sx={{ '& input': { color: 'black' } }}
         />
       </Box>
     </>
