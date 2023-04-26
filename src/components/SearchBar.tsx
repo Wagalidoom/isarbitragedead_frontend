@@ -4,6 +4,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { BlockData } from './Blocks';
+import { LOCAL_IP_ADDRESS } from '../App';
 
 
 export interface ISearchBar {
@@ -14,7 +15,7 @@ export interface ISearchBar {
 export async function searchBlocks(searchBlock: string): Promise<BlockData[]> {
     try {
         const query = `searchBlock=${searchBlock}&regex=true`
-        const response = await fetch(`http://localhost:3001/api/search?${query}`);
+        const response = await fetch(`http://${LOCAL_IP_ADDRESS}:3001/api/search?${query}`);
         const data: BlockData[] = await response.json();
         return data;
     } catch (error) {

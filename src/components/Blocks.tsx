@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Block from './Block';
 import SearchBar from './SearchBar';
+import { LOCAL_IP_ADDRESS } from '../App';
 
 const INITIAL_DATA_TO_FETCH = 10;
 const SCROLLING_DATA_TO_FETCH = 20;
@@ -26,7 +27,7 @@ export interface BlockData {
 async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Promise<BlockData[]> {
   try {
     const query = fromBlockNumber === undefined ? `limit=${limit}` : `fromBlockNumber=${fromBlockNumber}&limit=${limit}`
-    const response = await fetch(`http://localhost:3001/api/blocks-history?${query}`);
+    const response = await fetch(`http://${LOCAL_IP_ADDRESS}:3001/api/blocks-history?${query}`);
     const data: BlockData[] = await response.json();
     return data;
   } catch (error) {
@@ -85,7 +86,7 @@ const Blocks: React.FC = () => {
     }
   
     // Connect to the WebSocket server
-    const socket = io('http://localhost:3030');
+    const socket = io(`http://${LOCAL_IP_ADDRESS}:3030`);
   
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {

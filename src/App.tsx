@@ -5,6 +5,8 @@ import Blocks from './components/Blocks';
 import Box from '@mui/material/Box';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
+export const LOCAL_IP_ADDRESS = process.env.REACT_APP_LOCAL_IP;
+
 function App() {
   return (
     
