@@ -38,7 +38,7 @@ async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Prom
 const Blocks: React.FC = () => {
   const [lastDisplayedBlock, setCurrentBlockNumber] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
-
+  
   // Fetch the history asynchronously and update the state
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
     const history = await fetchBlocksHistory(limit, fromBlock);
