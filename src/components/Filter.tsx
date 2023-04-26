@@ -1,26 +1,68 @@
-import { Box, TextField } from '@mui/material';
-import React, { ChangeEvent } from 'react';
-
+import { Box, TextField, IconButton, InputAdornment } from '@mui/material';
+import React, { ChangeEvent, useState, KeyboardEvent } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export interface IFilter {
   onSearchChange: (value: string) => void;
 }
 
 const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
-  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onSearchChange(event.target.value);
+  const [searchInput, setSearchInput] = useState('');
+
+  const handleInputs = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
+    onSearchChange(searchInput);
+  };
+
+  const handleClearSearch = () => {
+    setSearchInput('');
+    onSearchChange('');
+  };
+
+  const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearchSubmit();
+    }
   };
 
   return (
     <>
-
-      <Box paddingLeft={1} paddingTop={1} sx={{ position: 'absolute', display: 'flex' }}>Is arbitrage dead ?</Box>
-      <Box paddingLeft={1} paddingTop={1} sx={{ position: 'absolute', display: 'flex' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: 2,
+        }}
+      >
+        <Box sx={{ marginBottom: 2 }}>Is arbitrage dead?</Box>
         <TextField
-          id="search-input"
+          fullWidth
+          id="outlined-basic"
           label="Search"
           variant="outlined"
-          onChange={handleSearchChange}
+          value={searchInput}
+          onChange={handleInputs}
+          onKeyPress={handleKeyPress}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="end">
+                {searchInput ? (
+                  <IconButton edge="end" onClick={handleClearSearch}>
+                    <ClearIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton edge="end" onClick={handleSearchSubmit}>
+                    <SearchIcon />
+                  </IconButton>
+                )}
+              </InputAdornment>
+            ),
+          }}
         />
       </Box>
     </>
