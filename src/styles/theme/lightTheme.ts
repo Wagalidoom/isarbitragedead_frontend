@@ -26,10 +26,6 @@ const lightTheme = createTheme({
       dark: '#B2B2B2',
       contrastText: '#FF6347',
     },
-    background: {
-      default: '#DCD7C9',
-      paper: '#fff',
-    },
     text: {
       primary: '#ffffff',
       secondary: '#383838',

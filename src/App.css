@@ -4,8 +4,8 @@
 
 .App {
   text-align: center;
-  background-color: #f7f1e8;
   min-height: 100vh;
+  height:  100vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
