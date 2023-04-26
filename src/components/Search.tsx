@@ -3,6 +3,7 @@ import { Grid, Typography } from '@mui/material';
 import Block from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import { BlockData } from './Blocks';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Search: React.FC<{searchValue: string}> = ({ searchValue }) => {
   const [searchResults, setSearchResults] = useState<BlockData[]>([]);
@@ -12,7 +13,6 @@ const Search: React.FC<{searchValue: string}> = ({ searchValue }) => {
     setIsLoading(true);
     try {
       const response = await fetch(`http://${LOCAL_IP_ADDRESS}:3001/api/search?searchValue=${searchValue}`);
-      console.log(`http://${LOCAL_IP_ADDRESS}:3001/api/search?searchValue=${searchValue}`)
       const data: BlockData[] = await response.json();
       setSearchResults(data);
     } catch (error) {
@@ -26,11 +26,10 @@ const Search: React.FC<{searchValue: string}> = ({ searchValue }) => {
   }, [searchValue]);
 
   return (
-    <Grid container rowSpacing={5} sx={{ width: '100%',height: '100%'}}>
+    <Grid container rowSpacing={5} sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+    >
       {isLoading ? (
-        <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }}>
-          Loading search results...
-        </Typography>
+        <CircularProgress color="inherit" size={80} />
       ) : searchResults.length > 0 ? (
         searchResults.map(({ blockNumber, opportunities }, index) => (
           <Grid item xs={12} md={12} key={index}>
