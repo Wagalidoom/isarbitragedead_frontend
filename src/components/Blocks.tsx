@@ -102,7 +102,7 @@ const Blocks: React.FC = () => {
       <Grid item xs={11} md={11} sx={{ backgroundColor: '#eae6e1' }}>
         {blockList.length > 0 ? (
           blockList.map(({ blockNumber, opportunities }, index) => (
-            <Box sx={{ marginTop: '10px' }} key={index}>
+            <Box sx={{ marginTop: '50px' }} key={index}>
               {index === 0 ? (
                 <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
                   <div>
@@ -112,11 +112,17 @@ const Blocks: React.FC = () => {
               ) : (
                 <Block blockNumber={blockNumber} opportunities={opportunities} />
               )}
-            </Box>))) : (<Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
-              No blocks to be shown
-            </Typography>)}
+            </Box>
+          )
+          )
+        ) : (
+          // <Block blockNumber={157896} opportunities={[]} />
+          <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
+            No blocks to be shown
+          </Typography>
+        )}
       </Grid>
-      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 2 }}>
+      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3 }}>
         <ScrollBlocks />
       </Grid>
     </Grid>
