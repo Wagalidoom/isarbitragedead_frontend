@@ -1,8 +1,9 @@
-import { Container, Grid, Typography, Fade } from '@mui/material';
+import { Container, Grid, Typography, Fade, Box } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Block from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
+import ScrollBlocks from './ScrollBlocks';
 
 const INITIAL_DATA_TO_FETCH = 10;
 const SCROLLING_DATA_TO_FETCH = 20;
@@ -38,7 +39,7 @@ async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Prom
 const Blocks: React.FC = () => {
   const [lastDisplayedBlock, setCurrentBlockNumber] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
-  
+
   // Fetch the history asynchronously and update the state
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
     const history = await fetchBlocksHistory(limit, fromBlock);
@@ -60,7 +61,7 @@ const Blocks: React.FC = () => {
 
     const handleScroll = throttle(() => {
       // Check if the user has scrolled to the near bottom of the page
-      if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.scrollHeight  - 100) return;
+      if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.scrollHeight - 100) return;
       fetchDataHistory(SCROLLING_DATA_TO_FETCH, lastDisplayedBlock);
     }, THROTTLE);
 
@@ -78,18 +79,18 @@ const Blocks: React.FC = () => {
   useEffect(() => {
     // Connect to the Websocket server
     const socket = io(`http://${LOCAL_IP_ADDRESS}:3030`);
-  
+
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {
       setBlockList((prevDataList) => [receivedData, ...prevDataList]);
     });
-  
+
     // Clean up the socket connection when the component is unmounted or when isSearchActive changes
     return () => {
       socket.disconnect();
     };
   }, []);
-  
+
 
   // On page loading : fetch history
   useEffect(() => {
@@ -97,32 +98,28 @@ const Blocks: React.FC = () => {
   }, []);
 
   return (
-    <Container maxWidth={false}>
-      <Grid container rowSpacing={5} sx={{ width: '100%',height: '100%'}}>
-        {blockList.length > 0 ? (
-          blockList.map(({ blockNumber, opportunities }, index) => (
-            <Grid item xs={12} md={12} key={index}>
-              {index === 0 ? (
-                <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
-                  <div>
-                    <Block blockNumber={blockNumber} opportunities={opportunities} />
-                  </div>
-                </Fade>
-              ) : (
-                <Block blockNumber={blockNumber} opportunities={opportunities} />
-              )}
-            </Grid>
-          ))
-        ) : (
-          <Grid item xs={12} md={12}>
-            <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
-              No blocks to be shown
-            </Typography>
-            {/* <Block blockNumber={178896} opportunities={[]}></Block> */}
-          </Grid>
-        )}
+      <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }}>
+        <Grid item xs={11} md={11} sx={{ backgroundColor: '#eae6e1' }}>
+          {blockList.length > 0 ? (
+            blockList.map(({ blockNumber, opportunities }, index) => (
+              <Box sx={{ marginTop: '10px' }} key={index}>
+                {index === 0 ? (
+                  <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
+                    <div>
+                      <Block blockNumber={blockNumber} opportunities={opportunities} />
+                    </div>
+                  </Fade>
+                ) : (
+                  <Block blockNumber={blockNumber} opportunities={opportunities} />
+                )}
+              </Box>))) : (<Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
+                No blocks to be shown
+              </Typography>)}
+        </Grid>
+        <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8' }}>
+          <ScrollBlocks />
+        </Grid>
       </Grid>
-    </Container>
   );
 
 };
