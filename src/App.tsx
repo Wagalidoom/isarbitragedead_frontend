@@ -16,10 +16,12 @@ function App() {
     <div className="App">
       <ThemeProvider theme={lightTheme}>
         <CssBaseline />
-        <Box paddingLeft={1} paddingTop={1} sx={{ position: 'absolute', display: 'flex' }}>Is arbitrage dead ?</Box>
-        <Grid container columnSpacing={0} sx={{ height: '100%' }}>
-          <Grid item xs={3} md={3} sx={{ backgroundColor: '#f7f1e8', paddingTop:'75px'}}>
-            <Filter onSearchChange={setSearchValue} />
+        <Box paddingLeft={1} paddingTop={1} sx={{ position: 'fixed', top: 0, left: 0, zIndex: 1}}>Is arbitrage dead ?</Box>
+        <Grid container columnSpacing={0} sx={{ height: '100%'}}>
+          <Grid item xs={3} md={3} sx={{ backgroundColor: '#f7f1e8' }}>
+            <Box sx={{ position: 'sticky', top: '50px' }}>
+              <Filter onSearchChange={setSearchValue} />
+            </Box>
           </Grid>
           <Grid item xs={9} md={9}>
             {searchValue ? <Search searchValue={searchValue} /> : <Blocks />}
