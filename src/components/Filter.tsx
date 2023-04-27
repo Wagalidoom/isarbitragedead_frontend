@@ -39,7 +39,6 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
           padding: 2,
         }}
       >
-        <Box sx={{ marginBottom: 2 }}>Is arbitrage dead?</Box>
         <TextField
           fullWidth
           id="outlined-basic"
