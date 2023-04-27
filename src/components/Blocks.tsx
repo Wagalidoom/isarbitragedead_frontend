@@ -1,4 +1,4 @@
-import { Container, Grid, Typography, Fade, Box } from '@mui/material';
+import { Grid, Typography, Fade, Box } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Block from './Block';
@@ -98,28 +98,28 @@ const Blocks: React.FC = () => {
   }, []);
 
   return (
-      <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }}>
-        <Grid item xs={11} md={11} sx={{ backgroundColor: '#eae6e1' }}>
-          {blockList.length > 0 ? (
-            blockList.map(({ blockNumber, opportunities }, index) => (
-              <Box sx={{ marginTop: '10px' }} key={index}>
-                {index === 0 ? (
-                  <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
-                    <div>
-                      <Block blockNumber={blockNumber} opportunities={opportunities} />
-                    </div>
-                  </Fade>
-                ) : (
-                  <Block blockNumber={blockNumber} opportunities={opportunities} />
-                )}
-              </Box>))) : (<Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
-                No blocks to be shown
-              </Typography>)}
-        </Grid>
-        <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8' }}>
-          <ScrollBlocks />
-        </Grid>
+    <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }}>
+      <Grid item xs={11} md={11} sx={{ backgroundColor: '#eae6e1' }}>
+        {blockList.length > 0 ? (
+          blockList.map(({ blockNumber, opportunities }, index) => (
+            <Box sx={{ marginTop: '10px' }} key={index}>
+              {index === 0 ? (
+                <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
+                  <div>
+                    <Block blockNumber={blockNumber} opportunities={opportunities} />
+                  </div>
+                </Fade>
+              ) : (
+                <Block blockNumber={blockNumber} opportunities={opportunities} />
+              )}
+            </Box>))) : (<Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
+              No blocks to be shown
+            </Typography>)}
       </Grid>
+      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 2 }}>
+        <ScrollBlocks />
+      </Grid>
+    </Grid>
   );
 
 };

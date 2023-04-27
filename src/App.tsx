@@ -16,9 +16,9 @@ function App() {
     <div className="App">
       <ThemeProvider theme={lightTheme}>
         <CssBaseline />
-        <Box paddingLeft={1} paddingTop={1} sx={{ position: 'fixed', top: 0, left: 0, zIndex: 1}}>Is arbitrage dead ?</Box>
-        <Grid container columnSpacing={0} sx={{ height: '100%'}}>
-          <Grid item xs={3} md={3} sx={{ backgroundColor: '#f7f1e8' }}>
+        <Box paddingLeft={1} paddingTop={1} sx={{ position: 'fixed', top: 0, left: 0, zIndex: 2 }}>Is arbitrage dead ?</Box>
+        <Grid container columnSpacing={0} sx={{ height: '100%' }}>
+          <Grid item xs={3} md={3} sx={{ backgroundColor: '#f7f1e8', boxShadow: 2, zIndex: 1 }}>
             <Box sx={{ position: 'sticky', top: '50px' }}>
               <Filter onSearchChange={setSearchValue} />
             </Box>
