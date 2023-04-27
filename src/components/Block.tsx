@@ -27,8 +27,9 @@ const Block: React.FC<BlockData> = ({ blockNumber, opportunities }) => {
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
-        <Paper square sx={{ padding: 2, width: '80%', height: '175px', backgroundColor: '#6389be', display: 'flex', flexDirection: 'column', alignItems: 'start', cursor: 'pointer', margin: 'auto' }} onClick={handleClick}>
-          <Typography variant="h5" sx={{ color: '#eae6e1' }}><b>{blockNumber}</b></Typography>
+        <Paper square sx={{paddingLeft: 1, paddingRight: 1, width: '70%', height: '175px', backgroundColor: '#6389be', display: 'flex', flexDirection: 'column', alignItems: 'start', cursor: 'pointer', margin: 'auto'
+        }} onClick={handleClick}>
+          <Typography variant="h4" sx={{ color: '#eae6e1' }}><b>{blockNumber}</b></Typography>
           {content}
         </Paper>
       </Box>

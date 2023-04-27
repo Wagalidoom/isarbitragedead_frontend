@@ -2,7 +2,7 @@ import './App.css';
 import './styles/globals.css';
 import lightTheme from './styles/theme/lightTheme';
 import Blocks from './components/Blocks';
-import { Box, CssBaseline, Grid, ThemeProvider } from '@mui/material';
+import { Box, CssBaseline, Grid, ThemeProvider, Typography } from '@mui/material';
 import Filter from './components/Filter';
 import { useState } from 'react';
 import Search from './components/Search';
@@ -16,11 +16,14 @@ function App() {
     <div className="App">
       <ThemeProvider theme={lightTheme}>
         <CssBaseline />
-        <Box paddingLeft={1} paddingTop={1} sx={{ position: 'fixed', top: 0, left: 0, zIndex: 2 }}>Is arbitrage dead ?</Box>
+        <Box paddingLeft={2} paddingTop={1} sx={{ position: 'fixed', top: 0, left: 0, zIndex: 2 }}>Is arbitrage dead ?</Box>
         <Grid container columnSpacing={0} sx={{ height: '100%' }}>
           <Grid item xs={3} md={3} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, zIndex: 1 }}>
             <Box sx={{ position: 'sticky', top: '50px' }}>
               <Filter onSearchChange={setSearchValue} />
+            </Box>
+            <Box sx={{ position: 'fixed', bottom: 0, left: 0, zIndex: 3 }}>
+              <Typography variant='h5'>By Lukas and Jordan</Typography>
             </Box>
           </Grid>
           <Grid item xs={9} md={9}>

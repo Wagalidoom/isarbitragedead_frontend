@@ -116,14 +116,14 @@ const Blocks: React.FC = () => {
           )
           )
         ) : (
-          // <Block blockNumber={157896} opportunities={[]} />
-          <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
-            No blocks to be shown
-          </Typography>
+          <Block blockNumber={157896} opportunities={[]} />
+          // <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
+          //   No blocks to be shown
+          // </Typography>
         )}
       </Grid>
-      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3 }}>
-        <ScrollBlocks />
+      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'flex'}}>
+          <ScrollBlocks />
       </Grid>
     </Grid>
   );
