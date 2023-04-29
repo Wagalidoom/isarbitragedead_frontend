@@ -4,18 +4,27 @@ import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 
 export interface IFilter {
-  onSearchChange: (searchParams: {searchInput: string, profitMin: number | null, profitMax: number | null}) => void;
+  onSearchChange: (searchParams: {searchInput: string | null, profitMin: number | null, profitMax: number | null}) => void;
 }
 
 const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState<string | null>(null);
   const [profitMin, setProfitMin] = useState<number | null>(null);
   const [profitMax, setProfitMax] = useState<number | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
 
-  const handleInputs = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(event.target.value);
+  const handleSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(event.target.value !== '' ? event.target.value : null);
   };
+  
+  const handleProfitMinInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setProfitMin(event.target.value !== '' ? parseFloat(event.target.value) : null)
+  };
+  
+  const handleProfitMaxInput = (event: ChangeEvent<HTMLInputElement>) => {
+    setProfitMax(event.target.value !== '' ? parseFloat(event.target.value) : null);
+  };
+  
 
   const handleSearchSubmit = () => {
     if (searchInput || profitMin || profitMax) {
@@ -55,7 +64,7 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
           label="Search"
           variant="outlined"
           value={searchInput}
-          onChange={handleInputs}
+          onChange={handleSearchInput}
           onKeyPress={handleKeyPress}
           sx={{ '& input': { color: 'black' } }}
           InputProps={{
@@ -80,10 +89,8 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
         id="outlined-profitMin"
         label="Profit Min"
         type="number"
-        value={profitMin || ''}
-        onChange={(e) =>
-          setProfitMin(e.target.value ? Number(e.target.value) : null)
-        }
+        value={profitMin}
+        onChange={handleProfitMinInput}
         onKeyPress={handleKeyPress}
         sx={{ marginTop: 1, '& input': { color: 'black' } }}
       />
@@ -92,10 +99,8 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
         id="outlined-profitMax"
         label="Profit Max"
         type="number"
-        value={profitMax || ''}
-        onChange={(e) =>
-          setProfitMax(e.target.value ? Number(e.target.value) : null)
-        }
+        value={profitMax}
+        onChange={handleProfitMaxInput}
         onKeyPress={handleKeyPress}
         sx={{ marginTop: 1, '& input': { color: 'black' } }}
       />
