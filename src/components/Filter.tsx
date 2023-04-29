@@ -11,13 +11,17 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
   const [searchInput, setSearchInput] = useState('');
   const [profitMin, setProfitMin] = useState<number | null>(null);
   const [profitMax, setProfitMax] = useState<number | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
   const handleInputs = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(event.target.value);
   };
 
   const handleSearchSubmit = () => {
-    onSearchChange({searchInput: searchInput, profitMin: profitMin, profitMax: profitMax});
+    if (searchInput || profitMin || profitMax) {
+      onSearchChange({searchInput, profitMin, profitMax});
+      setHasSearched(true);
+    }
   };
 
   const handleClearSearch = () => {
@@ -25,6 +29,7 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
     setProfitMin(null);
     setProfitMax(null);
     onSearchChange({searchInput: '', profitMin: null, profitMax: null});
+    setHasSearched(false);
   };
 
   const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -52,10 +57,11 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
           value={searchInput}
           onChange={handleInputs}
           onKeyPress={handleKeyPress}
+          sx={{ '& input': { color: 'black' } }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                {searchInput ? (
+                {hasSearched ? (
                   <IconButton edge="end" onClick={handleClearSearch}>
                     <ClearIcon />
                   </IconButton>
@@ -67,7 +73,6 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
               </InputAdornment>
             ),
           }}
-          sx={{ '& input': { color: 'black' } }}
         />
         {/* Profit filters */}
         <TextField
@@ -75,20 +80,24 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
         id="outlined-profitMin"
         label="Profit Min"
         type="number"
-        value={profitMin}
+        value={profitMin || ''}
         onChange={(e) =>
           setProfitMin(e.target.value ? Number(e.target.value) : null)
         }
+        onKeyPress={handleKeyPress}
+        sx={{ marginTop: 1, '& input': { color: 'black' } }}
       />
        <TextField
         fullWidth
         id="outlined-profitMax"
         label="Profit Max"
         type="number"
-        value={profitMax}
+        value={profitMax || ''}
         onChange={(e) =>
           setProfitMax(e.target.value ? Number(e.target.value) : null)
         }
+        onKeyPress={handleKeyPress}
+        sx={{ marginTop: 1, '& input': { color: 'black' } }}
       />
       </Box>
     </>
