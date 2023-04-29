@@ -5,14 +5,33 @@ import { LOCAL_IP_ADDRESS } from '../App';
 import { BlockData } from './Blocks';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const Search: React.FC<{searchValue: string}> = ({ searchValue }) => {
+const generateApiUrl = (searchInput: string | null,profitMin: number | null,profitMax: number | null): string => {
+  let baseApiUrl = `http://${LOCAL_IP_ADDRESS}:3001/api/search?`;
+
+  if (searchInput) {
+    baseApiUrl += `&searchInput=${searchInput}`;
+  }
+
+  if (profitMin) {
+    baseApiUrl += `&profitMin=${profitMin}`;
+  }
+
+  if (profitMax) {
+    baseApiUrl += `&profitMax=${profitMax}`;
+  }
+
+  return baseApiUrl;
+};
+
+
+const Search: React.FC<{searchParams: {searchInput: string | null, profitMin: number | null, profitMax: number | null}}> = ({ searchParams }) => {
   const [searchResults, setSearchResults] = useState<BlockData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const apiRequest = async (searchValue: string) => {
+  const apiRequest = async ({searchInput, profitMin, profitMax}: {searchInput: string | null, profitMin: number | null, profitMax: number | null}) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`http://${LOCAL_IP_ADDRESS}:3001/api/search?searchValue=${searchValue}`);
+      const response = await fetch(generateApiUrl(searchInput, profitMin, profitMax));
       const data: BlockData[] = await response.json();
       setSearchResults(data);
     } catch (error) {
@@ -22,8 +41,8 @@ const Search: React.FC<{searchValue: string}> = ({ searchValue }) => {
   };
 
   useEffect(() => {
-    apiRequest(searchValue);
-  }, [searchValue]);
+    apiRequest(searchParams);
+  }, [searchParams]);
 
   return (
     <Grid container rowSpacing={5} sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
