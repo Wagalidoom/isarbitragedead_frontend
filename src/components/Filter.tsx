@@ -8,21 +8,21 @@ export interface IFilter {
 }
 
 const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
-  const [searchInput, setSearchInput] = useState<string | null>(null);
-  const [profitMin, setProfitMin] = useState<number | null>(null);
-  const [profitMax, setProfitMax] = useState<number | null>(null);
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [profitMin, setProfitMin] = useState<number>(0);
+  const [profitMax, setProfitMax] = useState<number>(1000000000);
   const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(event.target.value !== '' ? event.target.value : null);
+    setSearchInput(event.target.value !== '' ? event.target.value : '');
   };
   
   const handleProfitMinInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setProfitMin(event.target.value !== '' ? parseFloat(event.target.value) : null)
+    setProfitMin(event.target.value !== '' ? parseFloat(event.target.value) : 0)
   };
   
   const handleProfitMaxInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setProfitMax(event.target.value !== '' ? parseFloat(event.target.value) : null);
+    setProfitMax(event.target.value !== '' ? parseFloat(event.target.value) : 1000000000);
   };
   
 
@@ -35,8 +35,8 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
 
   const handleClearSearch = () => {
     setSearchInput('');
-    setProfitMin(null);
-    setProfitMax(null);
+    setProfitMin(0);
+    setProfitMax(1000000000);
     onSearchChange({searchInput: '', profitMin: null, profitMax: null});
     setHasSearched(false);
   };
