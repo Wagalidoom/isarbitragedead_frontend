@@ -26,7 +26,7 @@ const Block: React.FC<BlockData> = React.forwardRef(({ blockNumber, opportunitie
   };
   return (
     <>
-      <Box ref={ref} sx={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
+      <Box ref={ref} data-block-number={blockNumber} sx={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
         <Paper square sx={{paddingLeft: 1, paddingRight: 1, width: '70%', height: '175px', backgroundColor: '#6389be', display: 'flex', flexDirection: 'column', alignItems: 'start', cursor: 'pointer', margin: 'auto'
         }} onClick={handleClick}>
           <Typography variant="h4" sx={{ color: '#eae6e1' }}><b>{blockNumber}</b></Typography>

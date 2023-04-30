@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef, Ref } from 'react';
 import io from 'socket.io-client';
 import Block from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
-import ScrollBlocks from './ScrollBlocks';
 import MinimapBlock from './Minimap';
 
 const INITIAL_DATA_TO_FETCH = 10;
@@ -43,6 +42,32 @@ const Blocks: React.FC = () => {
   const [lastDisplayedBlock, setCurrentBlockNumber] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [visibleBlock, setVisibleBlock] = useState<number | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Le numéro de bloc est stocké dans l'attribut 'data-block-number' de chaque div de bloc
+          const blockNumber = parseInt(entry.target.getAttribute('data-block-number') || '');
+          setVisibleBlock(blockNumber);
+        }
+      });
+    }, {
+      rootMargin: '0px',
+      threshold: 0.5, // Le bloc est considéré comme visible lorsqu'il est à moitié dans le viewport
+    });
+
+    blockRefs.current.forEach(ref => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => {
+      blockRefs.current.forEach(ref => {
+        if (ref) observer.unobserve(ref);
+      });
+    };
+  }, [blockList]);
 
   const handleMinimapClick = (index: number) => {
     const ref = blockRefs.current[index];
@@ -139,7 +164,7 @@ const Blocks: React.FC = () => {
       </Grid>
       <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'flex' }}>
         {blockList.map(({ blockNumber }, index) => (
-          <MinimapBlock key={index} blockNumber={blockNumber} onClick={() => handleMinimapClick(index)} />
+          <MinimapBlock key={index} blockNumber={blockNumber} onClick={() => handleMinimapClick(index)} isHighLighted={blockNumber === visibleBlock} />
         ))}
       </Grid>
     </Grid>
