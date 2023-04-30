@@ -9,11 +9,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <head>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
-      <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&family=Roboto&display=swap" rel="stylesheet" />
-    </head>
     <App />
   </React.StrictMode>
 );
