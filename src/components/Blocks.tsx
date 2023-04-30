@@ -1,5 +1,5 @@
 import { Grid, Typography, Fade, Box } from '@mui/material';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Ref } from 'react';
 import io from 'socket.io-client';
 import Block from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
@@ -22,7 +22,9 @@ export interface OpportunityData {
 
 export interface BlockData {
   blockNumber: number,
-  opportunities: OpportunityData[]
+  opportunities: OpportunityData[],
+  ref: Ref<HTMLDivElement>
+
 }
 
 async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Promise<BlockData[]> {
@@ -84,6 +86,10 @@ const Blocks: React.FC = () => {
     // The effect depends on 'lastDisplayedBlock', so it will run whenever 'lastDisplayedBlock' changes
   }, [lastDisplayedBlock]);
 
+  useEffect(() => {
+    blockRefs.current = Array(blockList.length).fill(null);
+  }, [blockList]);
+
   // When search is active, stop the connection
   useEffect(() => {
     // Connect to the Websocket server
@@ -115,20 +121,20 @@ const Blocks: React.FC = () => {
               {index === 0 ? (
                 <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
                   <div>
-                    <Block blockNumber={blockNumber} opportunities={opportunities} />
+                    <Block ref={el => blockRefs.current[index] = el} blockNumber={blockNumber} opportunities={opportunities} />
                   </div>
                 </Fade>
               ) : (
-                <Block blockNumber={blockNumber} opportunities={opportunities} />
+                <Block ref={el => blockRefs.current[index] = el} blockNumber={blockNumber} opportunities={opportunities} />
               )}
             </Box>
           )
           )
         ) : (
-          <Block blockNumber={157896} opportunities={[]} />
-          // <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
-          //   No blocks to be shown
-          // </Typography>
+          // <Block blockNumber={157896} opportunities={[]} />
+          <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
+            No blocks to be shown
+          </Typography>
         )}
       </Grid>
       <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'flex' }}>

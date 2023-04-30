@@ -1,5 +1,5 @@
 import { Box, Paper, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { Ref, useState } from 'react';
 import { BlockData, OpportunityData } from './Blocks';
 import BlockDetails from './BlockDetails';
 
@@ -14,19 +14,19 @@ const Opportunity: React.FC<OpportunityData> = ({ buyMarketAddress, sellMarketAd
   );
 };
 
-const Block: React.FC<BlockData> = ({ blockNumber, opportunities }) => {
-  const [selectedBlock, setSelectedBlock] = useState<null | { blockNumber: number, opportunities: OpportunityData[] }>(null);;
+const Block: React.FC<BlockData> = React.forwardRef(({ blockNumber, opportunities }, ref) => {
+  const [selectedBlock, setSelectedBlock] = useState<null | { blockNumber: number, opportunities: OpportunityData[], ref: React.ForwardedRef<HTMLDivElement> }>(null);;
   const content = opportunities.length === 0
     ? (<Typography variant="body1" sx={{ color: '#ffffff' }}>No opportunities at this block</Typography>)
     : (opportunities.map((opportunity, index) => <Opportunity key={index} {...opportunity} />));
 
   const handleClick = () => {
     console.log("click");
-    setSelectedBlock({ blockNumber, opportunities });
+    setSelectedBlock({ blockNumber, opportunities, ref });
   };
   return (
     <>
-      <Box sx={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
+      <Box ref={ref} sx={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
         <Paper square sx={{paddingLeft: 1, paddingRight: 1, width: '70%', height: '175px', backgroundColor: '#6389be', display: 'flex', flexDirection: 'column', alignItems: 'start', cursor: 'pointer', margin: 'auto'
         }} onClick={handleClick}>
           <Typography variant="h4" sx={{ color: '#eae6e1' }}><b>{blockNumber}</b></Typography>
@@ -36,6 +36,6 @@ const Block: React.FC<BlockData> = ({ blockNumber, opportunities }) => {
       {selectedBlock && <BlockDetails block={selectedBlock} onClose={() => setSelectedBlock(null)} />}
     </>
   );
-};
+});
 
 export default Block;
