@@ -1,9 +1,10 @@
 import { Grid, Typography, Fade, Box } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import Block from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import ScrollBlocks from './ScrollBlocks';
+import MinimapBlock from './Minimap';
 
 const INITIAL_DATA_TO_FETCH = 10;
 const SCROLLING_DATA_TO_FETCH = 20;
@@ -39,6 +40,14 @@ async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Prom
 const Blocks: React.FC = () => {
   const [lastDisplayedBlock, setCurrentBlockNumber] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
+  const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const handleMinimapClick = (index: number) => {
+    const ref = blockRefs.current[index];
+    if (ref) {
+      ref.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   // Fetch the history asynchronously and update the state
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
@@ -122,8 +131,10 @@ const Blocks: React.FC = () => {
           // </Typography>
         )}
       </Grid>
-      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'flex'}}>
-          <ScrollBlocks />
+      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'flex' }}>
+        {blockList.map(({ blockNumber }, index) => (
+          <MinimapBlock key={index} blockNumber={blockNumber} onClick={() => handleMinimapClick(index)} />
+        ))}
       </Grid>
     </Grid>
   );
