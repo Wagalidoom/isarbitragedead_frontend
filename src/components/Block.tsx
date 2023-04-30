@@ -1,5 +1,5 @@
 import { Box, Paper, Typography } from '@mui/material';
-import React, { Ref, useState } from 'react';
+import React, { useState } from 'react';
 import { BlockData, OpportunityData } from './Blocks';
 import BlockDetails from './BlockDetails';
 

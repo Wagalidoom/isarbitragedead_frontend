@@ -5,9 +5,9 @@ import Block from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import MinimapBlock from './Minimap';
 
-const INITIAL_DATA_TO_FETCH = 10;
-const SCROLLING_DATA_TO_FETCH = 20;
-const THROTTLE = 40;
+const INITIAL_DATA_TO_FETCH = 50;
+const SCROLLING_DATA_TO_FETCH = 50;
+const THROTTLE = 20;
 
 export interface OpportunityData {
   buyMarketAddress: string,
@@ -163,8 +163,8 @@ const Blocks: React.FC = () => {
           </Typography>
         )}
       </Grid>
-      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'flex', height: '100vh', position: 'sticky', top: '0', flexDirection: 'column' }}>
-        {blockList.map(({ blockNumber }, index) => (
+      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'flex', height: '100vh', position: 'sticky', top: '0', flexDirection: 'column', alignItems: 'center' }}>
+        {blockList.slice(0, Math.floor(window.innerHeight / 15)).map(({ blockNumber }, index) => (
           <MinimapBlock key={index} blockNumber={blockNumber} onClick={() => handleMinimapClick(index)} isHighLighted={blockNumber === visibleBlock} />
         ))}
       </Grid>

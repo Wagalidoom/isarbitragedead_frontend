@@ -8,7 +8,7 @@ interface MinimapBlockProps {
 
 const MinimapBlock: React.FC<MinimapBlockProps> = ({ blockNumber, onClick, isHighLighted }) => {
     return (
-        <Box onClick={onClick} style={isHighLighted ? { backgroundColor: '#e64d43' } : undefined} sx={{ backgroundColor: '#ffffff', height: '10px', width: '50px', zIndex: 2, display: 'inline', marginBottom: '2px' }}></Box>
+        <Box onClick={onClick} style={isHighLighted ? { backgroundColor: '#e64d43' } : undefined} sx={{ backgroundColor: '#ffffff', height: '10px', width: '50px', zIndex: 2, display: 'inline', marginBottom: '5px' }}></Box>
     );
 };
 
