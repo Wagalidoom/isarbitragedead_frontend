@@ -7,7 +7,7 @@ import MinimapBlock from './Minimap';
 
 const INITIAL_DATA_TO_FETCH = 10;
 const SCROLLING_DATA_TO_FETCH = 20;
-const THROTTLE = 50;
+const THROTTLE = 40;
 
 export interface OpportunityData {
   buyMarketAddress: string,
@@ -51,6 +51,7 @@ const Blocks: React.FC = () => {
           // Le numéro de bloc est stocké dans l'attribut 'data-block-number' de chaque div de bloc
           const blockNumber = parseInt(entry.target.getAttribute('data-block-number') || '');
           setVisibleBlock(blockNumber);
+          console.log(blockNumber);
         }
       });
     }, {
@@ -162,7 +163,7 @@ const Blocks: React.FC = () => {
           </Typography>
         )}
       </Grid>
-      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'flex' }}>
+      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'flex', height: '100vh', position: 'sticky', top: '0', flexDirection: 'column' }}>
         {blockList.map(({ blockNumber }, index) => (
           <MinimapBlock key={index} blockNumber={blockNumber} onClick={() => handleMinimapClick(index)} isHighLighted={blockNumber === visibleBlock} />
         ))}
