@@ -43,6 +43,29 @@ const Blocks: React.FC = () => {
   const [blockList, setBlockList] = useState<BlockData[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [visibleBlock, setVisibleBlock] = useState<number | null>(null);
+  const minimapRef = useRef<HTMLDivElement>(null);
+  const [mainScrollTop, setMainScrollTop] = useState(0);
+  const mainContainerRef = useRef<HTMLDivElement>(null);
+  const minimapScrollSpeedFactor = 0.5;  // Ajuster cette valeur pour changer la vitesse de déplacement des miniblocks
+
+  const handleMainScroll = () => {
+    if (mainContainerRef.current) {
+      const { scrollTop } = mainContainerRef.current;
+      setMainScrollTop(scrollTop);
+    }
+  };
+
+  useEffect(() => {
+    if (mainContainerRef.current) {
+      // Ajouter le gestionnaire d'événements de scroll à la liste principale
+      mainContainerRef.current.addEventListener('scroll', handleMainScroll);
+
+      return () => {
+        // Supprimer le gestionnaire d'événements de scroll lorsque le composant est démonté
+        mainContainerRef.current?.removeEventListener('scroll', handleMainScroll);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
@@ -138,6 +161,24 @@ const Blocks: React.FC = () => {
     fetchDataHistory(INITIAL_DATA_TO_FETCH);
   }, []);
 
+  useEffect(() => {
+    if (visibleBlock === null || minimapRef.current === null) {
+      return;
+    }
+
+    const blockIndex = blockList.findIndex(block => block.blockNumber === visibleBlock);
+    const blockHeight = 10; // Remplacer par la hauteur de votre bloc dans la minimap
+
+    console.log('Scrolling minimap to block index:', blockIndex);
+
+    // Défiler pour que le bloc surligné soit toujours visible à une position fixe
+    minimapRef.current.scrollTo({
+      top: blockHeight * blockIndex,
+      behavior: 'smooth'
+    });
+  }, [visibleBlock, blockList]);
+
+
   return (
     <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }}>
       <Grid item xs={11} md={11} sx={{ backgroundColor: '#eae6e1' }}>
@@ -158,13 +199,13 @@ const Blocks: React.FC = () => {
           )
         ) : (
           // <Block blockNumber={157896} opportunities={[]} />
-          <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }} >
+          <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray' }} >
             No blocks to be shown
           </Typography>
         )}
       </Grid>
-      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'flex', height: '100vh', position: 'sticky', top: '0', flexDirection: 'column', alignItems: 'center' }}>
-        {blockList.slice(0, Math.floor(window.innerHeight / 15)).map(({ blockNumber }, index) => (
+      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'grid', height: '100vh', overflow: 'hidden', position: 'sticky', top: '0', transform: `translateY(-${mainScrollTop * minimapScrollSpeedFactor}px)` }} ref={minimapRef}>
+        {blockList.map(({ blockNumber }, index) => (
           <MinimapBlock key={index} blockNumber={blockNumber} onClick={() => handleMinimapClick(index)} isHighLighted={blockNumber === visibleBlock} />
         ))}
       </Grid>
