@@ -10,7 +10,7 @@ import Search from './components/Search';
 export const LOCAL_IP_ADDRESS = process.env.REACT_APP_LOCAL_IP;
 
 function App() {
-  const [searchParams, setSearchParams] = useState<{ searchInput: string | null, profitMin: number | null, profitMax: number | null }>({ searchInput: null, profitMin: null, profitMax: null });
+  const [searchParams, setSearchParams] = useState<{ searchInput: string | null, profitMin: string | null, profitMax: string | null }>({ searchInput: null, profitMin: null, profitMax: null });
 
   return (
     <div className="App">

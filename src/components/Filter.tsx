@@ -4,25 +4,25 @@ import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 
 export interface IFilter {
-  onSearchChange: (searchParams: {searchInput: string | null, profitMin: number | null, profitMax: number | null}) => void;
+  onSearchChange: (searchParams: {searchInput: string | null, profitMin: string | null, profitMax: string | null}) => void;
 }
 
 const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
-  const [searchInput, setSearchInput] = useState<string>('');
-  const [profitMin, setProfitMin] = useState<number>(0);
-  const [profitMax, setProfitMax] = useState<number>(1000000000);
+  const [searchInput, setSearchInput] = useState<string | null>(null);
+  const [profitMin, setProfitMin] = useState<string | null>(null);
+  const [profitMax, setProfitMax] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
 
   const handleSearchInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchInput(event.target.value !== '' ? event.target.value : '');
+    setSearchInput(event.target.value !== '' ? event.target.value : null);
   };
   
   const handleProfitMinInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setProfitMin(event.target.value !== '' ? parseFloat(event.target.value) : 0)
+    setProfitMin(event.target.value !== '' ? event.target.value : null);
   };
   
   const handleProfitMaxInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setProfitMax(event.target.value !== '' ? parseFloat(event.target.value) : 1000000000);
+    setProfitMax(event.target.value !== '' ? event.target.value : null);
   };
   
 
@@ -34,10 +34,10 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
   };
 
   const handleClearSearch = () => {
-    setSearchInput('');
-    setProfitMin(0);
-    setProfitMax(1000000000);
-    onSearchChange({searchInput: '', profitMin: null, profitMax: null});
+    setSearchInput(null);
+    setProfitMin(null);
+    setProfitMax(null);
+    onSearchChange({searchInput: null, profitMin: null, profitMax: null});
     setHasSearched(false);
   };
 
@@ -63,7 +63,7 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
           id="outlined-basic"
           label="Search"
           variant="outlined"
-          value={searchInput}
+          value={searchInput || ''}
           onChange={handleSearchInput}
           onKeyPress={handleKeyPress}
           sx={{ '& input': { color: 'black' } }}
@@ -88,8 +88,7 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
         fullWidth
         id="outlined-profitMin"
         label="Profit Min"
-        type="number"
-        value={profitMin}
+        value={profitMin || ''}
         onChange={handleProfitMinInput}
         onKeyPress={handleKeyPress}
         sx={{ marginTop: 1, '& input': { color: 'black' } }}
@@ -98,8 +97,8 @@ const Filter: React.FC<IFilter> = ({ onSearchChange }) => {
         fullWidth
         id="outlined-profitMax"
         label="Profit Max"
-        type="number"
-        value={profitMax}
+        type="text"
+        value={profitMax || ''}
         onChange={handleProfitMaxInput}
         onKeyPress={handleKeyPress}
         sx={{ marginTop: 1, '& input': { color: 'black' } }}
