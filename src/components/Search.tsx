@@ -5,7 +5,7 @@ import { LOCAL_IP_ADDRESS } from '../App';
 import { BlockData } from './Blocks';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const generateApiUrl = (searchInput: string | null,profitMin: number | null,profitMax: number | null): string => {
+const generateApiUrl = (searchInput: string | null,profitMin: string | null,profitMax: string | null): string => {
   let baseApiUrl = `http://${LOCAL_IP_ADDRESS}:3001/api/search?`;
 
   if (searchInput) {
@@ -24,11 +24,11 @@ const generateApiUrl = (searchInput: string | null,profitMin: number | null,prof
 };
 
 
-const Search: React.FC<{searchParams: {searchInput: string | null, profitMin: number | null, profitMax: number | null}}> = ({ searchParams }) => {
+const Search: React.FC<{searchParams: {searchInput: string | null, profitMin: string | null, profitMax: string | null}}> = ({ searchParams }) => {
   const [searchResults, setSearchResults] = useState<BlockData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const apiRequest = async ({searchInput, profitMin, profitMax}: {searchInput: string | null, profitMin: number | null, profitMax: number | null}) => {
+  const apiRequest = async ({searchInput, profitMin, profitMax}: {searchInput: string | null, profitMin: string | null, profitMax: string | null}) => {
     setIsLoading(true);
     try {
       const response = await fetch(generateApiUrl(searchInput, profitMin, profitMax));
