@@ -5,10 +5,12 @@ import Block from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import MinimapBlock from './Minimap';
 
+// Constantes globales
 const INITIAL_DATA_TO_FETCH = 50;
 const SCROLLING_DATA_TO_FETCH = 50;
 const THROTTLE = 20;
 
+// Interfaces de données
 export interface OpportunityData {
   buyMarketAddress: string,
   sellMarketAddres: string,
@@ -26,6 +28,7 @@ export interface BlockData {
 
 }
 
+// Récupère l'historique des blocs à partir de l'API
 async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Promise<BlockData[]> {
   try {
     const query = fromBlockNumber === undefined ? `limit=${limit}` : `fromBlockNumber=${fromBlockNumber}&limit=${limit}`
@@ -38,7 +41,20 @@ async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Prom
   }
 }
 
+// Génère une fonction qui retarde l'exécution de la fonction passée en argument
+const throttle = (func: (...args: any[]) => any, delay: number): ((...args: any[]) => void) => {
+  let lastCall = 0;
+  return (...args: any[]) => {
+    const now = new Date().getTime();
+    if (now - lastCall < delay) return;
+    lastCall = now;
+    return func(...args);
+  };
+};
+
+
 const Blocks: React.FC = () => {
+  // État local et références
   const [lastDisplayedBlock, setCurrentBlockNumber] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -48,6 +64,7 @@ const Blocks: React.FC = () => {
   const mainContainerRef = useRef<HTMLDivElement>(null);
   const minimapScrollSpeedFactor = 0.5;  // Ajuster cette valeur pour changer la vitesse de déplacement des miniblocks
 
+  // Gère le défilement principal
   const handleMainScroll = () => {
     if (mainContainerRef.current) {
       const { scrollTop } = mainContainerRef.current;
@@ -57,6 +74,7 @@ const Blocks: React.FC = () => {
     }
   };
 
+  // Ajoute et supprime le gestionnaire d'événements de défilement
   useEffect(() => {
     if (mainContainerRef.current) {
       // Ajouter le gestionnaire d'événements de scroll à la liste principale
@@ -69,6 +87,7 @@ const Blocks: React.FC = () => {
     }
   }, []);
 
+  // Met à jour la liste des blocs lorsqu'un nouveau bloc est détecté
   useEffect(() => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -81,7 +100,7 @@ const Blocks: React.FC = () => {
       });
     }, {
       rootMargin: '0px',
-      threshold: 0.5, // Le bloc est considéré comme visible lorsqu'il est à moitié dans le viewport
+      threshold: 0.5,
     });
 
     blockRefs.current.forEach(ref => {
@@ -95,6 +114,7 @@ const Blocks: React.FC = () => {
     };
   }, [blockList]);
 
+  // Gère le clic sur la minimap
   const handleMinimapClick = (index: number) => {
     const ref = blockRefs.current[index];
     if (ref) {
@@ -102,7 +122,7 @@ const Blocks: React.FC = () => {
     }
   };
 
-  // Fetch the history asynchronously and update the state
+  // Récupère l'historique des données de manière asynchrone et met à jour l'état
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
     const history = await fetchBlocksHistory(limit, fromBlock);
     setBlockList((prevDataList) => [...prevDataList, ...history]);
@@ -111,16 +131,6 @@ const Blocks: React.FC = () => {
 
   // Listening to scroll events and hot loading
   useEffect(() => {
-    const throttle = (func: (...args: any[]) => any, delay: number): ((...args: any[]) => void) => {
-      let lastCall = 0;
-      return (...args: any[]) => {
-        const now = new Date().getTime();
-        if (now - lastCall < delay) return;
-        lastCall = now;
-        return func(...args);
-      };
-    };
-
     const handleScroll = throttle(() => {
       // Check if the user has scrolled to the near bottom of the page
       if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.scrollHeight - 100) return;
@@ -137,11 +147,12 @@ const Blocks: React.FC = () => {
     // The effect depends on 'lastDisplayedBlock', so it will run whenever 'lastDisplayedBlock' changes
   }, [lastDisplayedBlock]);
 
+  // Met à jour les références des blocs lorsque la liste des blocs change
   useEffect(() => {
     blockRefs.current = Array(blockList.length).fill(null);
   }, [blockList]);
 
-  // When search is active, stop the connection
+  // Établit la connexion WebSocket
   useEffect(() => {
     // Connect to the Websocket server
     const socket = io(`http://${LOCAL_IP_ADDRESS}:3030`);
@@ -158,14 +169,14 @@ const Blocks: React.FC = () => {
   }, []);
 
 
-  // On page loading : fetch history
+  // Récupère l'historique lors du chargement de la page
   useEffect(() => {
     fetchDataHistory(INITIAL_DATA_TO_FETCH);
   }, []);
 
+  // Défile la minimap pour garder le bloc visible à une position fixe
   useEffect(() => {
     const blockHeight = 15;
-
     if (visibleBlock === null || minimapRef.current === null) {
       return;
     }
