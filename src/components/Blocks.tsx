@@ -6,7 +6,8 @@ import { LOCAL_IP_ADDRESS } from '../App';
 import MinimapBlock from './Minimap';
 
 // Constantes globales
-const INITIAL_DATA_TO_FETCH = 50;
+const MINIBLOCKS = Math.floor(window.innerHeight / 15);
+const INITIAL_DATA_TO_FETCH = MINIBLOCKS * 3;
 const SCROLLING_DATA_TO_FETCH = 50;
 const THROTTLE = 20;
 
@@ -76,13 +77,14 @@ const Blocks: React.FC = () => {
 
   // Ajoute et supprime le gestionnaire d'événements de défilement
   useEffect(() => {
-    if (mainContainerRef.current) {
+    const current = mainContainerRef.current;
+    if (current) {
       // Ajouter le gestionnaire d'événements de scroll à la liste principale
-      mainContainerRef.current.addEventListener('scroll', handleMainScroll);
-
+      current.addEventListener('scroll', handleMainScroll);
+  
       return () => {
         // Supprimer le gestionnaire d'événements de scroll lorsque le composant est démonté
-        mainContainerRef.current?.removeEventListener('scroll', handleMainScroll);
+        current.removeEventListener('scroll', handleMainScroll);
       };
     }
   }, []);
@@ -194,7 +196,7 @@ const Blocks: React.FC = () => {
 
 
   return (
-    <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }}>
+    <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }} >
       <Grid item xs={11} md={11} sx={{ backgroundColor: '#eae6e1' }}>
         {blockList.length > 0 ? (
           blockList.map(({ blockNumber, opportunities }, index) => (
