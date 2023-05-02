@@ -51,7 +51,9 @@ const Blocks: React.FC = () => {
   const handleMainScroll = () => {
     if (mainContainerRef.current) {
       const { scrollTop } = mainContainerRef.current;
-      setMainScrollTop(scrollTop);
+      requestAnimationFrame(() => {
+        setMainScrollTop(scrollTop);
+      });
     }
   };
 
@@ -204,7 +206,7 @@ const Blocks: React.FC = () => {
           </Typography>
         )}
       </Grid>
-      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'grid', height: '100vh', overflow: 'hidden', position: 'sticky', top: '0', transform: `translateY(-${mainScrollTop * minimapScrollSpeedFactor}px)` }} ref={minimapRef}>
+      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'grid', justifyContent: 'center', height: '100vh', overflow: 'hidden', position: 'sticky', top: '0', transform: `translateY(-${mainScrollTop * minimapScrollSpeedFactor}px)` }} ref={minimapRef}>
         {blockList.map(({ blockNumber }, index) => (
           <MinimapBlock key={index} blockNumber={blockNumber} onClick={() => handleMinimapClick(index)} isHighLighted={blockNumber === visibleBlock} />
         ))}
