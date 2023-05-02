@@ -164,12 +164,13 @@ const Blocks: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const blockHeight = 15;
+
     if (visibleBlock === null || minimapRef.current === null) {
       return;
     }
 
     const blockIndex = blockList.findIndex(block => block.blockNumber === visibleBlock);
-    const blockHeight = 10; // Remplacer par la hauteur de votre bloc dans la minimap
 
     console.log('Scrolling minimap to block index:', blockIndex);
 
@@ -206,7 +207,7 @@ const Blocks: React.FC = () => {
           </Typography>
         )}
       </Grid>
-      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'grid', justifyContent: 'center', height: '100vh', overflow: 'hidden', position: 'sticky', top: '0', transform: `translateY(-${mainScrollTop * minimapScrollSpeedFactor}px)` }} ref={minimapRef}>
+      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'grid', justifyContent: 'center', height: '100vh', overflow: 'hidden', position: 'sticky', top: '0', transform: `translateY(-${mainScrollTop * minimapScrollSpeedFactor}px)`, willChange: 'transform' }} ref={minimapRef}>
         {blockList.map(({ blockNumber }, index) => (
           <MinimapBlock key={index} blockNumber={blockNumber} onClick={() => handleMinimapClick(index)} isHighLighted={blockNumber === visibleBlock} />
         ))}
