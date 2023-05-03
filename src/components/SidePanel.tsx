@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState, KeyboardEvent, useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-export interface IFilter {
+export interface ISidePanel {
   onSearchChange: (searchParams: { searchInput: string | null, profitMin: string | null, profitMax: string | null }) => void,
   currentBlock: number
 }
@@ -14,7 +14,7 @@ interface IArbStatistics {
   mostArbitragedToken: string
 }
 
-const Filter: React.FC<IFilter> = ({ onSearchChange, currentBlock }) => {
+const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
   const [searchInput, setSearchInput] = useState<string | null>(null);
   const [profitMin, setProfitMin] = useState<string | null>(null);
   const [profitMax, setProfitMax] = useState<string | null>(null);

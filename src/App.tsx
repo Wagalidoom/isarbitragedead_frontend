@@ -3,7 +3,7 @@ import lightTheme from './styles/theme/lightTheme';
 import Blocks from './components/Blocks';
 import { Box, CssBaseline, Grid, ThemeProvider, Typography } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Filter from './components/Filter';
+import Filter from './components/SidePanel';
 import { useState } from 'react';
 import Search from './components/Search';
 import BlockDetails from './components/BlockDetails';
