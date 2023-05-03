@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from '@mui/material';
+import { Box, Link, Paper, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { BlockData, OpportunityData } from './Blocks';
 import BlockDetails from './BlockDetails';
@@ -27,10 +27,12 @@ const Block: React.FC<BlockData> = React.forwardRef(({ blockNumber, opportunitie
   return (
     <>
       <Box ref={ref} data-block-number={blockNumber} sx={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
-        <Paper square sx={{paddingLeft: 1, paddingRight: 1, width: '70%', height: '175px', backgroundColor: '#6389be', display: 'flex', flexDirection: 'column', alignItems: 'start', cursor: 'pointer', margin: 'auto'
-        }} onClick={handleClick}>
+        <Paper square sx={{ paddingLeft: 1, paddingRight: 1, width: '70%', height: '175px', backgroundColor: '#6389be', display: 'flex', flexDirection: 'column', alignItems: 'start', margin: 'auto' }} onClick={handleClick}>
           <Typography variant="h4" sx={{ color: '#eae6e1' }}><b>{blockNumber}</b></Typography>
           {content}
+          <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'end', width: '100%', height: '100%' }}>
+            <Link underline='hover' sx={{ color: '#eae6e1', fontSize: '0.8rem' }} href={`https://etherscan.io/block/${blockNumber}`}>Voir sur Etherscan</Link>
+          </Box>
         </Paper>
       </Box>
       {selectedBlock && <BlockDetails block={selectedBlock} onClose={() => setSelectedBlock(null)} />}
