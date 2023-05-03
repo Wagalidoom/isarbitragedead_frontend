@@ -18,6 +18,10 @@ export interface BlockData {
 
 }
 
+interface IBlocks {
+  setCurrentBlockNumber: (blockNumber: number) => void;
+}
+
 // Récupère l'historique des blocs à partir de l'API
 async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Promise<BlockData[]> {
   try {
@@ -42,10 +46,9 @@ const throttle = (func: (...args: any[]) => any, delay: number): ((...args: any[
   };
 };
 
-
-const Blocks: React.FC = () => {
+const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   // État local et références
-  const [lastDisplayedBlock, setCurrentBlockNumber] = useState(0);
+  const [lastDisplayedBlock, setLastDisplayedBlock] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [visibleBlock, setVisibleBlock] = useState<number | null>(null);
@@ -70,7 +73,7 @@ const Blocks: React.FC = () => {
     if (current) {
       // Ajouter le gestionnaire d'événements de scroll à la liste principale
       current.addEventListener('scroll', handleMainScroll);
-  
+
       return () => {
         // Supprimer le gestionnaire d'événements de scroll lorsque le composant est démonté
         current.removeEventListener('scroll', handleMainScroll);
@@ -117,7 +120,10 @@ const Blocks: React.FC = () => {
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
     const history = await fetchBlocksHistory(limit, fromBlock);
     setBlockList((prevDataList) => [...prevDataList, ...history]);
-    setCurrentBlockNumber(history[history.length - 1].blockNumber);
+    setLastDisplayedBlock(history[history.length - 1].blockNumber);
+    // Récupère le premier block de l'historique
+    return history[0].blockNumber;
+
   };
 
   // Listening to scroll events and hot loading
@@ -162,8 +168,12 @@ const Blocks: React.FC = () => {
 
   // Récupère l'historique lors du chargement de la page
   useEffect(() => {
-    fetchDataHistory(INITIAL_DATA_TO_FETCH);
-  }, []);
+    const fetchInitialData = async () => {
+      const initialBlockNumber = await fetchDataHistory(INITIAL_DATA_TO_FETCH);
+      setCurrentBlockNumber(initialBlockNumber);
+    };
+    fetchInitialData();
+  }, [setCurrentBlockNumber]);
 
   // Défile la minimap pour garder le bloc visible à une position fixe
   useEffect(() => {
