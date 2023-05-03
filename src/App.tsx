@@ -26,9 +26,7 @@ function App() {
                 <Box sx={{ position: 'sticky', top: '50px' }}>
                   <Filter onSearchChange={setSearchParams} currentBlock={currentBlockNumber} />
                 </Box>
-                <Box sx={{ position: 'fixed', bottom: 0, left: 0, zIndex: 3 }}>
-                  <Typography variant='h5'>By Lukas and Jordan</Typography>
-                </Box>
+                
               </Grid>
               <Grid item xs={9} md={9}>
                 {(searchParams.searchInput || searchParams.profitMin || searchParams.profitMax) ? <Search searchParams={searchParams} /> : <Blocks setCurrentBlockNumber={setCurrentBlockNumber} />}

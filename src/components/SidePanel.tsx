@@ -142,24 +142,44 @@ const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
           color: 'black',
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 1 }}>
-          <FiberManualRecordIcon color="success" />
-          <Typography variant="h6" component="div">
-            Block  {currentBlock !== 0 ? currentBlock : '...'}
+        {/* Statistics block */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: 2,
+            marginTop: 2,
+            color: 'black',
+            position: 'fixed',
+            bottom: '15%',
+            width: '100%',
+            zIndex: 2,
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 1, padding: 4 }}>
+            <FiberManualRecordIcon color="success" sx={{ marginRight: 1 }} />
+            <Typography variant="h6" component="div" sx={{ fontSize: '1.5rem' }} >
+              Block  <b>{currentBlock !== 0 ? currentBlock : '...'}</b>
+            </Typography>
+          </Box>
+          <Typography variant="subtitle1" component="div" sx={{ fontSize: '2.5rem', fontWeight: 'bold', padding:2}}>
+            Today
           </Typography>
+          <Typography variant="body1" component="div" sx={{ fontSize: '1.45rem', padding:1 }} >
+            Total potential profit: <b>{isLoading ? <CircularProgress size={20} /> :`${apiData.totalProfit} $`}</b>
+          </Typography>
+          <Typography variant="body1" component="div" sx={{ fontSize: '1.45rem', padding:1 }}>
+            Number of opportunities: <b>{isLoading ? <CircularProgress size={20} /> : apiData.nbOpportunities}</b>
+          </Typography>
+          <Typography variant="body1" component="div" sx={{ fontSize: '1.45rem', padding:1 }}>
+            Most arbitraged token: <b>{isLoading ? <CircularProgress size={20} /> : apiData.mostArbitragedToken}</b>
+          </Typography>
+
         </Box>
-        <Typography variant="subtitle1" component="div">
-          24h statistics
-        </Typography>
-        <Typography variant="body1" component="div">
-          Total potential profit: {isLoading ? <CircularProgress size={20} /> : apiData.totalProfit}
-        </Typography>
-        <Typography variant="body1" component="div">
-          Number of opportunities: {isLoading ? <CircularProgress size={20} /> : apiData.nbOpportunities}
-        </Typography>
-        <Typography variant="body1" component="div">
-          Most arbitraged token: {isLoading ? <CircularProgress size={20} /> : apiData.mostArbitragedToken}
-        </Typography>
+      </Box>
+      <Box sx={{ position: 'fixed', bottom: 0, left: 0, zIndex: 3 }}>
+        <Typography variant='h5'>By Lukas and Jordan</Typography>
       </Box>
     </>
   );

@@ -157,6 +157,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {
       setBlockList((prevDataList) => [receivedData, ...prevDataList]);
+      setCurrentBlockNumber(receivedData.blockNumber);
     });
 
     // Clean up the socket connection when the component is unmounted or when isSearchActive changes
