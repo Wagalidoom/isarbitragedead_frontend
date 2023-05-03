@@ -9,14 +9,14 @@ export interface OpportunityData {
   sellMarketAddress: string,
   sellMarketName: string,
   sellMarketLogo: string,
-  token0Address: string,
-  token0Name: string | undefined,
-  token0Symbol: string | undefined
-  token0Logo: string,
-  token1Address: string,
-  token1Name: string | undefined,
-  token1Symbol: string | undefined,
-  token1Logo: string,
+  tokenAddress: string,
+  tokenName: string | undefined,
+  tokenSymbol: string | undefined
+  tokenLogo: string,
+  baseAddress: string,
+  baseName: string | undefined,
+  baseSymbol: string | undefined,
+  baseLogo: string,
   deltaXa: number,
   deltaYa: number,
   deltaXb: number,
@@ -28,8 +28,8 @@ export interface OpportunityData {
 const Opportunity: React.FC<OpportunityData & { key: number, blockNumber: number }> = ({
   buyMarketLogo,
   sellMarketLogo,
-  token0Symbol,
-  token1Symbol,
+  tokenSymbol,
+  baseSymbol,
   deltaYa,
   deltaXa,
   deltaYb,
@@ -42,7 +42,7 @@ const Opportunity: React.FC<OpportunityData & { key: number, blockNumber: number
     <Link href={opportunityLink} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '95%', height: '100px', backgroundColor: '#eae6e1', marginBottom: '30px', borderRadius: '3px', padding: '10px',  textDecoration: 'none' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
         <img src={buyMarketLogo} alt="Exchange 1 Logo" width="40" height="40" />
-        <Typography variant="body1" sx={{ marginLeft: '4vw', marginRight: '4vw', fontSize: '1.2em' }}> {deltaYa.toFixed(2)} ETH → {-deltaXa.toFixed(2)} → {-deltaYb.toFixed(2)} ETH </Typography>
+        <Typography variant="body1" sx={{ marginLeft: '4vw', marginRight: '4vw', fontSize: '1.2em' }}> <b>{deltaYa.toFixed(4)}</b> {baseSymbol}  → <b>{-deltaXa.toFixed(2)}</b> {tokenSymbol}  → <b>{-deltaYb.toFixed(4)}</b> {baseSymbol}  </Typography>
         <img src={sellMarketLogo} alt="Exchange 2 Logo" width="40" height="40" />
       </Box>
       <Typography variant="body1" sx={{ fontFamily: 'Arial', fontSize: '1em' }}>Profit: <b>{profitDol.toFixed(2)} $</b></Typography>
