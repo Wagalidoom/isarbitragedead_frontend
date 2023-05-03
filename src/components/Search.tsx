@@ -45,7 +45,7 @@ const Search: React.FC<{searchParams: {searchInput: string | null, profitMin: st
   }, [searchParams]);
 
   return (
-    <Grid container rowSpacing={5} sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+    <Grid container rowSpacing={5} sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#eae6e1' }}
     >
       {isLoading ? (
         <CircularProgress color="inherit" size={80} />
