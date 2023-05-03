@@ -1,19 +1,53 @@
 import { Box, Link, Paper, Typography } from '@mui/material';
 import React from 'react';
-import { BlockData, OpportunityData } from './Blocks';
+import { BlockData } from './Blocks';
 
-const Opportunity: React.FC<OpportunityData & { key: number, blockNumber: number }> = ({ buyMarketAddress, sellMarketAddres, deltaXa, deltaYa, deltaYb, profit, key, blockNumber }) => {
+export interface OpportunityData {
+  buyMarketAddress: string,
+  buyMarketName: string,
+  buyMarketLogo: string,
+  sellMarketAddress: string,
+  sellMarketName: string,
+  sellMarketLogo: string,
+  token0Address: string,
+  token0Name: string | undefined,
+  token0Symbol: string | undefined
+  token0Logo: string,
+  token1Address: string,
+  token1Name: string | undefined,
+  token1Symbol: string | undefined,
+  token1Logo: string,
+  deltaXa: number,
+  deltaYa: number,
+  deltaXb: number,
+  deltaYb: number,
+  profitEth: number,
+  profitDol: number
+}
+
+const Opportunity: React.FC<OpportunityData & { key: number, blockNumber: number }> = ({
+  buyMarketLogo,
+  sellMarketLogo,
+  token0Symbol,
+  token1Symbol,
+  deltaYa,
+  deltaXa,
+  deltaYb,
+  profitDol,
+  key,
+  blockNumber
+}) => {
   const opportunityLink = `/block/${blockNumber}/opportunity/${key}`;
   return (
-    <Link href={opportunityLink} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '95%', height: '100px', backgroundColor: '#eae6e1', marginBottom: '30px', borderRadius: '3px', padding: '10px', boxShadow: 'inset 0 0 5px #454545' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <img src="logo192.png" alt="Exchange 1 Logo" width="50" height="50" />
-        <Typography variant="body1" sx={{ marginLeft: 2, marginRight: 2 }}> {deltaYa} → {-deltaXa} → {deltaYb}</Typography>
-        <img src="logo192.png" alt="Exchange 2 Logo" width="50" height="50" />
+    <Link href={opportunityLink} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '95%', height: '100px', backgroundColor: '#eae6e1', marginBottom: '30px', borderRadius: '3px', padding: '10px',  textDecoration: 'none' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
+        <img src={buyMarketLogo} alt="Exchange 1 Logo" width="40" height="40" />
+        <Typography variant="body1" sx={{ marginLeft: '4vw', marginRight: '4vw', fontSize: '1.2em' }}> {deltaYa.toFixed(2)} ETH → {-deltaXa.toFixed(2)} → {-deltaYb.toFixed(2)} ETH </Typography>
+        <img src={sellMarketLogo} alt="Exchange 2 Logo" width="40" height="40" />
       </Box>
-      <Typography variant="body1"><b>Profit: {profit}</b></Typography>
+      <Typography variant="body1" sx={{ fontFamily: 'Arial', fontSize: '1em' }}>Profit: <b>{profitDol.toFixed(2)} $</b></Typography>
     </Link>
-  );
+  );  
 };
 
 

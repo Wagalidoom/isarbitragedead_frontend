@@ -1,7 +1,7 @@
 import { Grid, Typography, Fade, Box } from '@mui/material';
 import React, { useState, useEffect, useRef, Ref } from 'react';
 import io from 'socket.io-client';
-import Block from './Block';
+import Block, { OpportunityData } from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import MinimapBlock from './Minimap';
 
@@ -10,17 +10,6 @@ const MINIBLOCKS = Math.floor(window.innerHeight / 15);
 const INITIAL_DATA_TO_FETCH = MINIBLOCKS * 3;
 const SCROLLING_DATA_TO_FETCH = 50;
 const THROTTLE = 20;
-
-// Interfaces de données
-export interface OpportunityData {
-  buyMarketAddress: string,
-  sellMarketAddres: string,
-  deltaXa: number,
-  deltaYa: number,
-  deltaXb: number,
-  deltaYb: number,
-  profit: number,
-}
 
 export interface BlockData {
   blockNumber: number,
