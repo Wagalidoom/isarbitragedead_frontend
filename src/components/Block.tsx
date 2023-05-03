@@ -1,6 +1,7 @@
 import { Box, Link, Paper, Typography } from '@mui/material';
 import React from 'react';
 import { BlockData } from './Blocks';
+import { useNavigate } from 'react-router-dom';
 
 export interface OpportunityData {
   buyMarketAddress: string,
@@ -38,15 +39,21 @@ const Opportunity: React.FC<OpportunityData & { key: number, blockNumber: number
   blockNumber
 }) => {
   const opportunityLink = `/block/${blockNumber}/opportunity/${key}`;
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(opportunityLink);
+  };
+
   return (
-    <Link href={opportunityLink} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '95%', height: '100px', backgroundColor: '#eae6e1', marginBottom: '30px', borderRadius: '3px', padding: '10px',  textDecoration: 'none' }}>
+    <Paper elevation={1} onClick={handleClick} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '95%', height: '100px', backgroundColor: '#eae6e1', marginBottom: '30px', borderRadius: '3px', padding: '10px', cursor: 'pointer' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
         <img src={buyMarketLogo} alt="Exchange 1 Logo" width="40" height="40" />
-        <Typography variant="body1" sx={{ marginLeft: '2vw', marginRight: '2vw', fontSize: '1.2em' }}> <b>{deltaYa.toFixed(4)}</b> {baseSymbol}  → <b>{-deltaXa.toFixed(2)}</b> {tokenSymbol}  → <b>{-deltaYb.toFixed(4)}</b> {baseSymbol}  </Typography>
+        <Typography sx={{ color: '#000000', marginLeft: '2vw', marginRight: '2vw', fontSize: '1.2em' }}> <b>{deltaYa.toFixed(4)}</b> {baseSymbol}  → <b>{-deltaXa.toFixed(2)}</b> {tokenSymbol}  → <b>{-deltaYb.toFixed(4)}</b> {baseSymbol}  </Typography>
         <img src={sellMarketLogo} alt="Exchange 2 Logo" width="40" height="40" />
       </Box>
-      <Typography variant="body1" sx={{ fontSize: '1.2em' }}>Profit: <b>{profitDol.toFixed(2)} $</b></Typography>
-    </Link>
+      <Typography variant="body1" sx={{ color: '#000000', fontSize: '1.2em' }}>Profit: <b>{profitDol.toFixed(2)} $</b></Typography>
+    </Paper>
   );  
 };
 
