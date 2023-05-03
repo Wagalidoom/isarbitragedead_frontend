@@ -19,7 +19,7 @@ const Opportunity: React.FC<OpportunityData & { key: number, blockNumber: number
 
 const Block: React.FC<BlockData> = React.forwardRef(({ blockNumber, opportunities }, ref) => {
   const content = opportunities.length === 0
-    ? (<Typography variant="body1" sx={{ color: '#ffffff' }}>No opportunities at this block</Typography>)
+    ? (<Box sx={{ width: '100%' }}><Typography variant="body1" sx={{ color: '#ffffff' }}>No opportunities at this block</Typography></Box>)
     : (opportunities.map((opportunity, index) => <Opportunity key={index} blockNumber={blockNumber} {...opportunity} />));
 
   return (
