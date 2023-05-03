@@ -1,9 +1,10 @@
-import { Grid, Typography, Fade, Box } from '@mui/material';
+import { Grid, Typography, Fade, Box, Fab } from '@mui/material';
 import React, { useState, useEffect, useRef, Ref } from 'react';
 import io from 'socket.io-client';
 import Block, { OpportunityData } from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import MinimapBlock from './Minimap';
+import { ArrowUpward } from '@mui/icons-material';
 
 // Constantes globales
 const MINIBLOCKS = Math.floor(window.innerHeight / 15);
@@ -194,8 +195,16 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     });
   }, [visibleBlock, blockList]);
 
+  // Fonction pour remonter en un clic 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth" 
+    });
+  };
 
   return (
+    
     <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }} >
       <Grid item xs={11} md={11} sx={{ backgroundColor: '#eae6e1' }}>
         {blockList.length > 0 ? (
@@ -225,6 +234,11 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
           <MinimapBlock key={index} blockNumber={blockNumber} onClick={() => handleMinimapClick(index)} isHighLighted={blockNumber === visibleBlock} />
         ))}
       </Grid>
+      <Box sx={{ position: 'fixed', top: 16, right: 150, zIndex: 1 }}>
+        <Fab color="secondary" onClick={scrollToTop}>
+          <ArrowUpward />
+        </Fab>
+      </Box>
     </Grid>
   );
 

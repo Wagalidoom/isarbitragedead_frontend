@@ -1,3 +1,10 @@
+/* Cacher barre pour Chrome Safari et Opera */
+::-webkit-scrollbar {
+  display: none;
+}
+
 html {
     scroll-behavior: smooth;
+    -ms-overflow-style: none;  /* IE et Edge */
+    scrollbar-width: none;  /* Firefox */
   }
