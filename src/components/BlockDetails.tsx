@@ -12,7 +12,7 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
       <Box sx={{ width: '80%', height: '80%', backgroundColor: '#ffffff', margin: 'auto', padding: 2 }}>
         <Typography variant="h4" sx={{ marginBottom: 2 }}>Block Details</Typography>
         <Typography variant="h6" sx={{ marginBottom: 1 }}>Block Number: {blockNumber}</Typography>
-        <Typography variant="h6" sx={{ marginBottom: 1 }}>Opportunities:</Typography>
+        <Typography variant="h6" sx={{ marginBottom: 1 }}>Opportunities: {opportunityIndex} </Typography>
       </Box>
     </Box>
   );

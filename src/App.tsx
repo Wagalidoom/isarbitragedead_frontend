@@ -35,7 +35,6 @@ function App() {
             </Grid>} />
           <Route path="/block/:blockNumber/opportunity/:opportunityIndex" element={<BlockDetails />} />
         </Routes>
-
       </ThemeProvider>
     </BrowserRouter>
   );
