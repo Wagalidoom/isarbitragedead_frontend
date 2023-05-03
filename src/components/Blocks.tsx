@@ -19,7 +19,7 @@ export interface OpportunityData {
   deltaYa: number,
   deltaXb: number,
   deltaYb: number,
-  profit: number
+  profit: number,
 }
 
 export interface BlockData {
