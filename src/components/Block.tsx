@@ -42,10 +42,10 @@ const Opportunity: React.FC<OpportunityData & { key: number, blockNumber: number
     <Link href={opportunityLink} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '95%', height: '100px', backgroundColor: '#eae6e1', marginBottom: '30px', borderRadius: '3px', padding: '10px',  textDecoration: 'none' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
         <img src={buyMarketLogo} alt="Exchange 1 Logo" width="40" height="40" />
-        <Typography variant="body1" sx={{ marginLeft: '4vw', marginRight: '4vw', fontSize: '1.2em' }}> <b>{deltaYa.toFixed(4)}</b> {baseSymbol}  → <b>{-deltaXa.toFixed(2)}</b> {tokenSymbol}  → <b>{-deltaYb.toFixed(4)}</b> {baseSymbol}  </Typography>
+        <Typography variant="body1" sx={{ marginLeft: '2vw', marginRight: '2vw', fontSize: '1.2em' }}> <b>{deltaYa.toFixed(4)}</b> {baseSymbol}  → <b>{-deltaXa.toFixed(2)}</b> {tokenSymbol}  → <b>{-deltaYb.toFixed(4)}</b> {baseSymbol}  </Typography>
         <img src={sellMarketLogo} alt="Exchange 2 Logo" width="40" height="40" />
       </Box>
-      <Typography variant="body1" sx={{ fontFamily: 'Arial', fontSize: '1em' }}>Profit: <b>{profitDol.toFixed(2)} $</b></Typography>
+      <Typography variant="body1" sx={{ fontSize: '1.2em' }}>Profit: <b>{profitDol.toFixed(2)} $</b></Typography>
     </Link>
   );  
 };
