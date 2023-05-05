@@ -5,7 +5,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { LOCAL_IP_ADDRESS } from '../App';
 export interface ISidePanel {
-  onSearchChange: (searchParams: { searchInput: string | null, profitMin: string | null, profitMax: string | null }) => void,
+  onSearchChange: (searchParams: { searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean }) => void,
   currentBlock: number
 }
 
@@ -20,10 +20,11 @@ interface IArbStatistics {
   }
 }
 
-const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
+const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
   const [searchInput, setSearchInput] = useState<string | null>(null);
   const [profitMin, setProfitMin] = useState<string | null>(null);
   const [profitMax, setProfitMax] = useState<string | null>(null);
+  const [isDollarProfitFilter, setIsDollarProfitFilter] = useState<boolean>(true);
   const [hasSearched, setHasSearched] = useState(false);
   const [apiData, setApiData] = useState<IArbStatistics | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -62,10 +63,14 @@ const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
     setProfitMax(event.target.value !== '' ? event.target.value : null);
   };
 
+  const toggleCurrencyFilter = () => {
+    setIsDollarProfitFilter(!isDollarProfitFilter);
+  };
+
 
   const handleSearchSubmit = () => {
     if (searchInput || profitMin || profitMax) {
-      onSearchChange({ searchInput, profitMin, profitMax });
+      onSearchChange({ searchInput, profitMin, profitMax, isDollar: isDollarProfitFilter });
       setHasSearched(true);
     }
   };
@@ -74,7 +79,7 @@ const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
     setSearchInput(null);
     setProfitMin(null);
     setProfitMax(null);
-    onSearchChange({ searchInput: null, profitMin: null, profitMax: null });
+    onSearchChange({ searchInput: null, profitMin: null, profitMax: null, isDollar: isDollarProfitFilter });
     setHasSearched(false);
   };
 
@@ -121,36 +126,33 @@ const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
           }}
         />
         {/* Profit filters */}
-        <TextField
-          fullWidth
-          id="outlined-profitMin"
-          label="Profit Min"
-          value={profitMin || ''}
-          onChange={handleProfitMinInput}
-          onKeyPress={handleKeyPress}
-          sx={{ marginTop: 1, '& input': { color: 'black' } }}
-        />
-        <TextField
-          fullWidth
-          id="outlined-profitMax"
-          label="Profit Max"
-          type="text"
-          value={profitMax || ''}
-          onChange={handleProfitMaxInput}
-          onKeyPress={handleKeyPress}
-          sx={{ marginTop: 1, '& input': { color: 'black' } }}
-        />
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          padding: 2,
-          marginTop: 2,
-          color: 'black',
-        }}
-      >
+        <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', marginTop: 1 }}>
+          <TextField
+            fullWidth
+            id="outlined-profitMin"
+            label="Profit Min"
+            value={profitMin || ''}
+            onChange={handleProfitMinInput}
+            onKeyPress={handleKeyPress}
+            sx={{ '& input': { color: 'black' } }}
+          />
+          <IconButton onClick={toggleCurrencyFilter}>
+            {isDollarProfitFilter ? "$" : "Ξ"}
+          </IconButton>
+          <TextField
+            fullWidth
+            id="outlined-profitMax"
+            label="Profit Max"
+            type="text"
+            value={profitMax || ''}
+            onChange={handleProfitMaxInput}
+            onKeyPress={handleKeyPress}
+            sx={{ marginLeft: 1, '& input': { color: 'black' } }}
+          />
+          <IconButton onClick={toggleCurrencyFilter}>
+            {isDollarProfitFilter ? "$" : "Ξ"}
+          </IconButton>
+        </Box>
         {/* Statistics block */}
         <Box
           sx={{
@@ -207,4 +209,4 @@ const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
   );
 };
 
-export default Filter;
+export default SidePanel;

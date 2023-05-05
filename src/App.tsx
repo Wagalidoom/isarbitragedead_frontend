@@ -1,17 +1,17 @@
 import './styles/globals.css';
 import lightTheme from './styles/theme/lightTheme';
 import Blocks from './components/Blocks';
-import { Box, CssBaseline, Grid, ThemeProvider, Typography } from '@mui/material';
+import { Box, CssBaseline, Grid, ThemeProvider } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Filter from './components/SidePanel';
 import { useState } from 'react';
 import Search from './components/Search';
 import BlockDetails from './components/BlockDetails';
+import SidePanel from './components/SidePanel';
 
 export const LOCAL_IP_ADDRESS = process.env.REACT_APP_LOCAL_IP;
 
 function App() {
-  const [searchParams, setSearchParams] = useState<{ searchInput: string | null, profitMin: string | null, profitMax: string | null }>({ searchInput: null, profitMin: null, profitMax: null });
+  const [searchParams, setSearchParams] = useState<{ searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean }>({ searchInput: null, profitMin: null, profitMax: null, isDollar: true });
   const [currentBlockNumber, setCurrentBlockNumber] = useState<number>(0);
 
   return (
@@ -24,7 +24,7 @@ function App() {
             <Grid container columnSpacing={0} sx={{ height: '100%' }}>
               <Grid item xs={3} md={3} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, zIndex: 1 }}>
                 <Box sx={{ position: 'sticky', top: '50px' }}>
-                  <Filter onSearchChange={setSearchParams} currentBlock={currentBlockNumber} />
+                  <SidePanel onSearchChange={setSearchParams} currentBlock={currentBlockNumber} />
                 </Box>
                 
               </Grid>
