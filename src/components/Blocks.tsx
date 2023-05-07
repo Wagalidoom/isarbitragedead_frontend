@@ -5,7 +5,6 @@ import Block, { OpportunityData } from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import { ArrowUpward } from '@mui/icons-material';
 import lightTheme from '../styles/theme/lightTheme';
-import MinimapBlock from './Minimap';
 
 // Constantes globales
 const MINIBLOCKS = Math.floor(window.innerHeight / 15);
@@ -54,69 +53,6 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   const [lastDisplayedBlock, setLastDisplayedBlock] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [visibleBlock, setVisibleBlock] = useState<number | null>(null);
-  const minimapRef = useRef<HTMLDivElement>(null);
-  const [mainScrollTop, setMainScrollTop] = useState(0);
-  const mainContainerRef = useRef<HTMLDivElement>(null);
-  const minimapScrollSpeedFactor = 0.5;  // Ajuster cette valeur pour changer la vitesse de déplacement des miniblocks
-
-  // Gère le défilement principal
-  const handleMainScroll = () => {
-    if (mainContainerRef.current) {
-      const { scrollTop } = mainContainerRef.current;
-      requestAnimationFrame(() => {
-        setMainScrollTop(scrollTop);
-      });
-    }
-  };
-
-  // Ajoute et supprime le gestionnaire d'événements de défilement
-  useEffect(() => {
-    const current = mainContainerRef.current;
-    if (current) {
-      // Ajouter le gestionnaire d'événements de scroll à la liste principale
-      current.addEventListener('scroll', handleMainScroll);
-
-      return () => {
-        // Supprimer le gestionnaire d'événements de scroll lorsque le composant est démonté
-        current.removeEventListener('scroll', handleMainScroll);
-      };
-    }
-  }, []);
-
-  // Met à jour la liste des blocs lorsqu'un nouveau bloc est détecté
-  useEffect(() => {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Le numéro de bloc est stocké dans l'attribut 'data-block-number' de chaque div de bloc
-          const blockNumber = parseInt(entry.target.getAttribute('data-block-number') || '');
-          setVisibleBlock(blockNumber);
-          console.log(blockNumber);
-        }
-      });
-    }, {
-      rootMargin: '0px',
-      threshold: 0.5,
-    });
-
-    blockRefs.current.forEach(ref => {
-      if (ref) observer.observe(ref);
-    });
-
-    return () => {
-      blockRefs.current.forEach(ref => {
-        if (ref) observer.unobserve(ref);
-      });
-    };
-  }, [blockList]);
-
-  const handleMinimapClick = (index: number) => {
-    const ref = blockRefs.current[index];
-    if (ref) {
-      ref.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   // Récupère l'historique des données de manière asynchrone et met à jour l'état
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
@@ -178,24 +114,6 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     fetchInitialData();
   }, [setCurrentBlockNumber]);
 
-    // Défile la minimap pour garder le bloc visible à une position fixe
-    useEffect(() => {
-      const blockHeight = 15;
-      if (visibleBlock === null || minimapRef.current === null) {
-        return;
-      }
-  
-      const blockIndex = blockList.findIndex(block => block.blockNumber === visibleBlock);
-  
-      console.log('Scrolling minimap to block index:', blockIndex);
-  
-      // Défiler pour que le bloc surligné soit toujours visible à une position fixe
-      minimapRef.current.scrollTo({
-        top: blockHeight * blockIndex,
-        behavior: 'smooth'
-      });
-    }, [visibleBlock, blockList]);
-
   // Fonction pour remonter en un clic 
   const scrollToTop = () => {
     window.scrollTo({
@@ -229,10 +147,8 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
           </Typography>
         )}
       </Grid>
-      <Grid item xs={0} sm={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: isSmallScreen ? 'none' : 'grid', justifyContent: 'center', height: '100vh', overflow: 'hidden', position: 'sticky', top: '0', transform: `translateY(-${mainScrollTop * minimapScrollSpeedFactor}px)`, willChange: 'transform' }} ref={minimapRef}>
-        {blockList.map(({ blockNumber }, index) => (
-          <MinimapBlock key={index} blockNumber={blockNumber} onClick={() => handleMinimapClick(index)} isHighLighted={blockNumber === visibleBlock} />
-        ))}
+      <Grid item xs={0} sm={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: isSmallScreen ? 'none' : 'grid', justifyContent: 'center', height: '100vh', overflow: 'hidden', position: 'sticky', top: '0', willChange: 'transform' }}>
+        Minimap
       </Grid>
       <Box sx={{ position: 'fixed', top: 16, right: 150, zIndex: 1 }}>
         <Fab color="secondary" onClick={scrollToTop}>
