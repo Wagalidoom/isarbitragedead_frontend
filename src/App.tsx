@@ -7,7 +7,6 @@ import SidePanel from './components/SidePanel';
 import { useState } from 'react';
 import Search from './components/Search';
 import BlockDetails from './components/BlockDetails';
-import SidePanel from './components/SidePanel';
 
 export const LOCAL_IP_ADDRESS = process.env.REACT_APP_LOCAL_IP;
 
