@@ -31,9 +31,6 @@ function App() {
               <Grid item xs={12} sm={9} md={9}>
                 {(searchParams.searchInput || searchParams.profitMin || searchParams.profitMax) ? <Search searchParams={searchParams} /> : <Blocks setCurrentBlockNumber={setCurrentBlockNumber} />}
               </Grid>
-              <Grid item xs={1} md={1}>
-                {/* <Minimap /> */}
-              </Grid>
             </Grid>} />
           <Route path="/block/:blockNumber/opportunity/:opportunityIndex" element={<BlockDetails />} />
         </Routes>
