@@ -5,6 +5,8 @@ import Block, { OpportunityData } from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import { ArrowUpward } from '@mui/icons-material';
 import lightTheme from '../styles/theme/lightTheme';
+import MiniBlock from './MiniBlock';
+
 
 // Constantes globales
 const MINIBLOCKS = Math.floor(window.innerHeight / 15);
@@ -54,6 +56,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   const [blockList, setBlockList] = useState<BlockData[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+
   // Récupère l'historique des données de manière asynchrone et met à jour l'état
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
     const history = await fetchBlocksHistory(limit, fromBlock);
@@ -65,22 +68,22 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   };
 
   // Listening to scroll events and hot loading
-  useEffect(() => {
-    const handleScroll = throttle(() => {
-      // Check if the user has scrolled to the near bottom of the page
-      if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.scrollHeight - 100) return;
-      fetchDataHistory(SCROLLING_DATA_TO_FETCH, lastDisplayedBlock);
-    }, THROTTLE);
+  // useEffect(() => {
+  //   const handleScroll = throttle(() => {
+  //     // Check if the user has scrolled to the near bottom of the page
+  //     if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.scrollHeight - 100) return;
+  //     fetchDataHistory(SCROLLING_DATA_TO_FETCH, lastDisplayedBlock);
+  //   }, THROTTLE);
 
-    // Add the 'handleScroll' function as an event listener for the 'scroll' event on the window object only when search is not active
-    window.addEventListener('scroll', handleScroll);
+  //   // Add the 'handleScroll' function as an event listener for the 'scroll' event on the window object only when search is not active
+  //   window.addEventListener('scroll', handleScroll);
 
-    // Return a cleanup function that removes the event listener when the component is unmounted or when the dependencies change
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-    // The effect depends on 'lastDisplayedBlock', so it will run whenever 'lastDisplayedBlock' changes
-  }, [lastDisplayedBlock]);
+  //   // Return a cleanup function that removes the event listener when the component is unmounted or when the dependencies change
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
+  //   };
+  //   // The effect depends on 'lastDisplayedBlock', so it will run whenever 'lastDisplayedBlock' changes
+  // }, [lastDisplayedBlock]);
 
   // Met à jour les références des blocs lorsque la liste des blocs change
   useEffect(() => {
@@ -122,9 +125,13 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     });
   };
 
+  // Fonctions pour le fonctionnement de la minimap
+  
+
+
   return (
     <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }} >
-      <Grid item xs={12} sm={11} md={11} sx={{ backgroundColor: '#eae6e1' }}>
+      <Grid item xs={12} sm={11} md={11} sx={{ backgroundColor: '#eae6e1' }} >
         {blockList.length > 0 ? (
           blockList.map(({ blockNumber, opportunities }, index) => (
             <Box sx={{ marginTop: '50px' }} key={index}>
@@ -138,18 +145,29 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
                 <Block ref={el => blockRefs.current[index] = el} blockNumber={blockNumber} opportunities={opportunities} />
               )}
             </Box>
-          )
+            )
           )
         ) : (
-          // <Block blockNumber={157896} opportunities={[]} />
-          <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray' }} >
+          <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'gray', textAlign: 'center' }} >
             No blocks to be shown
           </Typography>
         )}
       </Grid>
-      <Grid item xs={0} sm={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: isSmallScreen ? 'none' : 'grid', justifyContent: 'center', height: '100vh', overflow: 'hidden', position: 'sticky', top: '0', willChange: 'transform' }}>
-        Minimap
+
+      {/* Minimap */}
+      <Grid item xs={0} sm={1} md={1}  >
+        {blockList.length > 0 ? (
+          blockList.map(({ opportunities }) => (
+            <MiniBlock nbOpportunities={opportunities.length} />
+            )
+          )
+        ) : (
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'gray', textAlign: 'center' }} >
+            No blocks to be shown
+          </Typography>
+        )}
       </Grid>
+
       <Box sx={{ position: 'fixed', top: 16, right: 150, zIndex: 1 }}>
         <Fab color="secondary" onClick={scrollToTop}>
           <ArrowUpward />
