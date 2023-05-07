@@ -5,7 +5,7 @@ import { LOCAL_IP_ADDRESS } from '../App';
 import { BlockData } from './Blocks';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const generateApiUrl = (searchInput: string | null,profitMin: string | null,profitMax: string | null): string => {
+const generateApiUrl = (searchInput: string | null,profitMin: string | null, profitMax: string | null, isDollar: boolean): string => {
   let baseApiUrl = `http://${LOCAL_IP_ADDRESS}:3001/api/search?`;
 
   if (searchInput) {
@@ -19,19 +19,20 @@ const generateApiUrl = (searchInput: string | null,profitMin: string | null,prof
   if (profitMax) {
     baseApiUrl += `&profitMax=${profitMax}`;
   }
+  baseApiUrl += `&isDollar=${isDollar}`;
 
   return baseApiUrl;
 };
 
 
-const Search: React.FC<{searchParams: {searchInput: string | null, profitMin: string | null, profitMax: string | null}}> = ({ searchParams }) => {
+const Search: React.FC<{searchParams: {searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean}}> = ({ searchParams }) => {
   const [searchResults, setSearchResults] = useState<BlockData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const apiRequest = async ({searchInput, profitMin, profitMax}: {searchInput: string | null, profitMin: string | null, profitMax: string | null}) => {
+  const apiRequest = async ({searchInput, profitMin, profitMax, isDollar}: {searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean}) => {
     setIsLoading(true);
     try {
-      const response = await fetch(generateApiUrl(searchInput, profitMin, profitMax));
+      const response = await fetch(generateApiUrl(searchInput, profitMin, profitMax, isDollar));
       const data: BlockData[] = await response.json();
       setSearchResults(data);
     } catch (error) {

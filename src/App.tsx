@@ -7,6 +7,7 @@ import SidePanel from './components/SidePanel';
 import { useState } from 'react';
 import Search from './components/Search';
 import BlockDetails from './components/BlockDetails';
+import SidePanel from './components/SidePanel';
 
 export const LOCAL_IP_ADDRESS = process.env.REACT_APP_LOCAL_IP;
 
@@ -26,10 +27,14 @@ function App() {
               <Grid item xs={0} sm={3} md={3} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, zIndex: 1, display: isSmallScreen ? 'none' : 'block' }}>
                 <Box sx={{ position: 'sticky', top: '50px' }}>
                   <SidePanel onSearchChange={setSearchParams} currentBlock={currentBlockNumber} />
+                  <SidePanel onSearchChange={setSearchParams} currentBlock={currentBlockNumber} />
                 </Box>
               </Grid>
               <Grid item xs={12} sm={9} md={9}>
                 {(searchParams.searchInput || searchParams.profitMin || searchParams.profitMax) ? <Search searchParams={searchParams} /> : <Blocks setCurrentBlockNumber={setCurrentBlockNumber} />}
+              </Grid>
+              <Grid item xs={1} md={1}>
+                {/* <Minimap /> */}
               </Grid>
             </Grid>} />
           <Route path="/block/:blockNumber/opportunity/:opportunityIndex" element={<BlockDetails />} />
