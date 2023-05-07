@@ -26,10 +26,13 @@ function App() {
                 <Box sx={{ position: 'sticky', top: '50px' }}>
                   <SidePanel onSearchChange={setSearchParams} currentBlock={currentBlockNumber} />
                 </Box>
-                
+
               </Grid>
-              <Grid item xs={9} md={9}>
+              <Grid item xs={8} md={8}>
                 {(searchParams.searchInput || searchParams.profitMin || searchParams.profitMax) ? <Search searchParams={searchParams} /> : <Blocks setCurrentBlockNumber={setCurrentBlockNumber} />}
+              </Grid>
+              <Grid item xs={1} md={1}>
+                {/* <Minimap /> */}
               </Grid>
             </Grid>} />
           <Route path="/block/:blockNumber/opportunity/:opportunityIndex" element={<BlockDetails />} />

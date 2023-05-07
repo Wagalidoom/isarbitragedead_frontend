@@ -3,6 +3,7 @@ import React from 'react';
 import { BlockData } from './Blocks';
 import { useNavigate } from 'react-router-dom';
 
+
 export interface OpportunityData {
   buyMarketAddress: string,
   buyMarketName: string,
