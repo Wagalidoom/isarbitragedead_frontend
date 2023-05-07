@@ -12,7 +12,7 @@ export const LOCAL_IP_ADDRESS = process.env.REACT_APP_LOCAL_IP;
 
 function App() {
   const isSmallScreen = useMediaQuery(lightTheme.breakpoints.down('sm'));
-  const [searchParams, setSearchParams] = useState<{ searchInput: string | null, profitMin: string | null, profitMax: string | null }>({ searchInput: null, profitMin: null, profitMax: null });
+  const [searchParams, setSearchParams] = useState<{ searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean }>({ searchInput: null, profitMin: null, profitMax: null, isDollar: true });
   const [currentBlockNumber, setCurrentBlockNumber] = useState<number>(0);
 
   return (
@@ -25,7 +25,6 @@ function App() {
             <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }}>
               <Grid item xs={0} sm={3} md={3} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, zIndex: 1, display: isSmallScreen ? 'none' : 'block' }}>
                 <Box sx={{ position: 'sticky', top: '50px' }}>
-                  <SidePanel onSearchChange={setSearchParams} currentBlock={currentBlockNumber} />
                   <SidePanel onSearchChange={setSearchParams} currentBlock={currentBlockNumber} />
                 </Box>
               </Grid>
