@@ -1,9 +1,10 @@
-import { Box, TextField, IconButton, InputAdornment, Typography, CircularProgress } from '@mui/material';
+import { Box, TextField, IconButton, InputAdornment, Typography, CircularProgress, useMediaQuery } from '@mui/material';
 import React, { ChangeEvent, useState, KeyboardEvent, useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { LOCAL_IP_ADDRESS } from '../App';
+import lightTheme from '../styles/theme/lightTheme';
 export interface ISidePanel {
   onSearchChange: (searchParams: { searchInput: string | null, profitMin: string | null, profitMax: string | null }) => void,
   currentBlock: number
@@ -20,7 +21,8 @@ interface IArbStatistics {
   }
 }
 
-const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
+const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
+  const isSmallScreen = useMediaQuery(lightTheme.breakpoints.down('sm'));
   const [searchInput, setSearchInput] = useState<string | null>(null);
   const [profitMin, setProfitMin] = useState<string | null>(null);
   const [profitMax, setProfitMax] = useState<string | null>(null);
@@ -91,19 +93,19 @@ const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          padding: 2,
+          padding: isSmallScreen ? 0 : 2,
+          width:  isSmallScreen ? 0 : '100%',
         }}
       >
         {/* Searchbar */}
         <TextField
-          fullWidth
           id="outlined-basic"
           label="Search"
           variant="outlined"
           value={searchInput || ''}
           onChange={handleSearchInput}
           onKeyPress={handleKeyPress}
-          sx={{ '& input': { color: 'black' } }}
+          sx={{ width:  isSmallScreen ? 0 : '100%', '& input': { color: 'black' } }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -122,23 +124,21 @@ const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
         />
         {/* Profit filters */}
         <TextField
-          fullWidth
           id="outlined-profitMin"
           label="Profit Min"
           value={profitMin || ''}
           onChange={handleProfitMinInput}
           onKeyPress={handleKeyPress}
-          sx={{ marginTop: 1, '& input': { color: 'black' } }}
+          sx={{ width:  isSmallScreen ? 0 : '100%', marginTop: 1, '& input': { color: 'black' } }}
         />
         <TextField
-          fullWidth
           id="outlined-profitMax"
           label="Profit Max"
           type="text"
           value={profitMax || ''}
           onChange={handleProfitMaxInput}
           onKeyPress={handleKeyPress}
-          sx={{ marginTop: 1, '& input': { color: 'black' } }}
+          sx={{ width:  isSmallScreen ? 0 : '100%', marginTop: 1, '& input': { color: 'black' } }}
         />
       </Box>
       <Box
@@ -146,7 +146,7 @@ const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          padding: 2,
+          padding: isSmallScreen ? 0 : 2,
           marginTop: 2,
           color: 'black',
         }}
@@ -157,31 +157,27 @@ const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            padding: 2,
-            marginTop: 2,
             color: 'black',
-            position: 'fixed',
             bottom: '10%',
             width: '100%',
-            zIndex: 2,
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 1, padding: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 1, padding: isSmallScreen ? 0 : 4 }}>
             <FiberManualRecordIcon color="success" sx={{ marginRight: 1 }} />
-            <Typography variant="h6" component="div" sx={{ fontSize: '1.5rem' }} >
+            <Typography variant="h6" component="div" >
               Block  <b>{currentBlock !== 0 ? currentBlock : '...'}</b>
             </Typography>
           </Box>
-          <Typography variant="subtitle1" component="div" sx={{ fontSize: '2.5rem', fontWeight: 'bold', padding: 2 }}>
+          <Typography variant="subtitle1" component="div" sx={{ fontWeight: 'bold', padding: 2 }}>
             Today
           </Typography>
-          <Typography variant="body1" component="div" sx={{ fontSize: '1.45rem', padding: 1 }} >
+          <Typography variant="body1" component="div" sx={{ padding: 1 }} >
             Total potential profit: <b>{isLoading ? <CircularProgress size={20} /> : `${apiData?.totalProfit.toFixed(2)} $`}</b>
           </Typography>
-          <Typography variant="body1" component="div" sx={{ fontSize: '1.45rem', padding: 1 }}>
+          <Typography variant="body1" component="div" sx={{ padding: 1 }}>
             Number of opportunities: <b>{isLoading ? <CircularProgress size={20} /> : apiData?.nbOpportunities}</b>
           </Typography>
-          <Typography variant="body1" component="div" sx={{ fontSize: '1.45rem', padding: 1 }}>
+          <Typography variant="body1" component="div" sx={{ padding: 1 }}>
             Most arbitraged token:
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 1 }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -207,4 +203,4 @@ const Filter: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
   );
 };
 
-export default Filter;
+export default SidePanel;

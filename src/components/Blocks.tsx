@@ -1,10 +1,11 @@
-import { Grid, Typography, Fade, Box, Fab } from '@mui/material';
+import { Grid, Typography, Fade, Box, Fab, useMediaQuery } from '@mui/material';
 import React, { useState, useEffect, useRef, Ref } from 'react';
 import io from 'socket.io-client';
 import Block, { OpportunityData } from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import MinimapBlock from './Minimap';
 import { ArrowUpward } from '@mui/icons-material';
+import lightTheme from '../styles/theme/lightTheme';
 
 // Constantes globales
 const MINIBLOCKS = Math.floor(window.innerHeight / 15);
@@ -49,6 +50,7 @@ const throttle = (func: (...args: any[]) => any, delay: number): ((...args: any[
 
 const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   // État local et références
+  const isSmallScreen = useMediaQuery(lightTheme.breakpoints.down('sm'));
   const [lastDisplayedBlock, setLastDisplayedBlock] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -204,9 +206,8 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   };
 
   return (
-    
     <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }} >
-      <Grid item xs={11} md={11} sx={{ backgroundColor: '#eae6e1' }}>
+      <Grid item xs={12} sm={11} md={11} sx={{ backgroundColor: '#eae6e1' }}>
         {blockList.length > 0 ? (
           blockList.map(({ blockNumber, opportunities }, index) => (
             <Box sx={{ marginTop: '50px' }} key={index}>
@@ -229,7 +230,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
           </Typography>
         )}
       </Grid>
-      <Grid item xs={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: 'grid', justifyContent: 'center', height: '100vh', overflow: 'hidden', position: 'sticky', top: '0', transform: `translateY(-${mainScrollTop * minimapScrollSpeedFactor}px)`, willChange: 'transform' }} ref={minimapRef}>
+      <Grid item xs={0} sm={1} md={1} sx={{ backgroundColor: '#f7f1e8', boxShadow: 3, display: isSmallScreen ? 'none' : 'grid', justifyContent: 'center', height: '100vh', overflow: 'hidden', position: 'sticky', top: '0', transform: `translateY(-${mainScrollTop * minimapScrollSpeedFactor}px)`, willChange: 'transform' }} ref={minimapRef}>
         {blockList.map(({ blockNumber }, index) => (
           <MinimapBlock key={index} blockNumber={blockNumber} onClick={() => handleMinimapClick(index)} isHighLighted={blockNumber === visibleBlock} />
         ))}
