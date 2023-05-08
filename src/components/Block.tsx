@@ -53,7 +53,7 @@ const Opportunity: React.FC<OpportunityData & { opportunityIndex: number, blockN
         <Typography sx={{ color: '#000000', marginLeft: '2vw', marginRight: '2vw', fontSize: '1.2em' }}> <b>{deltaYa.toFixed(4)}</b> {baseSymbol}  → <b>{-deltaXa.toFixed(2)}</b> {tokenSymbol}  → <b>{-deltaYb.toFixed(4)}</b> {baseSymbol}  </Typography>
         <img src={sellMarketLogo} alt="Exchange 2 Logo" width="40" height="40" />
       </Box>
-      <Typography variant="body1" sx={{ color: '#000000', fontSize: '1.2em' }}>Profit: <b>{opportunityLink} $</b></Typography>
+      <Typography variant="body1" sx={{ color: '#000000', fontSize: '1.2em' }}>Profit: <b>{profitDol.toFixed(2)} $</b></Typography>
     </Paper>
   );  
 };

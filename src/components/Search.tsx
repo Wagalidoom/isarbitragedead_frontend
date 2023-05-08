@@ -5,7 +5,7 @@ import { LOCAL_IP_ADDRESS } from '../App';
 import { BlockData } from './Blocks';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const generateApiUrl = (searchInput: string | null,profitMin: string | null, profitMax: string | null, isDollar: boolean): string => {
+export const generateApiUrl = (searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean): string => {
   let baseApiUrl = `http://${LOCAL_IP_ADDRESS}:3001/api/search?`;
 
   if (searchInput) {
@@ -25,11 +25,11 @@ const generateApiUrl = (searchInput: string | null,profitMin: string | null, pro
 };
 
 
-const Search: React.FC<{searchParams: {searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean}}> = ({ searchParams }) => {
+const Search: React.FC<{ searchParams: { searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean } }> = ({ searchParams }) => {
   const [searchResults, setSearchResults] = useState<BlockData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const apiRequest = async ({searchInput, profitMin, profitMax, isDollar}: {searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean}) => {
+  const apiRequest = async ({ searchInput, profitMin, profitMax, isDollar }: { searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean }) => {
     setIsLoading(true);
     try {
       const response = await fetch(generateApiUrl(searchInput, profitMin, profitMax, isDollar));
@@ -53,7 +53,7 @@ const Search: React.FC<{searchParams: {searchInput: string | null, profitMin: st
       ) : searchResults.length > 0 ? (
         searchResults.map(({ blockNumber, opportunities }, index) => (
           <Grid item xs={12} md={12} key={index}>
-            <Block ref={null} blockNumber={blockNumber} opportunities={opportunities} /> 
+            <Block ref={null} blockNumber={blockNumber} opportunities={opportunities} />
             {/* Passer null en ref ici ou autre chose ??? */}
           </Grid>
         ))
