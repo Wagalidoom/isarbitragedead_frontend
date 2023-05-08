@@ -148,6 +148,14 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     }
   };
 
+  const handleMinimapScroll = (event: React.WheelEvent) => {
+    event.preventDefault();
+    if (blocksScrollRef.current) {
+      blocksScrollRef.current.scrollTop += event.deltaY;
+    }
+  };
+  
+
   return (
     <Grid container columnSpacing={0} sx={{ width: '100%' }} >
       <Grid item xs={12} sm={11} md={11} >
@@ -177,7 +185,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
 
       {/* Minimap */}
       <Grid item xs={0} sm={1} md={1}  >
-        <div ref={miniBlocksScrollRef} style={{ height: '100vh', overflowY: 'scroll' }}>
+        <div ref={miniBlocksScrollRef} onWheel={handleMinimapScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
           {blockList.length > 0 ? (
             blockList.map(({ opportunities }, index) => (
               <MiniBlock nbOpportunities={opportunities.length} key={index} highlighted={false} />
