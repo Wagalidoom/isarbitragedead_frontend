@@ -6,7 +6,7 @@ import { LOCAL_IP_ADDRESS } from '../App';
 import { ArrowUpward } from '@mui/icons-material';
 import lightTheme from '../styles/theme/lightTheme';
 import MiniBlock from './MiniBlock';
-
+import '../styles/scrolling.css';
 
 // Constantes globales
 const MINIBLOCKS = Math.floor(window.innerHeight / 15);
@@ -123,12 +123,13 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   // Fonction pour remonter en un clic 
   const scrollToTop = () => {
     if (blocksScrollRef.current && miniBlocksScrollRef.current) {
-      miniBlocksScrollRef.current.scrollTo({
+      blocksScrollRef.current.scrollTo({
         top: 0,
         behavior: "smooth"
       });
     }
   };
+  
 
   // Fonctions pour le fonctionnement de la minimap
   const handleBlocksScroll = () => {
@@ -154,7 +155,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   return (
     <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }} >
       <Grid item xs={12} sm={11} md={11} >
-        <div ref={blocksScrollRef} onScroll={handleBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}> {/* Ajoutez cette div */}
+        <div ref={blocksScrollRef} onScroll={handleBlocksScroll} className="scroll-container"  style={{ height: '100vh', overflowY: 'scroll' }}> {/* Ajoutez cette div */}
           {blockList.length > 0 ? (
           blockList.map(({ blockNumber, opportunities }, index) => (
             <Box sx={{ marginTop: '50px' }} key={index}>
@@ -180,7 +181,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
 
       {/* Minimap */}
       <Grid item xs={0} sm={1} md={1}  >
-      <div ref={miniBlocksScrollRef} onScroll={handleMiniBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}> {/* Ajoutez cette div */}
+      <div ref={miniBlocksScrollRef} onScroll={handleMiniBlocksScroll} className="scroll-container"  style={{ height: '100vh', overflowY: 'scroll' }}> {/* Ajoutez cette div */}
         {blockList.length > 0 ? (
           blockList.map(({ opportunities }, index) => (
             <MiniBlock nbOpportunities={opportunities.length} key={index} />
