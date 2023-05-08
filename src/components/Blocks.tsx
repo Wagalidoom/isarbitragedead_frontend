@@ -7,9 +7,8 @@ import { ArrowUpward } from '@mui/icons-material';
 import lightTheme from '../styles/theme/lightTheme';
 import MiniBlock from './MiniBlock';
 
-
 // Constantes globales
-const MINIBLOCKS = Math.floor(window.innerHeight / 15);
+const MINIBLOCKS = 5;
 const INITIAL_DATA_TO_FETCH = MINIBLOCKS * 3;
 const SCROLLING_DATA_TO_FETCH = 50;
 const THROTTLE = 20;
@@ -55,6 +54,9 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   const [lastDisplayedBlock, setLastDisplayedBlock] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const blocksScrollRef = useRef<HTMLDivElement | null>(null);
+  const miniBlocksScrollRef = useRef<HTMLDivElement | null>(null);
+
 
 
   // Récupère l'historique des données de manière asynchrone et met à jour l'état
@@ -68,22 +70,30 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   };
 
   // Listening to scroll events and hot loading
-  // useEffect(() => {
-  //   const handleScroll = throttle(() => {
-  //     // Check if the user has scrolled to the near bottom of the page
-  //     if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.scrollHeight - 100) return;
-  //     fetchDataHistory(SCROLLING_DATA_TO_FETCH, lastDisplayedBlock);
-  //   }, THROTTLE);
+  useEffect(() => {
+    const handleScroll = throttle(() => {
+      if (!blocksScrollRef.current) return;
+      // Check if the user has scrolled to the near bottom of the page
+      const { scrollTop, scrollHeight, clientHeight } = blocksScrollRef.current;
+      if (scrollTop + clientHeight >= scrollHeight - 100) {
+        fetchDataHistory(SCROLLING_DATA_TO_FETCH, lastDisplayedBlock);
+      }
+    }, THROTTLE);
 
-  //   // Add the 'handleScroll' function as an event listener for the 'scroll' event on the window object only when search is not active
-  //   window.addEventListener('scroll', handleScroll);
+    // Add the 'handleScroll' function as an event listener for the 'scroll' event on the window object only when search is not active
+    const scrollElement = blocksScrollRef.current;
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', handleScroll);
+    }
 
-  //   // Return a cleanup function that removes the event listener when the component is unmounted or when the dependencies change
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   };
-  //   // The effect depends on 'lastDisplayedBlock', so it will run whenever 'lastDisplayedBlock' changes
-  // }, [lastDisplayedBlock]);
+    // Return a cleanup function that removes the event listener when the component is unmounted or when the dependencies change
+    return () => {
+      if (scrollElement) {
+        scrollElement.removeEventListener('scroll', handleScroll);
+      }
+    };
+    // The effect depends on 'lastDisplayedBlock', so it will run whenever 'lastDisplayedBlock' changes
+  }, [lastDisplayedBlock]);
 
   // Met à jour les références des blocs lorsque la liste des blocs change
   useEffect(() => {
@@ -119,53 +129,64 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
 
   // Fonction pour remonter en un clic 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    if (blocksScrollRef.current && miniBlocksScrollRef.current) {
+      blocksScrollRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
   };
 
-  // Fonctions pour le fonctionnement de la minimap
-  
 
+  // Fonctions pour le fonctionnement de la minimap
+  const handleBlocksScroll = () => {
+    if (blocksScrollRef.current && miniBlocksScrollRef.current) {
+      const blocksScrollHeight = blocksScrollRef.current.scrollHeight - blocksScrollRef.current.offsetHeight;
+      const miniBlocksScrollHeight = miniBlocksScrollRef.current.scrollHeight - miniBlocksScrollRef.current.offsetHeight;
+      const scrollRatio = miniBlocksScrollHeight / blocksScrollHeight;
+      miniBlocksScrollRef.current.scrollTop = blocksScrollRef.current.scrollTop * scrollRatio;
+    }
+  };
 
   return (
-    <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }} >
+    <Grid container columnSpacing={0} sx={{ width: '100%' }} >
       <Grid item xs={12} sm={11} md={11} >
-        {blockList.length > 0 ? (
-          blockList.map(({ blockNumber, opportunities }, index) => (
-            <Box sx={{ marginTop: '50px' }} key={index}>
-              {index === 0 ? (
-                <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
-                  <div>
-                    <Block ref={el => blockRefs.current[index] = el} blockNumber={blockNumber} opportunities={opportunities} />
-                  </div>
-                </Fade>
-              ) : (
-                <Block ref={el => blockRefs.current[index] = el} blockNumber={blockNumber} opportunities={opportunities} />
-              )}
-            </Box>
+        <div ref={blocksScrollRef} onScroll={handleBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
+          {blockList.length > 0 ? (
+            blockList.map(({ blockNumber, opportunities }, index) => (
+              <Box sx={{ marginTop: '50px' }} key={index}>
+                {index === 0 ? (
+                  <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
+                    <div>
+                      <Block ref={el => blockRefs.current[index] = el} blockNumber={blockNumber} opportunities={opportunities} />
+                    </div>
+                  </Fade>
+                ) : (
+                  <Block ref={el => blockRefs.current[index] = el} blockNumber={blockNumber} opportunities={opportunities} />
+                )}
+              </Box>
             )
-          )
-        ) : (
-          <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'gray', textAlign: 'center' }} >
-            No blocks to be shown
-          </Typography>
-        )}
+            )
+          ) : (
+            <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'gray', textAlign: 'center' }} >
+              No blocks to be shown
+            </Typography>
+          )}
+        </div>
       </Grid>
 
       {/* Minimap */}
       <Grid item xs={0} sm={1} md={1}  >
-        {blockList.length > 0 ? (
-          blockList.map(({ opportunities }, index) => (
-            <MiniBlock nbOpportunities={opportunities.length} key={index} />
+        <div ref={miniBlocksScrollRef} style={{ height: '100vh', overflowY: 'scroll' }}>
+          {blockList.length > 0 ? (
+            blockList.map(({ opportunities }, index) => (
+              <MiniBlock nbOpportunities={opportunities.length} key={index} highlighted={false} />
             )
-          )
-        ) : (
-          <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'gray', textAlign: 'center' }} >
-            No blocks to be shown
-          </Typography>
-        )}
+            )
+          ) : (
+            <Typography />
+          )}
+        </div>
       </Grid>
 
       <Box sx={{ position: 'fixed', top: 16, right: 150, zIndex: 1 }}>
