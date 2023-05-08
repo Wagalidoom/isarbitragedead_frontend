@@ -55,6 +55,9 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   const [lastDisplayedBlock, setLastDisplayedBlock] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const blocksScrollRef = useRef<HTMLDivElement | null>(null);
+  const miniBlocksScrollRef = useRef<HTMLDivElement | null>(null);
+
 
 
   // Récupère l'historique des données de manière asynchrone et met à jour l'état
@@ -119,20 +122,40 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
 
   // Fonction pour remonter en un clic 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
+    if (blocksScrollRef.current && miniBlocksScrollRef.current) {
+      miniBlocksScrollRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
   };
 
   // Fonctions pour le fonctionnement de la minimap
+  const handleBlocksScroll = () => {
+    if (blocksScrollRef.current && miniBlocksScrollRef.current) {
+      const blocksScrollHeight = blocksScrollRef.current.scrollHeight - blocksScrollRef.current.offsetHeight;
+      const miniBlocksScrollHeight = miniBlocksScrollRef.current.scrollHeight - miniBlocksScrollRef.current.offsetHeight;
+      const scrollRatio = miniBlocksScrollHeight / blocksScrollHeight;
+      miniBlocksScrollRef.current.scrollTop = blocksScrollRef.current.scrollTop * scrollRatio;
+    }
+  };
+  
+  const handleMiniBlocksScroll = () => {
+    if (blocksScrollRef.current && miniBlocksScrollRef.current) {
+      const blocksScrollHeight = blocksScrollRef.current.scrollHeight - blocksScrollRef.current.offsetHeight;
+      const miniBlocksScrollHeight = miniBlocksScrollRef.current.scrollHeight - miniBlocksScrollRef.current.offsetHeight;
+      const scrollRatio = blocksScrollHeight / miniBlocksScrollHeight;
+      blocksScrollRef.current.scrollTop = miniBlocksScrollRef.current.scrollTop * scrollRatio;
+    }
+  };
   
 
 
   return (
     <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }} >
       <Grid item xs={12} sm={11} md={11} >
-        {blockList.length > 0 ? (
+        <div ref={blocksScrollRef} onScroll={handleBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}> {/* Ajoutez cette div */}
+          {blockList.length > 0 ? (
           blockList.map(({ blockNumber, opportunities }, index) => (
             <Box sx={{ marginTop: '50px' }} key={index}>
               {index === 0 ? (
@@ -152,10 +175,12 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
             No blocks to be shown
           </Typography>
         )}
+        </div>
       </Grid>
 
       {/* Minimap */}
       <Grid item xs={0} sm={1} md={1}  >
+      <div ref={miniBlocksScrollRef} onScroll={handleMiniBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}> {/* Ajoutez cette div */}
         {blockList.length > 0 ? (
           blockList.map(({ opportunities }, index) => (
             <MiniBlock nbOpportunities={opportunities.length} key={index} />
@@ -166,6 +191,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
             No blocks to be shown
           </Typography>
         )}
+        </div>
       </Grid>
 
       <Box sx={{ position: 'fixed', top: 16, right: 150, zIndex: 1 }}>
