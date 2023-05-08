@@ -1,0 +1,27 @@
+.arrow {
+    display: inline-block;
+    position: relative;
+    padding: 0 1rem;
+  }
+  
+  .arrow::before,
+  .arrow::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 1rem solid transparent;
+  }
+  
+  .arrowUp::before {
+    top: 0;
+    border-top-color: #555;
+    border-bottom: none;
+  }
+  
+  .arrowDown::after {
+    bottom: 0;
+    border-bottom-color: #555;
+    border-top: none;
+  }

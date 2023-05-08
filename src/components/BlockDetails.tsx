@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Grid, TextField, Typography, colors, useMediaQuery } from '@mui/material';
+import { Avatar, Box, CircularProgress, Grid, Paper, TextField, Typography, colors, useMediaQuery } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { generateApiUrl } from './Search';
 import { BlockData } from './Blocks';
-import SidePanel from './SidePanel';
-import lightTheme from '../styles/theme/lightTheme';
+import { OpportunityData } from './Block';
+import styles from './../styles/BlockDetails.module.css';
 
 interface Params {
   blockNumber: string;
@@ -15,12 +15,10 @@ interface BlockDetailsProps {
 }
 
 const BlockDetails: React.FC<BlockDetailsProps> = () => {
-  const isSmallScreen = useMediaQuery(lightTheme.breakpoints.down('sm'));
   const { blockNumber = '0', opportunityIndex = '0' } = useParams();
   const [searchResults, setSearchResults] = useState<BlockData[]>([]);
-  const [searchParams, setSearchParams] = useState<{ searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean }>({ searchInput: null, profitMin: null, profitMax: null, isDollar: true });
   const [isLoading, setIsLoading] = useState(false);
-  const [currentBlockNumber, setCurrentBlockNumber] = useState<number>(0);
+  const [opportunity, setOpportunity] = useState<OpportunityData>();
 
   const apiRequest = async ({ searchInput }: { searchInput: string }) => {
     setIsLoading(true);
@@ -37,22 +35,56 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
   useEffect(() => {
     apiRequest({ searchInput: blockNumber });
   }, [blockNumber]);
+
+  useEffect(() => {
+    if (searchResults.length > 0) {
+      const currentBlock = searchResults[0];
+      const opportunitiesArray = currentBlock.opportunities;
+      const parsedOpportunityIndex = Number(opportunityIndex);
+
+      if (opportunitiesArray && parsedOpportunityIndex >= 0 && parsedOpportunityIndex < opportunitiesArray.length) {
+        setOpportunity(opportunitiesArray[parsedOpportunityIndex]);
+      }
+    }
+  }, [searchResults, opportunityIndex]);
+
   return (
-    <>
-      <Box sx={{ width: '80%', height: '80%', backgroundColor: '#ffffff', margin: 'auto', padding: 2 }}>
-        {isLoading ? (
-          <CircularProgress color="inherit" size={80} />
-        ) : searchResults.length > 0 ? (
-          searchResults.map(({ opportunities }, index) => (
-            [<Typography sx={{ color: 'gray' }} key={index}>{opportunities[Number(opportunityIndex)].tokenName}</Typography>]
-          ))
-        ) : (
-          <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }}>
-            No search results found
-          </Typography>
-        )}
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, p: 4 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+          <Typography variant="h6">External Owner Account</Typography>
+          <Avatar src={opportunity?.baseLogo} alt={opportunity?.baseName ?? ''} />
+          <Typography>{opportunity?.baseSymbol}</Typography>
+        </Paper>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+          <div className={`${styles.arrow} ${styles.arrowUp}`} />
+          <Typography>{opportunity?.deltaXa} {opportunity?.baseSymbol}</Typography>
+        </Box>
+        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+          <Typography variant="h6">{opportunity?.buyMarketName}</Typography>
+          <Avatar src={opportunity?.buyMarketLogo} alt={opportunity?.buyMarketName} />
+          <Typography>{opportunity?.buyMarketAddress}</Typography>
+        </Paper>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+          <div className={`${styles.arrow} ${styles.arrowDown}`} />
+          <Typography>{opportunity?.deltaYa} {opportunity?.tokenSymbol}</Typography>
+        </Box>
+        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+          <Typography variant="h6">{opportunity?.sellMarketName}</Typography>
+          <Avatar src={opportunity?.sellMarketLogo} alt={opportunity?.sellMarketName} />
+          <Typography>{opportunity?.sellMarketAddress}</Typography>
+        </Paper>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+          <div className={`${styles.arrow} ${styles.arrowUp}`} />
+          <Typography>{opportunity?.deltaXb} {opportunity?.baseSymbol}</Typography>
+        </Box>
       </Box>
-    </>
+      <Typography variant="h6">Profit</Typography>
+      <Box sx={{ display: 'flex', gap: 4 }}>
+        <Typography>{opportunity?.profitEth} ETH</Typography>
+        <Typography>{opportunity?.profitDol} USD</Typography>
+      </Box>
+    </Box>
   );
 };
 
