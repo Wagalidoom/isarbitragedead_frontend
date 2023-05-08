@@ -27,7 +27,7 @@ export interface OpportunityData {
   profitDol: number
 }
 
-const Opportunity: React.FC<OpportunityData & { key: number, blockNumber: number }> = ({
+const Opportunity: React.FC<OpportunityData & { opportunityIndex: number, blockNumber: number }> = ({
   buyMarketLogo,
   sellMarketLogo,
   tokenSymbol,
@@ -36,10 +36,10 @@ const Opportunity: React.FC<OpportunityData & { key: number, blockNumber: number
   deltaXa,
   deltaYb,
   profitDol,
-  key,
+  opportunityIndex,
   blockNumber
 }) => {
-  const opportunityLink = `/block/${blockNumber}/opportunity/${key}`;
+  const opportunityLink = `/block/${blockNumber}/opportunity/${opportunityIndex}`;
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -53,7 +53,7 @@ const Opportunity: React.FC<OpportunityData & { key: number, blockNumber: number
         <Typography sx={{ color: '#000000', marginLeft: '2vw', marginRight: '2vw', fontSize: '1.2em' }}> <b>{deltaYa.toFixed(4)}</b> {baseSymbol}  → <b>{-deltaXa.toFixed(2)}</b> {tokenSymbol}  → <b>{-deltaYb.toFixed(4)}</b> {baseSymbol}  </Typography>
         <img src={sellMarketLogo} alt="Exchange 2 Logo" width="40" height="40" />
       </Box>
-      <Typography variant="body1" sx={{ color: '#000000', fontSize: '1.2em' }}>Profit: <b>{profitDol.toFixed(2)} $</b></Typography>
+      <Typography variant="body1" sx={{ color: '#000000', fontSize: '1.2em' }}>Profit: <b>{opportunityLink} $</b></Typography>
     </Paper>
   );  
 };
@@ -62,7 +62,7 @@ const Opportunity: React.FC<OpportunityData & { key: number, blockNumber: number
 const Block: React.FC<BlockData> = React.forwardRef(({ blockNumber, opportunities }, ref) => {
   const content = opportunities.length === 0
     ? (<Box sx={{ width: '100%' }}><Typography variant="body1" sx={{ color: '#ffffff' }}>No opportunities at this block</Typography></Box>)
-    : (opportunities.map((opportunity, index) => <Opportunity key={index} blockNumber={blockNumber} {...opportunity} />));
+    : (opportunities.map((opportunity, index) => <Opportunity key={index} opportunityIndex={index} blockNumber={blockNumber} {...opportunity} />));
 
   return (
     <>

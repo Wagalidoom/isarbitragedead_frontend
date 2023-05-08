@@ -157,8 +157,8 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       {/* Minimap */}
       <Grid item xs={0} sm={1} md={1}  >
         {blockList.length > 0 ? (
-          blockList.map(({ opportunities }) => (
-            <MiniBlock nbOpportunities={opportunities.length} />
+          blockList.map(({ opportunities }, index) => (
+            <MiniBlock nbOpportunities={opportunities.length} key={index} />
             )
           )
         ) : (
