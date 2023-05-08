@@ -5,11 +5,10 @@ import Block, { OpportunityData } from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import { ArrowUpward } from '@mui/icons-material';
 import lightTheme from '../styles/theme/lightTheme';
-import MiniBlock from './MiniBlock';
+import MiniBlock, { MINIBLOCK_HEIGHT, MINIBLOCK_VERTICAL_PADDING } from './MiniBlock';
 
 // Constantes globales
-const MINIBLOCKS = 5;
-const INITIAL_DATA_TO_FETCH = MINIBLOCKS * 3;
+const INITIAL_DATA_TO_FETCH = 20;
 const SCROLLING_DATA_TO_FETCH = 50;
 const THROTTLE = 20;
 
@@ -123,6 +122,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     const fetchInitialData = async () => {
       const initialBlockNumber = await fetchDataHistory(INITIAL_DATA_TO_FETCH);
       setCurrentBlockNumber(initialBlockNumber);
+      updateViewportFrame();
     };
     fetchInitialData();
   }, [setCurrentBlockNumber]);
@@ -146,6 +146,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       const scrollRatio = miniBlocksScrollHeight / blocksScrollHeight;
       miniBlocksScrollRef.current.scrollTop = blocksScrollRef.current.scrollTop * scrollRatio;
     }
+    updateViewportFrame();
   };
 
   const handleMinimapScroll = (event: React.WheelEvent) => {
@@ -154,6 +155,30 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       blocksScrollRef.current.scrollTop += event.deltaY;
     }
   };
+
+  // Cadre de la minimap
+
+  const updateViewportFrame = () => {
+    const blocksScrollElement = blocksScrollRef.current;
+    const miniBlocksScrollElement = miniBlocksScrollRef.current;
+    const viewportElement = document.getElementById("viewport");
+  
+    if (blocksScrollElement && miniBlocksScrollElement && viewportElement) {
+      // Calculate the total height of all MiniBlock elements
+      const totalMiniBlocksHeight = miniBlocksScrollElement.scrollHeight;
+      
+      const VISIBLE_MINIBLOCKS = Math.floor(window.innerHeight / (MINIBLOCK_HEIGHT + MINIBLOCK_VERTICAL_PADDING * 8) );
+      console.log(VISIBLE_MINIBLOCKS)
+      // Calculate the height of the viewport frame based on VISIBLE_BLOCKS
+      const viewportHeight = (4/VISIBLE_MINIBLOCKS) * 100;
+      const viewportTop = (miniBlocksScrollElement.scrollTop / totalMiniBlocksHeight) * 100;
+
+      viewportElement.style.height = `${viewportHeight}%`;
+      viewportElement.style.top = `${viewportTop}%`;
+    }
+  };
+  
+  
   
 
   return (
@@ -186,9 +211,10 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       {/* Minimap */}
       <Grid item xs={0} sm={1} md={1}  >
         <div ref={miniBlocksScrollRef} onWheel={handleMinimapScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
+        <div id="viewport" style={{ position: 'absolute', border: '2px solid #FF5252', zIndex: 1 }}></div>
           {blockList.length > 0 ? (
             blockList.map(({ opportunities }, index) => (
-              <MiniBlock nbOpportunities={opportunities.length} key={index} highlighted={false} />
+              <MiniBlock nbOpportunities={opportunities.length} key={index} />
             )
             )
           ) : (

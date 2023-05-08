@@ -1,16 +1,17 @@
 import { Box, Paper, Typography } from "@mui/material";
 import React from "react";
 
-const MiniBlock: React.FC<{ nbOpportunities: number, highlighted: boolean }> = React.forwardRef(({ nbOpportunities, highlighted }, ref) => {
+export const MINIBLOCK_HEIGHT = 50;
+export const MINIBLOCK_VERTICAL_PADDING = 2;
+
+const MiniBlock: React.FC<{ nbOpportunities: number }> = React.forwardRef(({ nbOpportunities }, ref) => {
   const miniBlockWidth = (50 + nbOpportunities * 10).toString() + "%";
-  const miniBlockHeight = 5 + nbOpportunities * 10;
-  const backgroundColor = highlighted ? "#000000" : "#6389be";
 
   return (
       <Box
         ref={ref}
         sx={{
-          my: 2
+          my: MINIBLOCK_VERTICAL_PADDING
         }}
       >
         <Paper
@@ -19,9 +20,8 @@ const MiniBlock: React.FC<{ nbOpportunities: number, highlighted: boolean }> = R
             paddingLeft: 1,
             paddingRight: 1,
             width: miniBlockWidth,
-            minHeight: `${miniBlockHeight}px`,
-            height: "100%",
-            backgroundColor: backgroundColor,
+            height: `${MINIBLOCK_HEIGHT}px`,
+            backgroundColor: "#6389be",
             display: "flex",
             flexDirection: "column",
             alignItems: "start",
