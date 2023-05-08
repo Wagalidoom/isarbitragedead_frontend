@@ -49,42 +49,49 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
   }, [searchResults, opportunityIndex]);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, p: 4 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-          <Typography variant="h6">External Owner Account</Typography>
-          <Avatar src={opportunity?.baseLogo} alt={opportunity?.baseName ?? ''} />
-          <Typography>{opportunity?.baseSymbol}</Typography>
-        </Paper>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-          <div className={`${styles.arrow} ${styles.arrowUp}`} />
-          <Typography>{opportunity?.deltaXa} {opportunity?.baseSymbol}</Typography>
-        </Box>
-        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-          <Typography variant="h6">{opportunity?.buyMarketName}</Typography>
-          <Avatar src={opportunity?.buyMarketLogo} alt={opportunity?.buyMarketName} />
-          <Typography>{opportunity?.buyMarketAddress}</Typography>
-        </Paper>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-          <div className={`${styles.arrow} ${styles.arrowDown}`} />
-          <Typography>{opportunity?.deltaYa} {opportunity?.tokenSymbol}</Typography>
-        </Box>
-        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-          <Typography variant="h6">{opportunity?.sellMarketName}</Typography>
-          <Avatar src={opportunity?.sellMarketLogo} alt={opportunity?.sellMarketName} />
-          <Typography>{opportunity?.sellMarketAddress}</Typography>
-        </Paper>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-          <div className={`${styles.arrow} ${styles.arrowUp}`} />
-          <Typography>{opportunity?.deltaXb} {opportunity?.baseSymbol}</Typography>
-        </Box>
-      </Box>
-      <Typography variant="h6">Profit</Typography>
-      <Box sx={{ display: 'flex', gap: 4 }}>
-        <Typography>{opportunity?.profitEth} ETH</Typography>
-        <Typography>{opportunity?.profitDol} USD</Typography>
-      </Box>
-    </Box>
+    <>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh' }}>
+        {isLoading ? (
+          <CircularProgress color="inherit" size={80} />
+        ) : opportunity ? (
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', width: '70%', height: '60%' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'sart', width: '100%' }}>
+              <div className={styles.buyMarketOutside}>
+                <div className={styles.logoInside}>
+                  <img src={opportunity.sellMarketLogo} alt={opportunity.sellMarketName} width="40" height="40" />
+                </div>
+              </div>
+              <div className={styles.arrowDown}>
+                <div className={styles.arrowLine}></div>
+                <Typography>{opportunity.deltaYa} {opportunity.tokenSymbol}</Typography>
+              </div>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'end', width: '100%' }}>
+              <div className={styles.logoInside}>
+                <Typography variant="h6">EOA</Typography>
+              </div>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <div className={styles.arrowUp}>
+                <div className={styles.arrowLine}></div>
+                <Typography>{opportunity.deltaXa} {opportunity.baseSymbol}</Typography>
+              </div>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'start', width: '100%' }}>
+              <div className={styles.sellMarketOutside}>
+                <div className={styles.logoInside}>
+                  <img src={opportunity.buyMarketLogo} alt={opportunity.buyMarketName} width="40" height="40" />
+                </div>
+              </div>
+            </Box>
+          </Box>
+        ) : (
+          <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }}>
+            No search results found
+          </Typography>
+        )}
+      </Box >
+    </>
   );
 };
 
