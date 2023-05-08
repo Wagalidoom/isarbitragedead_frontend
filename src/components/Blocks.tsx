@@ -130,7 +130,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   // Fonction pour remonter en un clic 
   const scrollToTop = () => {
     if (blocksScrollRef.current && miniBlocksScrollRef.current) {
-      miniBlocksScrollRef.current.scrollTo({
+      blocksScrollRef.current.scrollTo({
         top: 0,
         behavior: "smooth"
       });
@@ -148,21 +148,10 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     }
   };
 
-  const handleMiniBlocksScroll = () => {
-    if (blocksScrollRef.current && miniBlocksScrollRef.current) {
-      const blocksScrollHeight = blocksScrollRef.current.scrollHeight - blocksScrollRef.current.offsetHeight;
-      const miniBlocksScrollHeight = miniBlocksScrollRef.current.scrollHeight - miniBlocksScrollRef.current.offsetHeight;
-      const scrollRatio = blocksScrollHeight / miniBlocksScrollHeight;
-      blocksScrollRef.current.scrollTop = miniBlocksScrollRef.current.scrollTop * scrollRatio;
-    }
-  };
-
-
-
   return (
-    <Grid container columnSpacing={0} sx={{ width: '100%'}} >
+    <Grid container columnSpacing={0} sx={{ width: '100%' }} >
       <Grid item xs={12} sm={11} md={11} >
-        <div ref={blocksScrollRef} onScroll={handleBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}> 
+        <div ref={blocksScrollRef} onScroll={handleBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
           {blockList.length > 0 ? (
             blockList.map(({ blockNumber, opportunities }, index) => (
               <Box sx={{ marginTop: '50px' }} key={index}>
@@ -188,16 +177,14 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
 
       {/* Minimap */}
       <Grid item xs={0} sm={1} md={1}  >
-        <div ref={miniBlocksScrollRef} onScroll={handleMiniBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
+        <div ref={miniBlocksScrollRef} style={{ height: '100vh', overflowY: 'scroll' }}>
           {blockList.length > 0 ? (
             blockList.map(({ opportunities }, index) => (
-              <MiniBlock nbOpportunities={opportunities.length} key={index} />
+              <MiniBlock nbOpportunities={opportunities.length} key={index} highlighted={false} />
             )
             )
           ) : (
-            <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'gray', textAlign: 'center' }} >
-              No blocks to be shown
-            </Typography>
+            <Typography />
           )}
         </div>
       </Grid>
