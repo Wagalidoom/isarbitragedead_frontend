@@ -131,7 +131,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
 
   return (
     <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }} >
-      <Grid item xs={12} sm={11} md={11} sx={{ backgroundColor: '#eae6e1' }} >
+      <Grid item xs={12} sm={11} md={11} >
         {blockList.length > 0 ? (
           blockList.map(({ blockNumber, opportunities }, index) => (
             <Box sx={{ marginTop: '50px' }} key={index}>

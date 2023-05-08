@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, TextField, Typography, colors } from '@mui/material';
+import { Box, CircularProgress, Grid, TextField, Typography, colors, useMediaQuery } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { generateApiUrl } from './Search';
 import { BlockData } from './Blocks';
+import SidePanel from './SidePanel';
+import lightTheme from '../styles/theme/lightTheme';
 
 interface Params {
   blockNumber: string;
@@ -13,9 +15,12 @@ interface BlockDetailsProps {
 }
 
 const BlockDetails: React.FC<BlockDetailsProps> = () => {
+  const isSmallScreen = useMediaQuery(lightTheme.breakpoints.down('sm'));
   const { blockNumber = '0', opportunityIndex = '0' } = useParams();
   const [searchResults, setSearchResults] = useState<BlockData[]>([]);
+  const [searchParams, setSearchParams] = useState<{ searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean }>({ searchInput: null, profitMin: null, profitMax: null, isDollar: true });
   const [isLoading, setIsLoading] = useState(false);
+  const [currentBlockNumber, setCurrentBlockNumber] = useState<number>(0);
 
   const apiRequest = async ({ searchInput }: { searchInput: string }) => {
     setIsLoading(true);
@@ -33,13 +38,13 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
     apiRequest({ searchInput: blockNumber });
   }, [blockNumber]);
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 9999 }}>
+    <>
       <Box sx={{ width: '80%', height: '80%', backgroundColor: '#ffffff', margin: 'auto', padding: 2 }}>
         {isLoading ? (
           <CircularProgress color="inherit" size={80} />
         ) : searchResults.length > 0 ? (
           searchResults.map(({ opportunities }, index) => (
-            [<Typography sx={{color: 'gray'}} key={index}>{opportunities[Number(opportunityIndex)].tokenName}</Typography>]
+            [<Typography sx={{ color: 'gray' }} key={index}>{opportunities[Number(opportunityIndex)].tokenName}</Typography>]
           ))
         ) : (
           <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }}>
@@ -47,7 +52,7 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
           </Typography>
         )}
       </Box>
-    </Box>
+    </>
   );
 };
 
