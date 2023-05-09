@@ -1,11 +1,11 @@
 import { Box, Paper, Typography } from "@mui/material";
 import React from "react";
 
-export const MINIBLOCK_HEIGHT = 50;
+export const MINIBLOCK_WIDTH = 100;
 export const MINIBLOCK_VERTICAL_PADDING = 2;
 
 const MiniBlock: React.FC<{ nbOpportunities: number }> = React.forwardRef(({ nbOpportunities }, ref) => {
-  const miniBlockWidth = (50 + nbOpportunities * 10).toString() + "%";
+  const miniBlockheight = nbOpportunities > 0 ?  10 + nbOpportunities * 10 : 20;
 
   return (
       <Box
@@ -19,8 +19,8 @@ const MiniBlock: React.FC<{ nbOpportunities: number }> = React.forwardRef(({ nbO
           sx={{
             paddingLeft: 1,
             paddingRight: 1,
-            width: miniBlockWidth,
-            height: `${MINIBLOCK_HEIGHT}px`,
+            width: `${MINIBLOCK_WIDTH}%`,
+            height: `${miniBlockheight}px`,
             backgroundColor: "#6389be",
             display: "flex",
             flexDirection: "column",
@@ -29,7 +29,7 @@ const MiniBlock: React.FC<{ nbOpportunities: number }> = React.forwardRef(({ nbO
             position: "relative",
           }}
         >
-          <Typography variant="h4" sx={{ color: "#eae6e1" }}>
+          <Typography  sx={{ color: "#eae6e1" }}>
             <b>{nbOpportunities}</b>
           </Typography>
         </Paper>

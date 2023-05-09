@@ -1,4 +1,4 @@
-import './styles/globals.css';
+// import './styles/globals.css';
 import lightTheme from './styles/theme/lightTheme';
 import Blocks from './components/Blocks';
 import { Box, CssBaseline, Grid, ThemeProvider, useMediaQuery } from '@mui/material';
