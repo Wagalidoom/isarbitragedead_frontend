@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Box, CircularProgress, Grid, Paper, TextField, Typography, colors, useMediaQuery } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { generateApiUrl } from './Search';
 import { BlockData } from './Blocks';
 import { OpportunityData } from './Block';
 import styles from './../styles/BlockDetails.module.css';
-
-interface Params {
-  blockNumber: string;
-  opportunityIndex: string;
-}
 
 interface BlockDetailsProps {
 }
@@ -55,29 +50,32 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
           <CircularProgress color="inherit" size={80} />
         ) : opportunity ? (
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', width: '70%', height: '60%' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'sart', width: '100%' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <div className={styles.logoInside}>
+                <Typography variant="h6">EOA</Typography>
+              </div>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+              <div className={styles.arrowLeft}>
+                <div className={styles.arrowLine}>
+                  <Typography sx={{ color: '#454545', paddingTop: '45px', paddingLeft: '30px' }}>{opportunity.deltaYa} {opportunity.tokenSymbol}</Typography>
+                </div>
+              </div>
+              <div className={styles.arrowRight}>
+                <div className={styles.arrowLine}>
+                  <Typography sx={{ color: '#454545', paddingTop: '45px', paddingLeft: '30px' }}>{opportunity.deltaYa} {opportunity.tokenSymbol}</Typography>
+                </div>
+              </div>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
               <div className={styles.buyMarketOutside}>
                 <div className={styles.logoInside}>
                   <img src={opportunity.sellMarketLogo} alt={opportunity.sellMarketName} width="40" height="40" />
                 </div>
               </div>
-              <div className={styles.arrowDown}>
-                <div className={styles.arrowLine}></div>
-                <Typography>{opportunity.deltaYa} {opportunity.tokenSymbol}</Typography>
+              <div className={styles.arrowMarket}>
+                <div className={styles.arrowLine}><Typography sx={{ color: '#454545', paddingTop: '45px', paddingLeft: '30px' }}>{opportunity.deltaYa} {opportunity.tokenSymbol}</Typography></div>
               </div>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'end', width: '100%' }}>
-              <div className={styles.logoInside}>
-                <Typography variant="h6">EOA</Typography>
-              </div>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-              <div className={styles.arrowUp}>
-                <div className={styles.arrowLine}></div>
-                <Typography>{opportunity.deltaXa} {opportunity.baseSymbol}</Typography>
-              </div>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'start', width: '100%' }}>
               <div className={styles.sellMarketOutside}>
                 <div className={styles.logoInside}>
                   <img src={opportunity.buyMarketLogo} alt={opportunity.buyMarketName} width="40" height="40" />

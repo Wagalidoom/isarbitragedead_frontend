@@ -7,7 +7,6 @@
 .markets {
   display: flex;
   align-items: center;
-  gap: 32px;
 }
 
 .buyMarketOutside {
@@ -19,6 +18,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 }
 
 .sellMarketOutside {
@@ -30,6 +30,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
 }
 
 .logoInside {
@@ -41,6 +42,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 3;
 }
 
 .arrow {
@@ -52,32 +54,41 @@
   stroke-linejoin: round;
 }
 
-.arrowDown {
-  transform: rotate(90deg);
+.arrowRight {
+  transform: rotate(45deg);
 }
 
-.arrowUp {
-  transform: rotate(-15deg);
+.arrowLeft {
+  flex-direction: row-reverse;
+  transform: rotate(-45deg);
 }
 
 /* ... */
-
-.arrowDown, .arrowUp {
+.arrowLeft, .arrowRight {
   display: flex;
   align-items: center;
-  width: 80%;
+  justify-content: center;
+  width: 100%;
+  z-index: 1;
+}
+
+.arrowMarkets {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  z-index: 1;
+  transform: rotate(90deg);
 }
 
 .arrowLine {
-  height: 2px;
+  height: 10px;
   background: currentColor;
   flex-grow: 1;
   background-image: linear-gradient(to right, currentColor 50%, transparent 50%);
   background-size: 8px 100%;
   min-width: 150px; /* Ajout d'une largeur minimale pour s'assurer que le rectangle est visible */
-}
-
-.arrowUp {
-  flex-direction: row-reverse;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
 }
 
