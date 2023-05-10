@@ -5,11 +5,12 @@ import Block, { OpportunityData } from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import { ArrowUpward } from '@mui/icons-material';
 import lightTheme from '../styles/theme/lightTheme';
-import MiniBlock, { MINIBLOCK_HEIGHT, MINIBLOCK_VERTICAL_PADDING } from './MiniBlock';
+import MiniBlock, { MINIBLOCK_VERTICAL_PADDING } from './MiniBlock';
 
 // Constantes globales
 const INITIAL_DATA_TO_FETCH = 20;
 const SCROLLING_DATA_TO_FETCH = 50;
+const PX_HOT_LOADING_LIMIT = 100;
 const THROTTLE = 20;
 
 export interface BlockData {
@@ -58,15 +59,17 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
 
 
 
+
   // Récupère l'historique des données de manière asynchrone et met à jour l'état
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
     const history = await fetchBlocksHistory(limit, fromBlock);
     setBlockList((prevDataList) => [...prevDataList, ...history]);
     setLastDisplayedBlock(history[history.length - 1].blockNumber);
+  
     // Récupère le premier block de l'historique
     return history[0].blockNumber;
-
   };
+  
 
   // Listening to scroll events and hot loading
   useEffect(() => {
@@ -74,7 +77,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       if (!blocksScrollRef.current) return;
       // Check if the user has scrolled to the near bottom of the page
       const { scrollTop, scrollHeight, clientHeight } = blocksScrollRef.current;
-      if (scrollTop + clientHeight >= scrollHeight - 100) {
+      if (scrollTop + clientHeight >= scrollHeight - PX_HOT_LOADING_LIMIT) {
         fetchDataHistory(SCROLLING_DATA_TO_FETCH, lastDisplayedBlock);
       }
     }, THROTTLE);
@@ -122,7 +125,6 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     const fetchInitialData = async () => {
       const initialBlockNumber = await fetchDataHistory(INITIAL_DATA_TO_FETCH);
       setCurrentBlockNumber(initialBlockNumber);
-      updateViewportFrame();
     };
     fetchInitialData();
   }, [setCurrentBlockNumber]);
@@ -145,8 +147,8 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       const miniBlocksScrollHeight = miniBlocksScrollRef.current.scrollHeight - miniBlocksScrollRef.current.offsetHeight;
       const scrollRatio = miniBlocksScrollHeight / blocksScrollHeight;
       miniBlocksScrollRef.current.scrollTop = blocksScrollRef.current.scrollTop * scrollRatio;
+      updateViewportFrame()
     }
-    updateViewportFrame();
   };
 
   const handleMinimapScroll = (event: React.WheelEvent) => {
@@ -156,8 +158,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     }
   };
 
-  // Cadre de la minimap
-
+  // Viewport 
   const updateViewportFrame = () => {
     const blocksScrollElement = blocksScrollRef.current;
     const miniBlocksScrollElement = miniBlocksScrollRef.current;
@@ -167,19 +168,15 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       // Calculate the total height of all MiniBlock elements
       const totalMiniBlocksHeight = miniBlocksScrollElement.scrollHeight;
       
-      const VISIBLE_MINIBLOCKS = Math.floor(window.innerHeight / (MINIBLOCK_HEIGHT + MINIBLOCK_VERTICAL_PADDING * 8) );
-      console.log(VISIBLE_MINIBLOCKS)
+      const VISIBLE_MINIBLOCKS = 28;
+      
       // Calculate the height of the viewport frame based on VISIBLE_BLOCKS
-      const viewportHeight = (4/VISIBLE_MINIBLOCKS) * 100;
-      const viewportTop = (miniBlocksScrollElement.scrollTop / totalMiniBlocksHeight) * 100;
-
-      viewportElement.style.height = `${viewportHeight}%`;
-      viewportElement.style.top = `${viewportTop}%`;
+      const viewportHeight = (4/VISIBLE_MINIBLOCKS) * window.innerHeight;
+      const viewportTop = blocksScrollElement.scrollTop * (blocksScrollElement.clientHeight / blocksScrollElement.scrollHeight) - viewportHeight;
+      viewportElement.style.height = `${viewportHeight}px`;
+      viewportElement.style.top = `${viewportTop}px`;
     }
   };
-  
-  
-  
 
   return (
     <Grid container columnSpacing={0} sx={{ width: '100%' }} >
