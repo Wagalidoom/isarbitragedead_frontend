@@ -199,9 +199,9 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       </Grid>
 
       {/* Minimap */}
-      <Grid item xs={0} sm={1} md={1}  >
+      <Grid item xs={0} sm={1} md={1}  position={'relative'}>
+      <Box id="viewport" sx={{ position: 'absolute', backgroundColor: 'transparent', width: "100%", borderRadius: '10px',right: 0, boxShadow: '0px 3px 6px rgba(0,0,0,0.8)', zIndex: 2, border: '3px solid #D1D1D1', }} />
         <div ref={miniBlocksScrollRef} onWheel={handleMinimapScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
-          <Box id="viewport" sx={{ position: 'absolute', backgroundColor: 'transparent', width: "100%", borderRadius: '10px', boxShadow: '0px 3px 6px rgba(0,0,0,0.8)', zIndex: 2, border: '3px solid #D1D1D1', }}></Box>
           {blockList.length > 0 ? (
             blockList.map(({ opportunities }, index) => (
               <MiniBlock nbOpportunities={opportunities.length} key={index} />

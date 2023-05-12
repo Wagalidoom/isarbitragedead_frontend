@@ -24,7 +24,7 @@ function App() {
           <Grid item xs={0} sm={3} md={3} sx={{ position: 'sticky', paddingTop: '50px', top: 0, height: '100vh', backgroundColor: '#f7f1e8', boxShadow: 3, zIndex: 1, display: isSmallScreen ? 'none' : 'block' }}>
             <SidePanel onSearchChange={setSearchParams} currentBlock={currentBlockNumber} />
           </Grid>
-          <Grid item xs={12} sm={9} md={8} sx={{ backgroundColor: '#eae6e1' }}>
+          <Grid item xs={12} sm={9} md={9} sx={{ backgroundColor: '#eae6e1' }}>
             <Routes>
               <Route path="/" element={(searchParams.searchInput || searchParams.profitMin || searchParams.profitMax) ? <Search searchParams={searchParams} /> : <Blocks setCurrentBlockNumber={setCurrentBlockNumber} />} />
               <Route path="/block/:blockNumber/opportunity/:opportunityIndex" element={<BlockDetails />} />
