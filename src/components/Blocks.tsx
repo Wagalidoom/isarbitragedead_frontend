@@ -53,6 +53,18 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
   const blocksScrollRef = useRef<HTMLDivElement | null>(null);
   const miniBlocksScrollRef = useRef<HTMLDivElement | null>(null);
+  const [isDraggingViewport, setIsDraggingViewport] = useState(false);
+  const [isHoveringViewport, setIsHoveringViewport] = useState(false);
+
+const handleViewportMouseEnter = (event: React.MouseEvent) => {
+  setIsHoveringViewport(true);
+};
+
+const handleViewportMouseLeave = (event: React.MouseEvent) => {
+  setIsHoveringViewport(false);
+};
+
+
 
   // Récupère l'historique des données de manière asynchrone et met à jour l'état
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
@@ -110,11 +122,20 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     // Update viewport to display it on page loading
     updateViewportFrame()
 
+    // Add global mouseup listener
+    const handleGlobalMouseUp = () => {
+      setIsDraggingViewport(false);
+    };
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+
     // Clean up the socket connection when the component is unmounted or when isSearchActive changes
     return () => {
       socket.disconnect();
+      // Remove global mouseup listener
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
     };
   }, []);
+
 
 
   // Récupère l'historique lors du chargement de la page
@@ -136,6 +157,27 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     }
   };
 
+  const handleViewportMouseDown = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDraggingViewport(true);
+  };
+  
+  const handleViewportMouseUp = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDraggingViewport(false);
+  };
+  
+  const handleViewportMouseMove = (event: React.MouseEvent) => {
+    if (!isDraggingViewport || !blocksScrollRef.current || !miniBlocksScrollRef.current) return;
+    const blocksScrollHeight = blocksScrollRef.current.scrollHeight;
+    const miniBlocksScrollHeight = miniBlocksScrollRef.current.scrollHeight;
+    const scrollRatio = blocksScrollHeight / window.innerHeight;
+    blocksScrollRef.current.scrollTop = event.clientY * scrollRatio;
+  };
+  
+
 
   // Fonctions pour le fonctionnement de la minimap
   const handleBlocksScroll = () => {
@@ -149,11 +191,13 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   };
 
   const handleMinimapScroll = (event: React.WheelEvent) => {
+    if (isDraggingViewport) return;
     event.preventDefault();
     if (blocksScrollRef.current) {
       blocksScrollRef.current.scrollTop += event.deltaY;
     }
   };
+  
 
   // Viewport 
   const updateViewportFrame = () => {
@@ -200,8 +244,25 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
 
       {/* Minimap */}
       <Grid item xs={0} sm={1} md={1}  position={'relative'} sx={{backgroundColor: '#d0c3ba', boxShadow: 4 }}>
-      <Box id="viewport" sx={{ position: 'absolute', backgroundColor: 'transparent', width: "100%", borderRadius: '10px', boxShadow: '0px 3px 6px rgba(0,0,0,0.8)', zIndex: 2, border: '3px solid #D1D1D1', }} />
-        <div ref={miniBlocksScrollRef} onWheel={handleMinimapScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
+      <Box
+  id="viewport"
+  onMouseDown={handleViewportMouseDown}
+  onMouseUp={handleViewportMouseUp}
+  onMouseMove={handleViewportMouseMove}
+  onMouseEnter={handleViewportMouseEnter}
+  onMouseLeave={handleViewportMouseLeave}
+  sx={{
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    width: "100%",
+    borderRadius: '10px',
+    boxShadow: '0px 3px 6px rgba(0,0,0,0.8)',
+    zIndex: 2,
+    border: '3px solid #D1D1D1',
+    opacity: isDraggingViewport || isHoveringViewport ? 1 : 0.5,
+  }}
+/>
+      <div ref={miniBlocksScrollRef} onWheel={handleMinimapScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
           {blockList.length > 0 ? (
             blockList.map(({ opportunities }, index) => (
               <MiniBlock nbOpportunities={opportunities.length} key={index} />
