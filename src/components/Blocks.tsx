@@ -8,6 +8,7 @@ import lightTheme from '../styles/theme/lightTheme';
 import MiniBlock, { MINIBLOCK_VERTICAL_PADDING } from './MiniBlock';
 
 // Constantes globales
+export const BLOCK_MARGIN_TOP = 50;
 const INITIAL_DATA_TO_FETCH = 20;
 const SCROLLING_DATA_TO_FETCH = 50;
 const PX_HOT_LOADING_LIMIT = 100;
@@ -181,7 +182,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
         <div ref={blocksScrollRef} onScroll={handleBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
           {blockList.length > 0 ? (
             blockList.map(({ blockNumber, opportunities }, index) => (
-              <Box sx={{ marginTop: '50px' }} key={index}>
+              <Box sx={{ marginTop: `${BLOCK_MARGIN_TOP}px` }} key={index}>
                 {index === 0 ? (
                   <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
                     <div>

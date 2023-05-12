@@ -3,7 +3,13 @@ import React from 'react';
 import { BlockData } from './Blocks';
 import { useNavigate } from 'react-router-dom';
 
+const blockNumberFontSize = 45;
+const blockNumberContainerSize = 65;
+const opportunityHeight = 100;
+const opportunityMarginBottom = 30;
 
+export const BLOCK_MIN_HEIGHT = blockNumberContainerSize + opportunityHeight + opportunityMarginBottom;
+export const OPPORTUNITY_FULL_HEIGHT = opportunityHeight + opportunityMarginBottom;
 export interface OpportunityData {
   buyMarketAddress: string,
   buyMarketName: string,
@@ -47,7 +53,7 @@ const Opportunity: React.FC<OpportunityData & { opportunityIndex: number, blockN
   };
 
   return (
-    <Paper elevation={1} onClick={handleClick} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '95%', height: '100px', backgroundColor: '#eae6e1', marginBottom: '30px', borderRadius: '3px', padding: '10px', cursor: 'pointer' }}>
+    <Paper elevation={1} onClick={handleClick} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '95%', height: `${opportunityHeight}px`, backgroundColor: '#eae6e1', marginBottom: `${opportunityMarginBottom}px`, borderRadius: '3px', padding: '10px', cursor: 'pointer' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
         <img src={buyMarketLogo} alt="Exchange 1 Logo" width="40" height="40" />
         <Typography sx={{ color: '#000000', marginLeft: '2vw', marginRight: '2vw', fontSize: '1.2em' }}> <b>{deltaYa.toFixed(4)}</b> {baseSymbol}  → <b>{-deltaXa.toFixed(2)}</b> {tokenSymbol}  → <b>{-deltaYb.toFixed(4)}</b> {baseSymbol}  </Typography>
@@ -66,9 +72,9 @@ const Block: React.FC<BlockData> = React.forwardRef(({ blockNumber, opportunitie
 
   return (
     <>
-      <Box ref={ref} data-block-number={blockNumber} sx={{ display: 'flex', alignItems: 'center', margin: '0 auto' }}>
-        <Paper square sx={{ paddingLeft: 1, paddingRight: 1, width: '70%', minHeight: '175px', height: '100%', backgroundColor: '#6389be', display: 'flex', flexDirection: 'column', alignItems: 'start', margin: 'auto', position: 'relative' }}>
-          <Typography variant="h4" sx={{ color: '#eae6e1' }}><b>{blockNumber}</b></Typography>
+      <Box ref={ref} data-block-number={blockNumber} sx={{ display: 'flex', alignItems: 'center'}}>
+        <Paper square sx={{ paddingLeft: 1, paddingRight: 1, width: '70%', minHeight: `${BLOCK_MIN_HEIGHT}px`, backgroundColor: '#6389be', display: 'flex', flexDirection: 'column', alignItems: 'start', margin: 'auto', position: 'relative' }}>
+          <Typography  sx={{ height:`${blockNumberContainerSize}px`, fontSize: `${blockNumberFontSize}px`, color: '#eae6e1' }}><b>{blockNumber}</b></Typography>
           <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
             {content}
           </Box>
