@@ -4,7 +4,6 @@ import io from 'socket.io-client';
 import Block, { OpportunityData } from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import { ArrowUpward } from '@mui/icons-material';
-import lightTheme from '../styles/theme/lightTheme';
 import MiniBlock from './MiniBlock';
 import { BLOCK_MARGIN_TOP, heightScaleFactor } from './constants';
 
@@ -55,19 +54,16 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   const blocksScrollRef = useRef<HTMLDivElement | null>(null);
   const miniBlocksScrollRef = useRef<HTMLDivElement | null>(null);
 
-
-
-
   // Récupère l'historique des données de manière asynchrone et met à jour l'état
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
     const history = await fetchBlocksHistory(limit, fromBlock);
     setBlockList((prevDataList) => [...prevDataList, ...history]);
     setLastDisplayedBlock(history[history.length - 1].blockNumber);
-  
+
     // Récupère le premier block de l'historique
     return history[0].blockNumber;
   };
-  
+
 
   // Listening to scroll events and hot loading
   useEffect(() => {
@@ -101,21 +97,24 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   }, [blockList]);
 
   // Établit la connexion WebSocket
-  // useEffect(() => {
-  //   // Connect to the Websocket server
-  //   const socket = io(`http://${LOCAL_IP_ADDRESS}:3030`);
+  useEffect(() => {
+    // Connect to the Websocket server
+    const socket = io(`http://${LOCAL_IP_ADDRESS}:3030`);
 
-  //   // Listen for the 'block-data' event
-  //   socket.on('block-data', (receivedData: BlockData) => {
-  //     setBlockList((prevDataList) => [receivedData, ...prevDataList]);
-  //     setCurrentBlockNumber(receivedData.blockNumber);
-  //   });
+    // Listen for the 'block-data' event
+    socket.on('block-data', (receivedData: BlockData) => {
+      setBlockList((prevDataList) => [receivedData, ...prevDataList]);
+      setCurrentBlockNumber(receivedData.blockNumber);
+    });
 
-  //   // Clean up the socket connection when the component is unmounted or when isSearchActive changes
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
+    // Update viewport to display it on page loading
+    updateViewportFrame()
+
+    // Clean up the socket connection when the component is unmounted or when isSearchActive changes
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
 
   // Récupère l'historique lors du chargement de la page
@@ -161,11 +160,9 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     const blocksScrollElement = blocksScrollRef.current;
     const miniBlocksScrollElement = miniBlocksScrollRef.current;
     const viewportElement = document.getElementById("viewport");
-  
+
     if (blocksScrollElement && miniBlocksScrollElement && viewportElement) {
-      // Calculate the total height of all MiniBlock elements
-      
-      // Calculate the height of the viewport frame based on VISIBLE_BLOCKS
+      // Calculate viewport height and position
       const viewportHeight = heightScaleFactor * window.innerHeight;
       const viewportTop = (blocksScrollElement.scrollTop / (blocksScrollElement.scrollHeight - blocksScrollElement.clientHeight)) * (window.innerHeight - viewportHeight);
 
@@ -204,7 +201,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       {/* Minimap */}
       <Grid item xs={0} sm={1} md={1}  >
         <div ref={miniBlocksScrollRef} onWheel={handleMinimapScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
-        <div id="viewport" style={{ position: 'absolute', border: '2px solid #FF5252', zIndex: 1 }}></div>
+          <Box id="viewport" sx={{ position: 'absolute', backgroundColor: 'transparent', width: "100%", borderRadius: '10px', boxShadow: '0px 3px 6px rgba(0,0,0,0.8)', zIndex: 2, border: '3px solid #D1D1D1', }}></Box>
           {blockList.length > 0 ? (
             blockList.map(({ opportunities }, index) => (
               <MiniBlock nbOpportunities={opportunities.length} key={index} />
