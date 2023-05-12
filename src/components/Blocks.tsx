@@ -15,9 +15,7 @@ const THROTTLE = 20;
 
 export interface BlockData {
   blockNumber: number,
-  opportunities: OpportunityData[],
-  ref: Ref<HTMLDivElement>
-
+  opportunities: OpportunityData[]
 }
 
 interface IBlocks {
@@ -50,7 +48,6 @@ const throttle = (func: (...args: any[]) => any, delay: number): ((...args: any[
 
 const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   // État local et références
-  const isSmallScreen = useMediaQuery(lightTheme.breakpoints.down('sm'));
   const [lastDisplayedBlock, setLastDisplayedBlock] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -188,11 +185,11 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
                 {index === 0 ? (
                   <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
                     <div>
-                      <Block ref={el => blockRefs.current[index] = el} blockNumber={blockNumber} opportunities={opportunities} />
+                      <Block blockNumber={blockNumber} opportunities={opportunities} />
                     </div>
                   </Fade>
                 ) : (
-                  <Block ref={el => blockRefs.current[index] = el} blockNumber={blockNumber} opportunities={opportunities} />
+                  <Block blockNumber={blockNumber} opportunities={opportunities} />
                 )}
               </Box>
             )

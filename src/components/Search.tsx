@@ -53,7 +53,7 @@ const Search: React.FC<{ searchParams: { searchInput: string | null, profitMin: 
       ) : searchResults.length > 0 ? (
         searchResults.map(({ blockNumber, opportunities }, index) => (
           <Grid item xs={12} md={12} key={index}>
-            <Block ref={null} blockNumber={blockNumber} opportunities={opportunities} />
+            <Block blockNumber={blockNumber} opportunities={opportunities} />
             {/* Passer null en ref ici ou autre chose ??? */}
           </Grid>
         ))
