@@ -2,14 +2,8 @@ import { Box, Link, Paper, Typography } from '@mui/material';
 import React from 'react';
 import { BlockData } from './Blocks';
 import { useNavigate } from 'react-router-dom';
+import { opportunityHeight, opportunityMarginBottom, BLOCK_MIN_HEIGHT, blockNumberContainerSize, blockNumberFontSize } from './constants';
 
-const blockNumberFontSize = 45;
-const blockNumberContainerSize = 65;
-const opportunityHeight = 100;
-const opportunityMarginBottom = 30;
-
-export const BLOCK_MIN_HEIGHT = blockNumberContainerSize + opportunityHeight + opportunityMarginBottom;
-export const OPPORTUNITY_FULL_HEIGHT = opportunityHeight + opportunityMarginBottom;
 export interface OpportunityData {
   buyMarketAddress: string,
   buyMarketName: string,

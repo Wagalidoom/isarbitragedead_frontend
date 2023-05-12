@@ -5,10 +5,10 @@ import Block, { OpportunityData } from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import { ArrowUpward } from '@mui/icons-material';
 import lightTheme from '../styles/theme/lightTheme';
-import MiniBlock, { MINIBLOCK_VERTICAL_PADDING } from './MiniBlock';
+import MiniBlock from './MiniBlock';
+import { BLOCK_MARGIN_TOP, heightScaleFactor } from './constants';
 
 // Constantes globales
-export const BLOCK_MARGIN_TOP = 50;
 const INITIAL_DATA_TO_FETCH = 20;
 const SCROLLING_DATA_TO_FETCH = 50;
 const PX_HOT_LOADING_LIMIT = 100;
@@ -101,21 +101,21 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   }, [blockList]);
 
   // Établit la connexion WebSocket
-  useEffect(() => {
-    // Connect to the Websocket server
-    const socket = io(`http://${LOCAL_IP_ADDRESS}:3030`);
+  // useEffect(() => {
+  //   // Connect to the Websocket server
+  //   const socket = io(`http://${LOCAL_IP_ADDRESS}:3030`);
 
-    // Listen for the 'block-data' event
-    socket.on('block-data', (receivedData: BlockData) => {
-      setBlockList((prevDataList) => [receivedData, ...prevDataList]);
-      setCurrentBlockNumber(receivedData.blockNumber);
-    });
+  //   // Listen for the 'block-data' event
+  //   socket.on('block-data', (receivedData: BlockData) => {
+  //     setBlockList((prevDataList) => [receivedData, ...prevDataList]);
+  //     setCurrentBlockNumber(receivedData.blockNumber);
+  //   });
 
-    // Clean up the socket connection when the component is unmounted or when isSearchActive changes
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+  //   // Clean up the socket connection when the component is unmounted or when isSearchActive changes
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
 
 
   // Récupère l'historique lors du chargement de la page
@@ -164,13 +164,11 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   
     if (blocksScrollElement && miniBlocksScrollElement && viewportElement) {
       // Calculate the total height of all MiniBlock elements
-      const totalMiniBlocksHeight = miniBlocksScrollElement.scrollHeight;
-      
-      const VISIBLE_MINIBLOCKS = 28;
       
       // Calculate the height of the viewport frame based on VISIBLE_BLOCKS
-      const viewportHeight = (4/VISIBLE_MINIBLOCKS) * window.innerHeight;
-      const viewportTop = blocksScrollElement.scrollTop * (blocksScrollElement.clientHeight / blocksScrollElement.scrollHeight) - viewportHeight;
+      const viewportHeight = heightScaleFactor * window.innerHeight;
+      const viewportTop = (blocksScrollElement.scrollTop / (blocksScrollElement.scrollHeight - blocksScrollElement.clientHeight)) * (window.innerHeight - viewportHeight);
+
       viewportElement.style.height = `${viewportHeight}px`;
       viewportElement.style.top = `${viewportTop}px`;
     }
