@@ -5,6 +5,11 @@ import { generateApiUrl } from './Search';
 import { BlockData } from './Blocks';
 import { OpportunityData } from './Block';
 import styles from './../styles/BlockDetails.module.css';
+import ReactFlow from 'reactflow';
+
+import 'reactflow/dist/style.css';
+
+const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 
 interface BlockDetailsProps {
 }
@@ -43,6 +48,34 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
     }
   }, [searchResults, opportunityIndex]);
 
+  const initialNodes = [
+    {
+      id: '1', position: { x: 0, y: 0 }, data: {
+        label: <div className={styles.logoInside}>
+          <Typography variant="h6">EOA</Typography>
+        </div>
+      }
+    },
+    {
+      id: '2', position: { x: 0, y: 100 }, data: {
+        label: <div className={styles.buyMarketOutside}>
+          <div className={styles.logoInside}>
+            <img src={opportunity.buyMarketLogo} alt={opportunity.buyMarketName} width="40" height="40" />
+          </div>
+        </div>
+      }
+    },
+    {
+      id: '3', position: { x: 0, y: 200 }, data: {
+        label: <div className={styles.sellMarketOutside}>
+          <div className={styles.logoInside}>
+            <img src={opportunity.sellMarketLogo} alt={opportunity.sellMarketName} width="40" height="40" />
+          </div>
+        </div>
+      }
+    },
+  ];
+
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh' }}>
@@ -50,6 +83,9 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
           <CircularProgress color="inherit" size={80} />
         ) : opportunity ? (
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', width: '70%', height: '60%' }}>
+            <div style={{ width: '100vw', height: '100vh' }}>
+              <ReactFlow nodes={initialNodes} edges={initialEdges} />
+            </div>
             <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
               <div className={styles.logoInside}>
                 <Typography variant="h6">EOA</Typography>
