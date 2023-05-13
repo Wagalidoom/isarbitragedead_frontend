@@ -56,13 +56,13 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   const [isDraggingViewport, setIsDraggingViewport] = useState(false);
   const [isHoveringViewport, setIsHoveringViewport] = useState(false);
 
-const handleViewportMouseEnter = (event: React.MouseEvent) => {
-  setIsHoveringViewport(true);
-};
+  const handleViewportMouseEnter = (event: React.MouseEvent) => {
+    setIsHoveringViewport(true);
+  };
 
-const handleViewportMouseLeave = (event: React.MouseEvent) => {
-  setIsHoveringViewport(false);
-};
+  const handleViewportMouseLeave = (event: React.MouseEvent) => {
+    setIsHoveringViewport(false);
+  };
 
 
 
@@ -162,21 +162,31 @@ const handleViewportMouseLeave = (event: React.MouseEvent) => {
     event.stopPropagation();
     setIsDraggingViewport(true);
   };
-  
+
   const handleViewportMouseUp = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
     setIsDraggingViewport(false);
   };
-  
+
+
+
   const handleViewportMouseMove = (event: React.MouseEvent) => {
     if (!isDraggingViewport || !blocksScrollRef.current || !miniBlocksScrollRef.current) return;
-    const blocksScrollHeight = blocksScrollRef.current.scrollHeight;
-    const miniBlocksScrollHeight = miniBlocksScrollRef.current.scrollHeight;
-    const scrollRatio = blocksScrollHeight / window.innerHeight;
+    const scrollRatio = blocksScrollRef.current.scrollHeight / window.innerHeight;
     blocksScrollRef.current.scrollTop = event.clientY * scrollRatio;
   };
-  
+
+  const handleViewportClick = (event: React.MouseEvent) => {
+    if (!blocksScrollRef.current || !miniBlocksScrollRef.current) return;
+    // calculate the ratio between the full content and the visible content
+    const scrollRatio = blocksScrollRef.current.scrollHeight / window.innerHeight;
+    // calculate the new scroll position based on the click position
+    const newScrollTop = event.clientY * scrollRatio;
+    // set the scroll position of the content
+    blocksScrollRef.current.scrollTop = newScrollTop;
+  };
+
 
 
   // Fonctions pour le fonctionnement de la minimap
@@ -197,7 +207,7 @@ const handleViewportMouseLeave = (event: React.MouseEvent) => {
       blocksScrollRef.current.scrollTop += event.deltaY;
     }
   };
-  
+
 
   // Viewport 
   const updateViewportFrame = () => {
@@ -243,26 +253,28 @@ const handleViewportMouseLeave = (event: React.MouseEvent) => {
       </Grid>
 
       {/* Minimap */}
-      <Grid item xs={0} sm={1} md={1}  position={'relative'} sx={{backgroundColor: '#d0c3ba', boxShadow: 4 }}>
-      <Box
-  id="viewport"
-  onMouseDown={handleViewportMouseDown}
-  onMouseUp={handleViewportMouseUp}
-  onMouseMove={handleViewportMouseMove}
-  onMouseEnter={handleViewportMouseEnter}
+      <Grid item xs={0} sm={1} md={1}
+          onClick={handleViewportClick}
+          onMouseDown={handleViewportMouseDown}
+          onMouseUp={handleViewportMouseUp}
+          onMouseMove={handleViewportMouseMove} position={'relative'} sx={{ backgroundColor: '#d0c3ba', boxShadow: 4 }}>
+        <Box
+          id="viewport"
+          
+          onMouseEnter={handleViewportMouseEnter}
   onMouseLeave={handleViewportMouseLeave}
-  sx={{
-    position: 'absolute',
-    backgroundColor: 'transparent',
-    width: "100%",
-    borderRadius: '10px',
-    boxShadow: '0px 3px 6px rgba(0,0,0,0.8)',
-    zIndex: 2,
-    border: '3px solid #D1D1D1',
-    opacity: isDraggingViewport || isHoveringViewport ? 1 : 0.5,
-  }}
-/>
-      <div ref={miniBlocksScrollRef} onWheel={handleMinimapScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
+          sx={{
+            position: 'absolute',
+            backgroundColor: 'transparent',
+            width: "100%",
+            borderRadius: '10px',
+            boxShadow: '0px 3px 6px rgba(0,0,0,0.8)',
+            zIndex: 2,
+            border: '3px solid #D1D1D1',
+            opacity: isDraggingViewport || isHoveringViewport ? 1 : 0.5,
+          }}
+        />
+        <div ref={miniBlocksScrollRef} onWheel={handleMinimapScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
           {blockList.length > 0 ? (
             blockList.map(({ opportunities }, index) => (
               <MiniBlock nbOpportunities={opportunities.length} key={index} />

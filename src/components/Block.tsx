@@ -59,14 +59,14 @@ const Opportunity: React.FC<OpportunityData & { opportunityIndex: number, blockN
 };
 
 
-const Block: React.FC<BlockData> = React.forwardRef(({ blockNumber, opportunities }, ref) => {
+const Block: React.FC<BlockData> = React.memo(({ blockNumber, opportunities }) => {
   const content = opportunities.length === 0
     ? (<Box sx={{ width: '100%' }}><Typography variant="body1" sx={{ color: '#ffffff' }}>No opportunities at this block</Typography></Box>)
     : (opportunities.map((opportunity, index) => <Opportunity key={index} opportunityIndex={index} blockNumber={blockNumber} {...opportunity} />));
 
   return (
     <>
-      <Box ref={ref} data-block-number={blockNumber} sx={{ display: 'flex', alignItems: 'center'}}>
+      <Box data-block-number={blockNumber} sx={{ display: 'flex', alignItems: 'center'}}>
         <Paper square sx={{ paddingLeft: 1, paddingRight: 1, width: '70%', minHeight: `${BLOCK_MIN_HEIGHT}px`, backgroundColor: '#6389be', display: 'flex', flexDirection: 'column', alignItems: 'start', margin: 'auto', position: 'relative' }}>
           <Typography  sx={{ height:`${blockNumberContainerSize}px`, fontSize: `${blockNumberFontSize}px`, color: '#eae6e1' }}><b>{blockNumber}</b></Typography>
           <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
