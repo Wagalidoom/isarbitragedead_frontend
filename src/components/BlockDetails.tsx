@@ -5,20 +5,22 @@ import { generateApiUrl } from './Search';
 import { BlockData } from './Blocks';
 import { OpportunityData } from './Block';
 import styles from './../styles/BlockDetails.module.css';
-import ReactFlow from 'reactflow';
+import ReactFlow, { Position } from 'reactflow';
 
 import 'reactflow/dist/style.css';
-
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
+import './overview.css';
 
 interface BlockDetailsProps {
 }
+
 
 const BlockDetails: React.FC<BlockDetailsProps> = () => {
   const { blockNumber = '0', opportunityIndex = '0' } = useParams();
   const [searchResults, setSearchResults] = useState<BlockData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [opportunity, setOpportunity] = useState<OpportunityData>();
+  const [initialNodes, setInitialNodes] = useState<any[]>([]);
+  const [initialEdges, setInitialEdges] = useState<any[]>([]);
 
   const apiRequest = async ({ searchInput }: { searchInput: string }) => {
     setIsLoading(true);
@@ -48,33 +50,53 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
     }
   }, [searchResults, opportunityIndex]);
 
-  const initialNodes = [
-    {
-      id: '1', position: { x: 0, y: 0 }, data: {
-        label: <div className={styles.logoInside}>
-          <Typography variant="h6">EOA</Typography>
-        </div>
-      }
-    },
-    {
-      id: '2', position: { x: 0, y: 100 }, data: {
-        label: <div className={styles.buyMarketOutside}>
-          <div className={styles.logoInside}>
-            <img src={opportunity.buyMarketLogo} alt={opportunity.buyMarketName} width="40" height="40" />
-          </div>
-        </div>
-      }
-    },
-    {
-      id: '3', position: { x: 0, y: 200 }, data: {
-        label: <div className={styles.sellMarketOutside}>
-          <div className={styles.logoInside}>
-            <img src={opportunity.sellMarketLogo} alt={opportunity.sellMarketName} width="40" height="40" />
-          </div>
-        </div>
-      }
-    },
-  ];
+  useEffect(() => {
+    if (opportunity) {
+      setInitialNodes([
+        {
+          id: '1', position: { x: 300, y: 0 }, data: {
+            label:
+              <Typography variant="h6">EOA</Typography>
+          }, sourcePosition: Position.Left,
+          targetPosition: Position.Right,
+          draggable: false,
+          className: 'logoInside',
+        },
+        {
+          id: '2', position: { x: 0, y: 300 }, data: {
+            label:
+              <div className={styles.logoInside}>
+                <img src={opportunity.buyMarketLogo} alt={opportunity.buyMarketName} width="40" height="40" />
+              </div>
+          }, sourcePosition: Position.Right,
+          draggable: false,
+          className: 'buyMarket',
+        },
+        {
+          id: '3', position: { x: 600, y: 300 }, data: {
+            label:
+              <div className={styles.logoInside}>
+                <img src={opportunity.sellMarketLogo} alt={opportunity.sellMarketName} width="40" height="40" />
+              </div>
+          }, sourcePosition: Position.Top,
+          targetPosition: Position.Left,
+          draggable: false,
+          className: 'sellMarket',
+        },
+      ]);
+    }
+  }, [opportunity]);  // When opportunity changes, this will run
+
+  useEffect(() => {
+    if (opportunity) {
+      setInitialEdges([
+        { id: 'e1-2', source: '1', target: '2', type: 'step', animated: true, label: opportunity.deltaYa+" "+opportunity.baseSymbol },
+        { id: 'e2-3', source: '2', target: '3', type: 'step', animated: true, label: opportunity.deltaXa+" "+opportunity.tokenSymbol},
+        { id: 'e3-1', source: '3', target: '1', type: 'step', animated: true, label: opportunity.deltaYb+" "+opportunity.baseSymbol}
+      ]
+      );
+    }
+  }, [opportunity]);  // When opportunity changes, this will run
 
   return (
     <>
@@ -83,40 +105,8 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
           <CircularProgress color="inherit" size={80} />
         ) : opportunity ? (
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', width: '70%', height: '60%' }}>
-            <div style={{ width: '100vw', height: '100vh' }}>
-              <ReactFlow nodes={initialNodes} edges={initialEdges} />
-            </div>
+            <ReactFlow nodes={initialNodes} edges={initialEdges} />
             <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-              <div className={styles.logoInside}>
-                <Typography variant="h6">EOA</Typography>
-              </div>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-              <div className={styles.arrowLeft}>
-                <div className={styles.arrowLine}>
-                  <Typography sx={{ color: '#454545', paddingTop: '45px', paddingLeft: '30px' }}>{opportunity.deltaYa} {opportunity.tokenSymbol}</Typography>
-                </div>
-              </div>
-              <div className={styles.arrowRight}>
-                <div className={styles.arrowLine}>
-                  <Typography sx={{ color: '#454545', paddingTop: '45px', paddingLeft: '30px' }}>{opportunity.deltaYa} {opportunity.tokenSymbol}</Typography>
-                </div>
-              </div>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-              <div className={styles.buyMarketOutside}>
-                <div className={styles.logoInside}>
-                  <img src={opportunity.sellMarketLogo} alt={opportunity.sellMarketName} width="40" height="40" />
-                </div>
-              </div>
-              <div className={styles.arrowMarket}>
-                <div className={styles.arrowLine}><Typography sx={{ color: '#454545', paddingTop: '45px', paddingLeft: '30px' }}>{opportunity.deltaYa} {opportunity.tokenSymbol}</Typography></div>
-              </div>
-              <div className={styles.sellMarketOutside}>
-                <div className={styles.logoInside}>
-                  <img src={opportunity.buyMarketLogo} alt={opportunity.buyMarketName} width="40" height="40" />
-                </div>
-              </div>
             </Box>
           </Box>
         ) : (

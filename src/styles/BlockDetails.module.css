@@ -9,33 +9,9 @@
   align-items: center;
 }
 
-.buyMarketOutside {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: rgb(143, 194, 231);
-  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.25);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-}
-
-.sellMarketOutside {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: rgb(231, 143, 143);
-  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.25);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-}
-
 .logoInside {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background-color: #eae6e1;
   box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.25);
@@ -43,52 +19,5 @@
   justify-content: center;
   align-items: center;
   z-index: 3;
-}
-
-.arrow {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-dasharray: 4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.arrowRight {
-  transform: rotate(45deg);
-}
-
-.arrowLeft {
-  flex-direction: row-reverse;
-  transform: rotate(-45deg);
-}
-
-/* ... */
-.arrowLeft, .arrowRight {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  z-index: 1;
-}
-
-.arrowMarkets {
-  display: flex;
-  align-items: center;
-  width: 50%;
-  z-index: 1;
-  transform: rotate(90deg);
-}
-
-.arrowLine {
-  height: 10px;
-  background: currentColor;
-  flex-grow: 1;
-  background-image: linear-gradient(to right, currentColor 50%, transparent 50%);
-  background-size: 8px 100%;
-  min-width: 150px; /* Ajout d'une largeur minimale pour s'assurer que le rectangle est visible */
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.35);
-  display: flex;
-  align-items: center;
 }
 
