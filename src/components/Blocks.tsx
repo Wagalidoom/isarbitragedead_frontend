@@ -132,7 +132,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       // Remove global mouseup listener
       window.removeEventListener('mouseup', handleGlobalMouseUp);
     };
-  }, []);
+  }, [setCurrentBlockNumber]);
 
   // Récupère l'historique lors du chargement de la page
   useEffect(() => {
@@ -217,7 +217,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   return (
     <Grid container columnSpacing={0} sx={{ width: '100%' }} >
       {/* Composant principal de défilement des blocks */}
-      <Grid item xs={12} sm={11} md={11} position="relative">
+      <Grid item xs={12} sm={11} md={11} position="relative" onMouseMove={handleViewportMouseMove} >
         <div ref={blocksScrollRef} onScroll={handleBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
           {blockList.length > 0 ? (
             blockList.map(({ blockNumber, opportunities }, index) => (
@@ -252,7 +252,9 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
         onClick={handleViewportClick}
         onMouseDown={handleViewportMouseDown}
         onMouseUp={handleViewportMouseUp}
-        onMouseMove={handleViewportMouseMove} position={'relative'} sx={{ backgroundColor: '#d0c3ba', boxShadow: 4 }}>
+        onMouseMove={handleViewportMouseMove} 
+        position={'relative'} 
+        sx={{ backgroundColor: '#d0c3ba', boxShadow: 4 }}>
         <Box
           id="viewport"
 
