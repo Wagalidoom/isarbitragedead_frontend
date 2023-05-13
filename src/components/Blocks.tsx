@@ -4,8 +4,8 @@ import io from 'socket.io-client';
 import Block, { OpportunityData } from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import { ArrowUpward } from '@mui/icons-material';
-import lightTheme from '../styles/theme/lightTheme';
-import MiniBlock, { MINIBLOCK_VERTICAL_PADDING } from './MiniBlock';
+import MiniBlock from './MiniBlock';
+import { BLOCK_MARGIN_TOP, heightScaleFactor } from './constants';
 
 // Constantes globales
 const INITIAL_DATA_TO_FETCH = 20;
@@ -53,7 +53,16 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
   const blocksScrollRef = useRef<HTMLDivElement | null>(null);
   const miniBlocksScrollRef = useRef<HTMLDivElement | null>(null);
+  const [isDraggingViewport, setIsDraggingViewport] = useState(false);
+  const [isHoveringViewport, setIsHoveringViewport] = useState(false);
 
+const handleViewportMouseEnter = (event: React.MouseEvent) => {
+  setIsHoveringViewport(true);
+};
+
+const handleViewportMouseLeave = (event: React.MouseEvent) => {
+  setIsHoveringViewport(false);
+};
 
 
 
@@ -62,11 +71,11 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     const history = await fetchBlocksHistory(limit, fromBlock);
     setBlockList((prevDataList) => [...prevDataList, ...history]);
     setLastDisplayedBlock(history[history.length - 1].blockNumber);
-  
+
     // Récupère le premier block de l'historique
     return history[0].blockNumber;
   };
-  
+
 
   // Listening to scroll events and hot loading
   useEffect(() => {
@@ -110,11 +119,23 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       setCurrentBlockNumber(receivedData.blockNumber);
     });
 
+    // Update viewport to display it on page loading
+    updateViewportFrame()
+
+    // Add global mouseup listener
+    const handleGlobalMouseUp = () => {
+      setIsDraggingViewport(false);
+    };
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+
     // Clean up the socket connection when the component is unmounted or when isSearchActive changes
     return () => {
       socket.disconnect();
+      // Remove global mouseup listener
+      window.removeEventListener('mouseup', handleGlobalMouseUp);
     };
   }, []);
+
 
 
   // Récupère l'historique lors du chargement de la page
@@ -136,6 +157,27 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     }
   };
 
+  const handleViewportMouseDown = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDraggingViewport(true);
+  };
+  
+  const handleViewportMouseUp = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDraggingViewport(false);
+  };
+  
+  const handleViewportMouseMove = (event: React.MouseEvent) => {
+    if (!isDraggingViewport || !blocksScrollRef.current || !miniBlocksScrollRef.current) return;
+    const blocksScrollHeight = blocksScrollRef.current.scrollHeight;
+    const miniBlocksScrollHeight = miniBlocksScrollRef.current.scrollHeight;
+    const scrollRatio = blocksScrollHeight / window.innerHeight;
+    blocksScrollRef.current.scrollTop = event.clientY * scrollRatio;
+  };
+  
+
 
   // Fonctions pour le fonctionnement de la minimap
   const handleBlocksScroll = () => {
@@ -149,27 +191,25 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   };
 
   const handleMinimapScroll = (event: React.WheelEvent) => {
+    if (isDraggingViewport) return;
     event.preventDefault();
     if (blocksScrollRef.current) {
       blocksScrollRef.current.scrollTop += event.deltaY;
     }
   };
+  
 
   // Viewport 
   const updateViewportFrame = () => {
     const blocksScrollElement = blocksScrollRef.current;
     const miniBlocksScrollElement = miniBlocksScrollRef.current;
     const viewportElement = document.getElementById("viewport");
-  
+
     if (blocksScrollElement && miniBlocksScrollElement && viewportElement) {
-      // Calculate the total height of all MiniBlock elements
-      const totalMiniBlocksHeight = miniBlocksScrollElement.scrollHeight;
-      
-      const VISIBLE_MINIBLOCKS = 28;
-      
-      // Calculate the height of the viewport frame based on VISIBLE_BLOCKS
-      const viewportHeight = (4/VISIBLE_MINIBLOCKS) * window.innerHeight;
-      const viewportTop = blocksScrollElement.scrollTop * (blocksScrollElement.clientHeight / blocksScrollElement.scrollHeight) - viewportHeight;
+      // Calculate viewport height and position
+      const viewportHeight = heightScaleFactor * window.innerHeight;
+      const viewportTop = (blocksScrollElement.scrollTop / (blocksScrollElement.scrollHeight - blocksScrollElement.clientHeight)) * (window.innerHeight - viewportHeight);
+
       viewportElement.style.height = `${viewportHeight}px`;
       viewportElement.style.top = `${viewportTop}px`;
     }
@@ -181,7 +221,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
         <div ref={blocksScrollRef} onScroll={handleBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
           {blockList.length > 0 ? (
             blockList.map(({ blockNumber, opportunities }, index) => (
-              <Box sx={{ marginTop: '50px' }} key={index}>
+              <Box sx={{ marginTop: `${BLOCK_MARGIN_TOP}px` }} key={index}>
                 {index === 0 ? (
                   <Fade in={true} timeout={500} key={`fade-${blockNumber}`}>
                     <div>
@@ -203,9 +243,26 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       </Grid>
 
       {/* Minimap */}
-      <Grid item xs={0} sm={1} md={1}  >
-        <div ref={miniBlocksScrollRef} onWheel={handleMinimapScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
-        <div id="viewport" style={{ position: 'absolute', border: '2px solid #FF5252', zIndex: 1 }}></div>
+      <Grid item xs={0} sm={1} md={1}  position={'relative'} sx={{backgroundColor: '#d0c3ba', boxShadow: 4 }}>
+      <Box
+  id="viewport"
+  onMouseDown={handleViewportMouseDown}
+  onMouseUp={handleViewportMouseUp}
+  onMouseMove={handleViewportMouseMove}
+  onMouseEnter={handleViewportMouseEnter}
+  onMouseLeave={handleViewportMouseLeave}
+  sx={{
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    width: "100%",
+    borderRadius: '10px',
+    boxShadow: '0px 3px 6px rgba(0,0,0,0.8)',
+    zIndex: 2,
+    border: '3px solid #D1D1D1',
+    opacity: isDraggingViewport || isHoveringViewport ? 1 : 0.5,
+  }}
+/>
+      <div ref={miniBlocksScrollRef} onWheel={handleMinimapScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
           {blockList.length > 0 ? (
             blockList.map(({ opportunities }, index) => (
               <MiniBlock nbOpportunities={opportunities.length} key={index} />
