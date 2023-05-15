@@ -1,10 +1,11 @@
-import { Grid, Typography, Fade, Box, Fab, useMediaQuery } from '@mui/material';
-import React, { useState, useEffect, useRef, Ref } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
-import Block, { OpportunityData } from './Block';
-import { LOCAL_IP_ADDRESS } from '../App';
+import { Grid, Typography, Fade, Box, Fab } from '@mui/material';
 import { ArrowUpward } from '@mui/icons-material';
+
+import Block, { OpportunityData } from './Block';
 import MiniBlock from './MiniBlock';
+import { LOCAL_IP_ADDRESS } from '../App';
 import { BLOCK_MARGIN_TOP, heightScaleFactor } from './constants';
 
 // Constantes globales
@@ -56,16 +57,6 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   const [isDraggingViewport, setIsDraggingViewport] = useState(false);
   const [isHoveringViewport, setIsHoveringViewport] = useState(false);
 
-  const handleViewportMouseEnter = (event: React.MouseEvent) => {
-    setIsHoveringViewport(true);
-  };
-
-  const handleViewportMouseLeave = (event: React.MouseEvent) => {
-    setIsHoveringViewport(false);
-  };
-
-
-
   // Récupère l'historique des données de manière asynchrone et met à jour l'état
   const fetchDataHistory = async (limit: number, fromBlock?: number) => {
     const history = await fetchBlocksHistory(limit, fromBlock);
@@ -74,6 +65,16 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
 
     // Récupère le premier block de l'historique
     return history[0].blockNumber;
+  };
+
+  // Fonction pour remonter en un clic 
+  const scrollToTop = () => {
+    if (blocksScrollRef.current && miniBlocksScrollRef.current) {
+      blocksScrollRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
   };
 
 
@@ -88,19 +89,16 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       }
     }, THROTTLE);
 
-    // Add the 'handleScroll' function as an event listener for the 'scroll' event on the window object only when search is not active
     const scrollElement = blocksScrollRef.current;
     if (scrollElement) {
       scrollElement.addEventListener('scroll', handleScroll);
     }
 
-    // Return a cleanup function that removes the event listener when the component is unmounted or when the dependencies change
     return () => {
       if (scrollElement) {
         scrollElement.removeEventListener('scroll', handleScroll);
       }
     };
-    // The effect depends on 'lastDisplayedBlock', so it will run whenever 'lastDisplayedBlock' changes
   }, [lastDisplayedBlock]);
 
   // Met à jour les références des blocs lorsque la liste des blocs change
@@ -134,9 +132,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       // Remove global mouseup listener
       window.removeEventListener('mouseup', handleGlobalMouseUp);
     };
-  }, []);
-
-
+  }, [setCurrentBlockNumber]);
 
   // Récupère l'historique lors du chargement de la page
   useEffect(() => {
@@ -146,48 +142,6 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     };
     fetchInitialData();
   }, [setCurrentBlockNumber]);
-
-  // Fonction pour remonter en un clic 
-  const scrollToTop = () => {
-    if (blocksScrollRef.current && miniBlocksScrollRef.current) {
-      blocksScrollRef.current.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-    }
-  };
-
-  const handleViewportMouseDown = (event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDraggingViewport(true);
-  };
-
-  const handleViewportMouseUp = (event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsDraggingViewport(false);
-  };
-
-
-
-  const handleViewportMouseMove = (event: React.MouseEvent) => {
-    if (!isDraggingViewport || !blocksScrollRef.current || !miniBlocksScrollRef.current) return;
-    const scrollRatio = blocksScrollRef.current.scrollHeight / window.innerHeight;
-    blocksScrollRef.current.scrollTop = event.clientY * scrollRatio;
-  };
-
-  const handleViewportClick = (event: React.MouseEvent) => {
-    if (!blocksScrollRef.current || !miniBlocksScrollRef.current) return;
-    // calculate the ratio between the full content and the visible content
-    const scrollRatio = blocksScrollRef.current.scrollHeight / window.innerHeight;
-    // calculate the new scroll position based on the click position
-    const newScrollTop = event.clientY * scrollRatio;
-    // set the scroll position of the content
-    blocksScrollRef.current.scrollTop = newScrollTop;
-  };
-
-
 
   // Fonctions pour le fonctionnement de la minimap
   const handleBlocksScroll = () => {
@@ -208,7 +162,6 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     }
   };
 
-
   // Viewport 
   const updateViewportFrame = () => {
     const blocksScrollElement = blocksScrollRef.current;
@@ -225,9 +178,46 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     }
   };
 
+  const handleViewportMouseDown = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDraggingViewport(true);
+  };
+
+  const handleViewportMouseUp = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDraggingViewport(false);
+  };
+
+  const handleViewportMouseEnter = (event: React.MouseEvent) => {
+    setIsHoveringViewport(true);
+  };
+
+  const handleViewportMouseLeave = (event: React.MouseEvent) => {
+    setIsHoveringViewport(false);
+  };
+
+  const handleViewportMouseMove = (event: React.MouseEvent) => {
+    if (!isDraggingViewport || !blocksScrollRef.current || !miniBlocksScrollRef.current) return;
+    const scrollRatio = blocksScrollRef.current.scrollHeight / window.innerHeight;
+    blocksScrollRef.current.scrollTop = event.clientY * scrollRatio;
+  };
+
+  const handleViewportClick = (event: React.MouseEvent) => {
+    if (!blocksScrollRef.current || !miniBlocksScrollRef.current) return;
+    // calculate the ratio between the full content and the visible content
+    const scrollRatio = blocksScrollRef.current.scrollHeight / window.innerHeight;
+    // calculate the new scroll position based on the click position
+    const newScrollTop = event.clientY * scrollRatio;
+    // set the scroll position of the content
+    blocksScrollRef.current.scrollTop = newScrollTop;
+  };
+
   return (
     <Grid container columnSpacing={0} sx={{ width: '100%' }} >
-      <Grid item xs={12} sm={11} md={11} >
+      {/* Composant principal de défilement des blocks */}
+      <Grid item xs={12} sm={11} md={11} position="relative" onMouseMove={handleViewportMouseMove} >
         <div ref={blocksScrollRef} onScroll={handleBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
           {blockList.length > 0 ? (
             blockList.map(({ blockNumber, opportunities }, index) => (
@@ -249,20 +239,27 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
               No blocks to be shown
             </Typography>
           )}
+          <Box sx={{ position: 'absolute', top: 16, right: 16, zIndex: 1 }}>
+            <Fab color="secondary" onClick={scrollToTop}>
+              <ArrowUpward />
+            </Fab>
+          </Box>
         </div>
       </Grid>
 
       {/* Minimap */}
       <Grid item xs={0} sm={1} md={1}
-          onClick={handleViewportClick}
-          onMouseDown={handleViewportMouseDown}
-          onMouseUp={handleViewportMouseUp}
-          onMouseMove={handleViewportMouseMove} position={'relative'} sx={{ backgroundColor: '#f7f1e8', boxShadow: 4 }}>
+        onClick={handleViewportClick}
+        onMouseDown={handleViewportMouseDown}
+        onMouseUp={handleViewportMouseUp}
+        onMouseMove={handleViewportMouseMove} 
+        position={'relative'} 
+        sx={{ backgroundColor: '#d0c3ba', boxShadow: 4 }}>
         <Box
           id="viewport"
-          
+
           onMouseEnter={handleViewportMouseEnter}
-  onMouseLeave={handleViewportMouseLeave}
+          onMouseLeave={handleViewportMouseLeave}
           sx={{
             position: 'absolute',
             backgroundColor: 'transparent',
@@ -285,12 +282,6 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
           )}
         </div>
       </Grid>
-
-      <Box sx={{ position: 'fixed', top: 16, right: 150, zIndex: 1 }}>
-        <Fab color="secondary" onClick={scrollToTop}>
-          <ArrowUpward />
-        </Fab>
-      </Box>
     </Grid>
   );
 
