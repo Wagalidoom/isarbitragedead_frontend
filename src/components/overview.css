@@ -33,8 +33,8 @@
 
 
 .react-flow__node.logoInside {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background-color: #f7f1e8;
     box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.25);
@@ -42,7 +42,7 @@
     justify-content: center;
     align-items: center;
     z-index: 3;
-  }
+}
 
 .react-flow__edge-textbg {
     fill: rgb(255, 255, 255);
@@ -54,8 +54,33 @@
     padding-bottom: 10px;
 }
 
-.react-flow__edge-path, .react-flow__connection-path {
+.react-flow__edge-path,
+.react-flow__connection-path {
     stroke: #b1b1b7;
     stroke-width: 2;
     fill: none;
+}
+
+@media only screen and (max-width: 1000px) {
+    .react-flow__node.logoInside {
+        width: 50px;
+        height: 50px;
+    }
+
+    .react-flow__node.buyMarket {
+        width: 50px;
+        height: 50px;
+    }
+
+    .react-flow__node.sellMarket {
+        width: 50px;
+        height: 50px;
+    }
+
+    .react-flow__edge-text {
+        font-size: 12px;
+
+    }
+
+
 }
