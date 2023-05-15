@@ -181,7 +181,7 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
               <ReactFlow nodes={initialNodes} edges={initialEdges} panOnDrag={false} panOnScroll={false} zoomOnScroll={false} zoomOnPinch={false} zoomOnDoubleClick={false} proOptions={proOptions}/>
             </Box>
   
-            <Box sx={{ width: '90%' }}>
+            <Box sx={{ width: '60%' }}>
               <OpportunityArray opportunity={opportunity} />
             </Box>
           </>

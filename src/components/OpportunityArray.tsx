@@ -35,27 +35,26 @@ const OpportunityArray: React.FC<IOpportunityArray> = ({ opportunity }) => {
             <Grid container spacing={2}>
                 {blockDetailsConfig.map((detail, index) => {
                     const value: any = (opportunity as any)[detail.key];
-                    const logoUrl: any = (opportunity as any)[detail.logoKey || ''];
                     const itemStyle = index % 2 === 0 ? '#faf7f2' : '#f7f1e8';
 
                     return (
                         <React.Fragment key={index}>
-                            <Grid item xs={6} style={{ backgroundColor: itemStyle }}>
-                                <Typography variant="h6" sx={{ color: 'black' }} >{detail.name}:</Typography>
+                            <Grid item xs={6} style={{ backgroundColor: itemStyle, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60px' }}>
+                            <Typography sx={{ color: 'black', fontSize: 19, fontWeight: 'bold' }}>{detail.name}</Typography>
                             </Grid>
-                            <Grid item xs={6} style={{ backgroundColor: itemStyle }}>
+                            <Grid item xs={6} style={{ backgroundColor: itemStyle, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60px' }}>
                                 {detail.link && !detail.logo && (
                                     <Typography sx={{ color: 'black' }}>
-                                        <Link to={`${etherscanLink}${value}`}>{value}</Link>
+                                        <Link to={`${etherscanLink}${value}`} style={{ color: 'inherit' }}>{value}</Link>
                                     </Typography>
                                 )}
                                 {detail.logo && !detail.link && (
                                     detail.logoKey ?
-                                        <Box>
-                                            <Typography sx={{ color: 'black' }}>{value}</Typography>
-                                            <img src={`${opportunity[detail.logoKey]}`} alt={`${detail.name}_logo`} width="40" height="40" style={{ marginLeft: '10px' }} />
+                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Typography sx={{ color: 'black' }}>{value}</Typography>
+                                            <img src={`${opportunity[detail.logoKey]}`} alt={`${detail.name}_logo`} width="40" height="40" style={{ marginLeft: '20px' }} />
                                         </Box> :
-                                        <img src={value} alt={`${detail.name}_logo`} width="40" height="40" style={{ marginLeft: '10px' }} />
+                                        <img src={value} alt={`${detail.name}_logo`} width="40" height="40" />
                                 )}
                                 {!detail.link && !detail.logo && (
                                     <Typography sx={{ color: 'black' }}>{value}</Typography>
