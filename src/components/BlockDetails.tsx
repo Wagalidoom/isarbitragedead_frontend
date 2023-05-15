@@ -54,7 +54,7 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
     if (opportunity) {
       setInitialNodes([
         {
-          id: '1', position: { x: 300, y: 0 }, data: {
+          id: '1', position: { x: 300, y: 20 }, data: {
             label:
               <Typography variant="h6">EOA</Typography>
           }, sourcePosition: Position.Left,
@@ -63,7 +63,7 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
           className: 'logoInside',
         },
         {
-          id: '2', position: { x: 0, y: 300 }, data: {
+          id: '2', position: { x: 10, y: 400 }, data: {
             label:
               <div className={styles.logoInside}>
                 <img src={opportunity.buyMarketLogo} alt={opportunity.buyMarketName} width="40" height="40" />
@@ -73,7 +73,7 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
           className: 'buyMarket',
         },
         {
-          id: '3', position: { x: 600, y: 300 }, data: {
+          id: '3', position: { x: 610, y: 400 }, data: {
             label:
               <div className={styles.logoInside}>
                 <img src={opportunity.sellMarketLogo} alt={opportunity.sellMarketName} width="40" height="40" />
@@ -104,10 +104,8 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
         {isLoading ? (
           <CircularProgress color="inherit" size={80} />
         ) : opportunity ? (
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', width: '70%', height: '60%' }}>
-            <ReactFlow nodes={initialNodes} edges={initialEdges} />
-            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-            </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '700px', height: '500px', boxShadow: 'inset 0 0 4px rgba(0, 0, 0, 0.25)', backgroundColor: '#f7f1e8' }}>
+            <ReactFlow nodes={initialNodes} edges={initialEdges} panOnDrag={false} panOnScroll={false} zoomOnScroll={false} zoomOnPinch={false} zoomOnDoubleClick={false} />
           </Box>
         ) : (
           <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }}>
