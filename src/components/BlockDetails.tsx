@@ -25,6 +25,7 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
   const isMediumScreen = useMediaQuery(lightTheme.breakpoints.down('md'));
   const isSmallScreen = useMediaQuery(lightTheme.breakpoints.down('sm'));
 
+  const proOptions = { hideAttribution: true };
 
   const apiRequest = async ({ searchInput }: { searchInput: string }) => {
     setIsLoading(true);
@@ -170,7 +171,6 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
       );
     }
   }, [opportunity]);  // When opportunity changes, this will run
-
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh' }}>
@@ -178,7 +178,7 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
           <CircularProgress color="inherit" size={80} />
         ) : opportunity ? (
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: isSmallScreen ? '350px' : isMediumScreen ? '450px' : '700px', height: '500px', boxShadow: 'inset 0 0 4px rgba(0, 0, 0, 0.25)', backgroundColor: '#f7f1e8' }}>
-            <ReactFlow nodes={initialNodes} edges={initialEdges} panOnDrag={false} panOnScroll={false} zoomOnScroll={false} zoomOnPinch={false} zoomOnDoubleClick={false} />
+            <ReactFlow nodes={initialNodes} edges={initialEdges} panOnDrag={false} panOnScroll={false} zoomOnScroll={false} zoomOnPinch={false} zoomOnDoubleClick={false} proOptions={proOptions}/>
           </Box>
         ) : (
           <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }}>
