@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { opportunityHeight, opportunityMarginBottom, BLOCK_MIN_HEIGHT, blockNumberContainerSize, blockNumberFontSize } from './constants';
 
 export interface OpportunityData {
+  [key: string]: string | number | undefined; // Index signature
   buyMarketAddress: string,
   buyMarketName: string,
   buyMarketLogo: string,

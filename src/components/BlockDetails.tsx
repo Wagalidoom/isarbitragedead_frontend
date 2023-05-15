@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Grid, Paper, Typography, useMediaQuery } from '@mui/material';
+import { Box, CircularProgress, Typography, useMediaQuery } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { generateApiUrl } from './Search';
 import { BlockData } from './Blocks';
@@ -10,11 +10,11 @@ import ReactFlow, { Position } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './overview.css';
 import lightTheme from '../styles/theme/lightTheme';
+import OpportunityArray from './OpportunityArray';
 
 const proOptions = { hideAttribution: true };
 interface IBlockDetails {
 }
-
 
 const BlockDetails: React.FC<IBlockDetails> = () => {
   const { blockNumber = '0', opportunityIndex = '0' } = useParams();
@@ -25,8 +25,6 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
   const [initialEdges, setInitialEdges] = useState<any[]>([]);
   const isMediumScreen = useMediaQuery(lightTheme.breakpoints.down('md'));
   const isSmallScreen = useMediaQuery(lightTheme.breakpoints.down('sm'));
-
-  const proOptions = { hideAttribution: true };
 
   const apiRequest = async ({ searchInput }: { searchInput: string }) => {
     setIsLoading(true);
@@ -160,7 +158,7 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
         ]);
       }
     }
-  }, [opportunity]);  // When opportunity changes, this will run
+  }, [opportunity]);
 
   useEffect(() => {
     if (opportunity) {
@@ -171,7 +169,7 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
       ]
       );
     }
-  }, [opportunity]);  // When opportunity changes, this will run
+  }, [opportunity]); 
   return (
     <>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', padding: 5 }}>
@@ -184,20 +182,7 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
             </Box>
   
             <Box sx={{ width: '90%' }}>
-              <Paper sx={{ backgroundColor: '#f7f1e8', overflow: 'hidden', width: '100%' }}>
-                <Grid container spacing={2}>
-                  {Object.entries(opportunity).map(([key, value], index) => (
-                    <>
-                      <Grid item xs={6} key={`${key}-title`} sx={{ padding: 2, backgroundColor: index % 2 === 0 ? '#faf7f2' : '#f7f1e8', color: 'black' }}>
-                        <Typography variant="subtitle1">{key}:</Typography>
-                      </Grid>
-                      <Grid item xs={6} key={`${key}-value`} sx={{ padding: 2, backgroundColor: index % 2 === 0 ? '#faf7f2' : '#f7f1e8', color: 'black' }}>
-                        <Typography variant="body1">{value !== '' ? value : 'N/A'}</Typography>
-                      </Grid>
-                    </>
-                  ))}
-                </Grid>
-              </Paper>
+              <OpportunityArray opportunity={opportunity} />
             </Box>
           </>
         ) : (
