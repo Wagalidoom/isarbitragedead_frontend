@@ -10,7 +10,7 @@ const lightTheme = createTheme({
     values: {
       xs: 0,
       sm: 600,
-      md: 960,
+      md: 1000,
       lg: 1280,
       xl: 1920,
     },

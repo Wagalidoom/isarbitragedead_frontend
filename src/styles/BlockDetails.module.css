@@ -21,3 +21,9 @@
   z-index: 3;
 }
 
+@media only screen and (max-width: 1000px) {
+  .logoInside {
+    width: 30px;
+    height: 30px;
+  }
+}

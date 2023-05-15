@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Grid, Paper, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, Paper, Typography, useMediaQuery } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { generateApiUrl } from './Search';
 import { BlockData } from './Blocks';
@@ -9,6 +9,7 @@ import ReactFlow, { Position } from 'reactflow';
 
 import 'reactflow/dist/style.css';
 import './overview.css';
+import lightTheme from '../styles/theme/lightTheme';
 
 const proOptions = { hideAttribution: true };
 interface IBlockDetails {
@@ -22,6 +23,10 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
   const [opportunity, setOpportunity] = useState<OpportunityData>();
   const [initialNodes, setInitialNodes] = useState<any[]>([]);
   const [initialEdges, setInitialEdges] = useState<any[]>([]);
+  const isMediumScreen = useMediaQuery(lightTheme.breakpoints.down('md'));
+  const isSmallScreen = useMediaQuery(lightTheme.breakpoints.down('sm'));
+
+  const proOptions = { hideAttribution: true };
 
   const apiRequest = async ({ searchInput }: { searchInput: string }) => {
     setIsLoading(true);
@@ -53,47 +58,116 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
 
   useEffect(() => {
     if (opportunity) {
-      setInitialNodes([
-        {
-          id: '1', position: { x: 300, y: 20 }, data: {
-            label:
-              <Typography variant="h6">EOA</Typography>
-          }, sourcePosition: Position.Left,
-          targetPosition: Position.Right,
-          draggable: false,
-          className: 'logoInside',
-        },
-        {
-          id: '2', position: { x: 10, y: 400 }, data: {
-            label:
-              <div className={styles.logoInside}>
-                <img src={opportunity.buyMarketLogo} alt={opportunity.buyMarketName} width="40" height="40" />
-              </div>
-          }, sourcePosition: Position.Right,
-          draggable: false,
-          className: 'buyMarket',
-        },
-        {
-          id: '3', position: { x: 610, y: 400 }, data: {
-            label:
-              <div className={styles.logoInside}>
-                <img src={opportunity.sellMarketLogo} alt={opportunity.sellMarketName} width="40" height="40" />
-              </div>
-          }, sourcePosition: Position.Top,
-          targetPosition: Position.Left,
-          draggable: false,
-          className: 'sellMarket',
-        },
-      ]);
+      if (isSmallScreen) {
+        setInitialNodes([
+          {
+            id: '1', position: { x: 150, y: 20 }, data: {
+              label:
+                <Typography variant="h6">EOA</Typography>
+            }, sourcePosition: Position.Left,
+            targetPosition: Position.Right,
+            draggable: false,
+            className: 'logoInside',
+          },
+          {
+            id: '2', position: { x: 50, y: 400 }, data: {
+              label:
+                <div className={styles.logoInside}>
+                  <img src={opportunity.buyMarketLogo} alt={opportunity.buyMarketName} width="30" height="30" />
+                </div>
+            }, sourcePosition: Position.Right,
+            draggable: false,
+            className: 'buyMarket',
+          },
+          {
+            id: '3', position: { x: 250, y: 400 }, data: {
+              label:
+                <div className={styles.logoInside}>
+                  <img src={opportunity.sellMarketLogo} alt={opportunity.sellMarketName} width="30" height="30" />
+                </div>
+            }, sourcePosition: Position.Top,
+            targetPosition: Position.Left,
+            draggable: false,
+            className: 'sellMarket',
+          },
+        ]);
+      } else if (isMediumScreen) {
+        setInitialNodes([
+          {
+            id: '1', position: { x: 210, y: 20 }, data: {
+              label:
+                <Typography variant="h6">EOA</Typography>
+            }, sourcePosition: Position.Left,
+            targetPosition: Position.Right,
+            draggable: false,
+            className: 'logoInside',
+          },
+          {
+            id: '2', position: { x: 70, y: 400 }, data: {
+              label:
+                <div className={styles.logoInside}>
+                  <img src={opportunity.buyMarketLogo} alt={opportunity.buyMarketName} width="30" height="30" />
+                </div>
+            }, sourcePosition: Position.Right,
+            draggable: false,
+            className: 'buyMarket',
+          },
+          {
+            id: '3', position: { x: 330, y: 400 }, data: {
+              label:
+                <div className={styles.logoInside}>
+                  <img src={opportunity.sellMarketLogo} alt={opportunity.sellMarketName} width="30" height="30" />
+                </div>
+            }, sourcePosition: Position.Top,
+            targetPosition: Position.Left,
+            draggable: false,
+            className: 'sellMarket',
+          },
+        ]);
+      }
+      else {
+        setInitialNodes([
+          {
+            id: '1', position: { x: 300, y: 20 }, data: {
+              label:
+                <Typography variant="h6">EOA</Typography>
+            }, sourcePosition: Position.Left,
+            targetPosition: Position.Right,
+            draggable: false,
+            className: 'logoInside',
+          },
+          {
+            id: '2', position: { x: 70, y: 400 }, data: {
+              label:
+                <div className={styles.logoInside}>
+                  <img src={opportunity.buyMarketLogo} alt={opportunity.buyMarketName} width="40" height="40" />
+                </div>
+            }, sourcePosition: Position.Right,
+            draggable: false,
+            className: 'buyMarket',
+          },
+          {
+            id: '3', position: { x: 550, y: 400 }, data: {
+              label:
+                <div className={styles.logoInside}>
+                  <img src={opportunity.sellMarketLogo} alt={opportunity.sellMarketName} width="40" height="40" />
+                </div>
+            }, sourcePosition: Position.Top,
+            targetPosition: Position.Left,
+            draggable: false,
+            className: 'sellMarket',
+          },
+        ]);
+      }
     }
   }, [opportunity]);  // When opportunity changes, this will run
 
   useEffect(() => {
     if (opportunity) {
       setInitialEdges([
-        { id: 'e1-2', source: '1', target: '2', type: 'step', animated: true, label: opportunity.deltaYa+" "+opportunity.baseSymbol },
-        { id: 'e2-3', source: '2', target: '3', type: 'step', animated: true, label: opportunity.deltaXa+" "+opportunity.tokenSymbol},
-        { id: 'e3-1', source: '3', target: '1', type: 'step', animated: true, label: opportunity.deltaYb+" "+opportunity.baseSymbol}
+        { id: 'e1-2', source: '1', target: '2', type: 'step', animated: true, label: opportunity.deltaYa + " " + opportunity.baseSymbol },
+        { id: 'e2-3', source: '2', target: '3', type: 'step', animated: true, label: opportunity.deltaXa + " " + opportunity.tokenSymbol },
+        { id: 'e3-1', source: '3', target: '1', type: 'step', animated: true, label: opportunity.deltaYb + " " + opportunity.baseSymbol }
       ]
       );
     }
