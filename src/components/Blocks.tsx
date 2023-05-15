@@ -254,7 +254,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
         onMouseUp={handleViewportMouseUp}
         onMouseMove={handleViewportMouseMove} 
         position={'relative'} 
-        sx={{ backgroundColor: '#d0c3ba', boxShadow: 4 }}>
+        sx={{ backgroundColor: '#f7f1e8', boxShadow: 4 }}>
         <Box
           id="viewport"
 
