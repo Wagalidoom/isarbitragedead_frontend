@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, Paper, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { generateApiUrl } from './Search';
 import { BlockData } from './Blocks';
@@ -10,18 +10,18 @@ import ReactFlow, { Position } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './overview.css';
 
-interface BlockDetailsProps {
+const proOptions = { hideAttribution: true };
+interface IBlockDetails {
 }
 
 
-const BlockDetails: React.FC<BlockDetailsProps> = () => {
+const BlockDetails: React.FC<IBlockDetails> = () => {
   const { blockNumber = '0', opportunityIndex = '0' } = useParams();
   const [searchResults, setSearchResults] = useState<BlockData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [opportunity, setOpportunity] = useState<OpportunityData>();
   const [initialNodes, setInitialNodes] = useState<any[]>([]);
   const [initialEdges, setInitialEdges] = useState<any[]>([]);
-  const proOptions = { hideAttribution: true };
 
   const apiRequest = async ({ searchInput }: { searchInput: string }) => {
     setIsLoading(true);
@@ -100,13 +100,32 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
   }, [opportunity]);  // When opportunity changes, this will run
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', padding: 5 }}>
         {isLoading ? (
           <CircularProgress color="inherit" size={80} />
         ) : opportunity ? (
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '700px', height: '500px', boxShadow: 'inset 0 0 4px rgba(0, 0, 0, 0.25)', backgroundColor: '#f7f1e8' }}>
-            <ReactFlow nodes={initialNodes} edges={initialEdges} panOnDrag={false} panOnScroll={false} zoomOnScroll={false} zoomOnPinch={false} zoomOnDoubleClick={false} proOptions={proOptions}/>
-          </Box>
+          <>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '700px', height: '500px', boxShadow: 'inset 0 0 4px rgba(0, 0, 0, 0.25)', backgroundColor: '#f7f1e8', marginBottom: 5 }}>
+              <ReactFlow nodes={initialNodes} edges={initialEdges} panOnDrag={false} panOnScroll={false} zoomOnScroll={false} zoomOnPinch={false} zoomOnDoubleClick={false} proOptions={proOptions}/>
+            </Box>
+  
+            <Box sx={{ width: '90%' }}>
+              <Paper sx={{ backgroundColor: '#f7f1e8', overflow: 'hidden', width: '100%' }}>
+                <Grid container spacing={2}>
+                  {Object.entries(opportunity).map(([key, value], index) => (
+                    <>
+                      <Grid item xs={6} key={`${key}-title`} sx={{ padding: 2, backgroundColor: index % 2 === 0 ? '#faf7f2' : '#f7f1e8', color: 'black' }}>
+                        <Typography variant="subtitle1">{key}:</Typography>
+                      </Grid>
+                      <Grid item xs={6} key={`${key}-value`} sx={{ padding: 2, backgroundColor: index % 2 === 0 ? '#faf7f2' : '#f7f1e8', color: 'black' }}>
+                        <Typography variant="body1">{value !== '' ? value : 'N/A'}</Typography>
+                      </Grid>
+                    </>
+                  ))}
+                </Grid>
+              </Paper>
+            </Box>
+          </>
         ) : (
           <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }}>
             No search results found
@@ -115,6 +134,6 @@ const BlockDetails: React.FC<BlockDetailsProps> = () => {
       </Box >
     </>
   );
-};
-
+}
+      
 export default BlockDetails;
