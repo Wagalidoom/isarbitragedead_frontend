@@ -16,11 +16,11 @@ const blockDetailsConfig = [
     { key: 'baseName', name: 'Base currenccy name' },
     { key: 'baseSymbol', name: 'Base currenccy symbol' },
     { key: 'baseLogo', name: 'Base currenccy logo', logo: true },
-    { key: 'deltaYa', name: 'Base amount in' },
-    { key: 'deltaXa', name: 'Token quantity received' },
-    { key: 'deltaYb', name: 'Base amount out' },
-    { key: 'profitEth', name: 'Profit in ETH' },
-    { key: 'profitDol', name: 'Profit in Dollar' },
+    { key: 'deltaYa', name: 'Base amount in', format: (value: any, opportunity: OpportunityData) => `${value.toFixed(10)} ${opportunity.baseSymbol}` },
+    { key: 'deltaXa', name: 'Token quantity received', format: (value: any, opportunity: OpportunityData) => `${-value.toFixed(10)} ${opportunity.tokenSymbol}` },
+    { key: 'deltaYb', name: 'Base amount out', format: (value: any, opportunity: OpportunityData) => `${-value.toFixed(10)} ${opportunity.baseSymbol}` },
+    { key: 'profitEth', name: 'Profit in ETH', format: (value: any) => `${value.toFixed(10)} ETH` },
+    { key: 'profitDol', name: 'Profit in Dollar', format: (value: any) => `${value.toFixed(2)} $` },
 ];
 
 interface IOpportunityArray {
@@ -29,18 +29,19 @@ interface IOpportunityArray {
 
 const OpportunityArray: React.FC<IOpportunityArray> = ({ opportunity }) => {
     const etherscanLink = 'https://etherscan.io/address/';
-    
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Grid container spacing={2}>
                 {blockDetailsConfig.map((detail, index) => {
                     const value: any = (opportunity as any)[detail.key];
+                    const formattedValue = detail.format ? detail.format(value, opportunity) : value;
                     const itemStyle = index % 2 === 0 ? '#faf7f2' : '#f7f1e8';
 
                     return (
                         <React.Fragment key={index}>
                             <Grid item xs={6} style={{ backgroundColor: itemStyle, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60px' }}>
-                            <Typography sx={{ color: 'black', fontSize: 19, fontWeight: 'bold' }}>{detail.name}</Typography>
+                                <Typography sx={{ color: 'black', fontSize: 19, fontWeight: 'bold' }} paddingBottom={2}>{detail.name}</Typography>
                             </Grid>
                             <Grid item xs={6} style={{ backgroundColor: itemStyle, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60px' }}>
                                 {detail.link && !detail.logo && (
@@ -50,14 +51,14 @@ const OpportunityArray: React.FC<IOpportunityArray> = ({ opportunity }) => {
                                 )}
                                 {detail.logo && !detail.link && (
                                     detail.logoKey ?
-                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <Typography sx={{ color: 'black' }}>{value}</Typography>
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <Typography sx={{ color: 'black' }}>{value}</Typography>
                                             <img src={`${opportunity[detail.logoKey]}`} alt={`${detail.name}_logo`} width="40" height="40" style={{ marginLeft: '20px' }} />
                                         </Box> :
                                         <img src={value} alt={`${detail.name}_logo`} width="40" height="40" />
                                 )}
                                 {!detail.link && !detail.logo && (
-                                    <Typography sx={{ color: 'black' }}>{value}</Typography>
+                                    <Typography fontSize={18} sx={{ color: 'black' }}>{formattedValue}</Typography>
                                 )}
                             </Grid>
                         </React.Fragment>

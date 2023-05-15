@@ -158,7 +158,7 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
         ]);
       }
     }
-  }, [opportunity]);
+  }, [opportunity, isMediumScreen, isSmallScreen]);
 
   useEffect(() => {
     if (opportunity) {
@@ -169,7 +169,7 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
       ]
       );
     }
-  }, [opportunity]); 
+  }, [opportunity]);
   return (
     <>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', padding: 5 }}>
@@ -178,10 +178,10 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
         ) : opportunity ? (
           <>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '700px', height: '500px', boxShadow: 'inset 0 0 4px rgba(0, 0, 0, 0.25)', backgroundColor: '#f7f1e8', marginBottom: 5 }}>
-              <ReactFlow nodes={initialNodes} edges={initialEdges} panOnDrag={false} panOnScroll={false} zoomOnScroll={false} zoomOnPinch={false} zoomOnDoubleClick={false} proOptions={proOptions}/>
+              <ReactFlow nodes={initialNodes} edges={initialEdges} panOnDrag={false} panOnScroll={false} zoomOnScroll={false} zoomOnPinch={false} zoomOnDoubleClick={false} proOptions={proOptions} />
             </Box>
-  
-            <Box sx={{ width: '60%' }}>
+
+            <Box sx={{ width: '75%', boxShadow: '-8px -8px 10px rgba(0, 0, 0, 1)' }} >
               <OpportunityArray opportunity={opportunity} />
             </Box>
           </>
@@ -194,5 +194,5 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
     </>
   );
 }
-      
+
 export default BlockDetails;
