@@ -54,8 +54,9 @@ const OpportunityArray: React.FC<IOpportunityArray> = ({ opportunity }) => {
                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                             <Typography sx={{ color: 'black' }}>{value}</Typography>
                                             <img src={`${opportunity[detail.logoKey]}`} alt={`${detail.name}_logo`} width="40" height="40" style={{ marginLeft: '20px' }} />
-                                        </Box> :
-                                        <img src={value} alt={`${detail.name}_logo`} width="40" height="40" />
+                                        </Box> : (value !== '' ?
+                                        <img src={value} alt={`${detail.name}_logo`} width="40" height="40" /> :
+                                        <Typography fontSize={18} sx={{ color: 'black' }}>N/A</Typography>)
                                 )}
                                 {!detail.link && !detail.logo && (
                                     <Typography fontSize={18} sx={{ color: 'black' }}>{formattedValue}</Typography>

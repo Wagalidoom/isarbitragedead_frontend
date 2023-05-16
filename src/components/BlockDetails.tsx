@@ -163,13 +163,14 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
   useEffect(() => {
     if (opportunity) {
       setInitialEdges([
-        { id: 'e1-2', source: '1', target: '2', type: 'step', animated: true, label: opportunity.deltaYa + " " + opportunity.baseSymbol },
-        { id: 'e2-3', source: '2', target: '3', type: 'step', animated: true, label: opportunity.deltaXa + " " + opportunity.tokenSymbol },
-        { id: 'e3-1', source: '3', target: '1', type: 'step', animated: true, label: opportunity.deltaYb + " " + opportunity.baseSymbol }
+        { id: 'e1-2', source: '1', target: '2', type: 'step', animated: true, label: opportunity.deltaYa.toFixed(10) + " " + opportunity.baseSymbol },
+        { id: 'e2-3', source: '2', target: '3', type: 'step', animated: true, label: -opportunity.deltaXa.toFixed(10) + " " + opportunity.tokenSymbol },
+        { id: 'e3-1', source: '3', target: '1', type: 'step', animated: true, label: -opportunity.deltaYb.toFixed(10) + " " + opportunity.baseSymbol }
       ]
       );
     }
   }, [opportunity]);
+
   return (
     <>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', padding: 5 }}>
@@ -180,6 +181,7 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '700px', height: '500px', boxShadow: 'inset 0 0 4px rgba(0, 0, 0, 0.25)', backgroundColor: '#f7f1e8', marginBottom: 5 }}>
               <ReactFlow nodes={initialNodes} edges={initialEdges} panOnDrag={false} panOnScroll={false} zoomOnScroll={false} zoomOnPinch={false} zoomOnDoubleClick={false} proOptions={proOptions} />
             </Box>
+            
 
             <Box sx={{ width: '75%', boxShadow: '-8px -8px 10px rgba(0, 0, 0, 1)' }} >
               <OpportunityArray opportunity={opportunity} />
