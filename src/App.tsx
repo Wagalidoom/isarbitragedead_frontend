@@ -8,6 +8,14 @@ import { useState } from 'react';
 import Search from './components/Search';
 import BlockDetails from './components/BlockDetails';
 
+import About from './components/About';
+import { AwesomeButton } from 'react-awesome-button';
+import { InfoOutlined } from '@mui/icons-material';
+import "react-awesome-button/dist/styles.css";
+import "./styles/theme/buttonTheme.css";
+
+
+
 export const LOCAL_IP_ADDRESS = process.env.REACT_APP_LOCAL_IP;
 
 function App() {
@@ -23,6 +31,9 @@ function App() {
           <Grid item xs={0} sm={3} md={3} sx={{ position: 'sticky', paddingTop: '20px', top: 0, height: '100vh', backgroundColor: '#f7f1e8', boxShadow: 3, zIndex: 1, display: isSmallScreen ? 'none' : 'block' }}>
             <Box sx={{ textAlign: 'center', fontSize: 'calc(10px + 2vmin)', color: '#454545' }}>
               <Link to="/" style={{ textDecoration: 'none', color: '#454545' }}>Is arbitrage dead ?</Link>
+              <AwesomeButton className='infoButton' type="secondary" size="icon" onPress={() => window.location.href = "/about"} style={{ position: 'absolute', right: '20px', width: '40px', height: '40px' }}>
+                <InfoOutlined />
+              </AwesomeButton>
             </Box>
             <SidePanel onSearchChange={setSearchParams} currentBlock={currentBlockNumber} />
           </Grid>
@@ -30,6 +41,7 @@ function App() {
             <Routes>
               <Route path="/" element={(searchParams.searchInput || searchParams.profitMin || searchParams.profitMax) ? <Search searchParams={searchParams} /> : <Blocks setCurrentBlockNumber={setCurrentBlockNumber} />} />
               <Route path="/block/:blockNumber/opportunity/:opportunityIndex" element={<BlockDetails />} />
+              <Route path="/about" element={<About />} />
             </Routes>
           </Grid>
         </Grid>

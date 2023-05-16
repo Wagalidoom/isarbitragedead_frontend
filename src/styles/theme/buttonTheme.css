@@ -1,0 +1,9 @@
+.infoButton {
+  --button-raise-level: 2px;
+  --button-secondary-color: #f7f1e8;
+  --button-secondary-color-dark: #333232;
+  --button-secondary-color-light: #454545;
+  --button-secondary-color-hover: #dccdbf;
+  --button-secondary-color-active: #f7f1e8;
+  --button-secondary-border: 3px solid #454545;
+}
