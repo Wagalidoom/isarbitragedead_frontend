@@ -165,7 +165,7 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
       setInitialEdges([
         { id: 'e1-2', source: '1', target: '2', type: 'step', animated: true, label: opportunity.deltaYa.toFixed(10) + " " + opportunity.baseSymbol },
         { id: 'e2-3', source: '2', target: '3', type: 'step', animated: true, label: -opportunity.deltaXa.toFixed(10) + " " + opportunity.tokenSymbol },
-        { id: 'e3-1', source: '3', target: '1', type: 'step', animated: true, label: -opportunity.deltaYb.toFixed(10) + " " + opportunity.baseSymbol }
+        { id: 'e3-1', source: '3', target: '1', type: 'step', animated: true, label: `${' '}${-opportunity.deltaYb.toFixed(10)}${' '}${opportunity.baseSymbol}${' '}` }
       ]
       );
     }

@@ -95,6 +95,7 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
     <>
       <Box
         sx={{
+          position: 'absolute',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -159,29 +160,30 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
         <Box
           sx={{
             display: 'flex',
+            position: 'fixed',
             flexDirection: 'column',
             alignItems: 'center',
             color: 'black',
-            bottom: '10%',
+            bottom: '15%',
             width: '100%',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 1, padding: isSmallScreen ? 0 : 4 }}>
+          <Box  sx={{ display: 'flex', alignItems: 'center', marginBottom: 1, marginTop:4, padding: isSmallScreen ? 0 : 4 }}>
             <FiberManualRecordIcon color="success" sx={{ marginRight: 1 }} />
-            <Typography variant="h6" component="div" >
+            <Typography sx={{fontSize: '30px'}} component="div" >
               Block  <b>{currentBlock !== 0 ? currentBlock : '...'}</b>
             </Typography>
           </Box>
-          <Typography variant="subtitle1" component="div" sx={{ fontWeight: 'bold', padding: 2 }}>
+          <Typography component="div" sx={{ fontWeight: 'bold', padding: 2, fontSize: '2vw' }}>
             Today
           </Typography>
-          <Typography variant="body1" component="div" sx={{ padding: 1 }} >
+          <Typography variant="body1" component="div" sx={{ padding: 1, fontSize: '1.35vw' }} >
             Total potential profit: <b>{isLoading ? <CircularProgress size={20} /> : `${apiData?.totalProfit.toFixed(2)} $`}</b>
           </Typography>
-          <Typography variant="body1" component="div" sx={{ padding: 1 }}>
+          <Typography variant="body1" component="div" sx={{ padding: 1, fontSize: '1.35vw' }}>
             Number of opportunities: <b>{isLoading ? <CircularProgress size={20} /> : apiData?.nbOpportunities}</b>
           </Typography>
-          <Typography variant="body1" component="div" sx={{ padding: 1 }}>
+          <Typography variant="body1" component="div" sx={{ padding: 1, fontSize: '1.35vw' }}>
             Most arbitraged token:
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 1 }}>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>

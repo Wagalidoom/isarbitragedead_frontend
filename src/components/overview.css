@@ -51,8 +51,8 @@
 
 .react-flow__edge-text {
     color: #e2e6eb;
-    font-size: 14px;
-    padding-bottom: 10px;
+    font-size: 15px;
+    text-anchor: right;
 }
 
 .react-flow__edge-path,
