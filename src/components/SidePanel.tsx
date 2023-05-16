@@ -100,7 +100,7 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
           flexDirection: 'column',
           alignItems: 'center',
           padding: isSmallScreen ? 0 : 2,
-          width:  isSmallScreen ? 0 : '100%',
+          width: isSmallScreen ? 0 : '100%',
         }}
       >
         {/* Searchbar */}
@@ -111,7 +111,7 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
           value={searchInput || ''}
           onChange={handleSearchInput}
           onKeyPress={handleKeyPress}
-          sx={{ width:  isSmallScreen ? 0 : '100%', '& input': { color: 'black' } }}
+          sx={{ width: isSmallScreen ? 0 : '100%', '& input': { color: 'black' } }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -137,7 +137,7 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
             value={profitMin || ''}
             onChange={handleProfitMinInput}
             onKeyPress={handleKeyPress}
-            sx={{ width:  isSmallScreen ? 0 : '100%', '& input': { color: 'black' } }}
+            sx={{ width: isSmallScreen ? 0 : '100%', '& input': { color: 'black' } }}
           />
           <IconButton onClick={toggleCurrencyFilter}>
             {isDollarProfitFilter ? "$" : "Ξ"}
@@ -168,9 +168,9 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
             width: '100%',
           }}
         >
-          <Box  sx={{ display: 'flex', alignItems: 'center', marginBottom: 1, marginTop:4, padding: isSmallScreen ? 0 : 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 1, marginTop: 4, padding: isSmallScreen ? 0 : 4 }}>
             <FiberManualRecordIcon color="success" sx={{ marginRight: 1 }} />
-            <Typography sx={{fontSize: '30px'}} component="div" >
+            <Typography sx={{ fontSize: '30px' }} component="div" >
               Block  <b>{currentBlock !== 0 ? currentBlock : '...'}</b>
             </Typography>
           </Box>
@@ -202,9 +202,11 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
 
         </Box>
       </Box>
-      <Box sx={{ position: 'fixed', bottom: 0, left: 0, zIndex: 3 }}>
-        <Typography variant='h5'>By Lukas and Jordan</Typography>
+      <Box sx={{ position: 'absolute', bottom: 0, left: 0, zIndex: 1, color: 'black', width: '100%', textAlign: 'center' }}>
+          <Typography fontSize={'0.8vw'}>This website is for educational purposes only</Typography>
+          <Typography fontSize={'0.8vw'}>By Lukas and Jordan</Typography>
       </Box>
+
     </>
   );
 };
