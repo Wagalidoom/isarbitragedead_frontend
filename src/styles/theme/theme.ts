@@ -58,14 +58,14 @@ const themes = {
       text: { primary: '#fff' },
     },
     colors: {
-      backgroundPrimary: '#ff5722',
-      backgroundSides: '#4caf50',
-      blockColor: '#2196f3',
-      accentuation: '#9c27b0',
+      backgroundPrimary: '#213140',
+      backgroundSides: '#243b53',
+      blockColor: '#243b53',
+      accentuation: '#1d314d',
       textOnBlock: '#eae6e1',
       announceText: 'gray',
-      buttonHover: '#dccdbf',
-      buttonAccent: '#333232',
+      buttonHover: '#34414d',
+      buttonAccent: '#eae6e1',
     },
     typography: {
       fontFamily: [

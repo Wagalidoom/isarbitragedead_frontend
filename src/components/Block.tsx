@@ -49,7 +49,7 @@ const Opportunity: React.FC<OpportunityData & { opportunityIndex: number, blockN
   };
 
   return (
-    <Paper elevation={1} onClick={handleClick} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '95%', height: `${opportunityHeight}px`, backgroundColor: theme.colors.textOnBlock, marginBottom: `${opportunityMarginBottom}px`, borderRadius: '3px', padding: '10px', cursor: 'pointer' }}>
+    <Paper elevation={1} onClick={handleClick} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '95%', height: `${opportunityHeight}px`,  backgroundColor: theme.colors.accentuation, marginBottom: `${opportunityMarginBottom}px`, borderRadius: '3px', padding: '10px', cursor: 'pointer' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
         <img src={buyMarketLogo} alt="Exchange 1 Logo" width="40" height="40" />
         <Typography sx={{ color: theme.palette.text.secondary, marginLeft: '2vw', marginRight: '2vw', fontSize: '1.2em' }}> <b>{deltaYa.toFixed(4)}</b> {baseSymbol}  → <b>{-deltaXa.toFixed(2)}</b> {tokenSymbol}  → <b>{-deltaYb.toFixed(4)}</b> {baseSymbol}  </Typography>
@@ -71,7 +71,7 @@ const Block: React.FC<BlockData> = React.memo(({ blockNumber, opportunities }) =
     <>
       <Box data-block-number={blockNumber} sx={{ display: 'flex', alignItems: 'center'}}>
         <Paper square sx={{ paddingLeft: 1, paddingRight: 1, width: '70%', minHeight: `${BLOCK_MIN_HEIGHT}px`, backgroundColor: theme.colors.blockColor, display: 'flex', flexDirection: 'column', alignItems: 'start', margin: 'auto', position: 'relative' }}>
-          <Typography  sx={{ height:`${blockNumberContainerSize}px`, fontSize: `${blockNumberFontSize}px`, color: theme.colors.backgroundPrimary }}><b>{blockNumber}</b></Typography>
+          <Typography  sx={{ height:`${blockNumberContainerSize}px`, fontSize: `${blockNumberFontSize}px`, color: '#eae6e1' }}><b>{blockNumber}</b></Typography>
           <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
             {content}
           </Box>
