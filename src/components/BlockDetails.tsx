@@ -10,7 +10,6 @@ import ReactFlow, { Position } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './overview.css';
 import OpportunityArray from './OpportunityArray';
-import { Palette } from '@mui/icons-material';
 
 const proOptions = { hideAttribution: true };
 interface IBlockDetails {
@@ -190,7 +189,7 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
           </>
         ) : (
           <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: theme.palette.text.primary }}>
-            No search results found
+            No results
           </Typography>
         )}
       </Box >

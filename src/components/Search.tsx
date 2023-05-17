@@ -60,7 +60,7 @@ const Search: React.FC<{ searchParams: { searchInput: string | null, profitMin: 
         ))
       ) : (
         <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: theme.colors.announceText }}>
-          No search results found
+          No results
         </Typography>
       )}
     </Grid>

@@ -64,7 +64,7 @@ const Opportunity: React.FC<OpportunityData & { opportunityIndex: number, blockN
 const Block: React.FC<BlockData> = React.memo(({ blockNumber, opportunities }) => {
   const theme = useTheme();
   const content = opportunities.length === 0
-    ? (<Box sx={{ width: '100%' }}><Typography variant="body1" sx={{ color: theme.colors.textOnBlock }}>No opportunities at this block</Typography></Box>)
+    ? (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%'  }}><Typography  sx={{ color: theme.colors.textOnBlock, fontSize: "30px" }}>No opportunities at this block</Typography></Box>)
     : (opportunities.map((opportunity, index) => <Opportunity key={index} opportunityIndex={index} blockNumber={blockNumber} {...opportunity} />));
 
   return (
@@ -76,7 +76,7 @@ const Block: React.FC<BlockData> = React.memo(({ blockNumber, opportunities }) =
             {content}
           </Box>
           <Box sx={{ position: 'absolute', bottom: 0, right: 0, marginRight: '5px' }}>
-            <Link underline='hover' sx={{ color: theme.colors.backgroundPrimary, fontSize: '0.8rem' }} href={`https://etherscan.io/block/${blockNumber}`}>Voir sur Etherscan</Link>
+            <Link underline='hover' sx={{ color: theme.colors.backgroundPrimary, fontSize: '0.8rem' }} href={`https://etherscan.io/block/${blockNumber}`}>View on etherscan</Link>
           </Box>
         </Paper>
       </Box>

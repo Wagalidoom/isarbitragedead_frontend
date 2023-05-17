@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
-import { Grid, Typography, Fade, Box, Fab, useTheme } from '@mui/material';
+import { Grid, Typography, Fade, Box, useTheme } from '@mui/material';
 import { ArrowUpward } from '@mui/icons-material';
 
 import Block, { OpportunityData } from './Block';
@@ -237,9 +237,17 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
             )
             )
           ) : (
-            <Typography variant="h3" sx={{ fontWeight: 'bold', color: theme.colors.announceText, textAlign: 'center' }} >
-              No blocks to be shown
-            </Typography>
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              height: '100vh'
+            }}>
+              <Typography variant="h3" sx={{ fontWeight: 'bold', color: theme.colors.announceText, textAlign: 'center' }} >
+                No blocks to be shown
+              </Typography>
+            </Box>
           )}
           <Box sx={{ display: 'flex', flexDirection: 'column', position: 'absolute', top: 0, right: 40, zIndex: 1, paddingTop: '20px' }}>
             <AwesomeButton className='upArrowButton' type="primary" size="icon" onPress={() => scrollToTop()} style={{ width: '40px', height: '40px', '--button-raise-level': '3px' }}>
