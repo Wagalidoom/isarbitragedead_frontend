@@ -2,17 +2,13 @@ import './styles/globals.css';
 import lightTheme from './styles/theme/lightTheme';
 import Blocks from './components/Blocks';
 import { Box, CssBaseline, Grid, ThemeProvider, useMediaQuery } from '@mui/material';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SidePanel from './components/SidePanel';
 import { useState } from 'react';
 import Search from './components/Search';
 import BlockDetails from './components/BlockDetails';
-
 import About from './components/About';
-import { AwesomeButton } from 'react-awesome-button';
-import { InfoOutlined } from '@mui/icons-material';
-import "react-awesome-button/dist/styles.css";
-import "./styles/theme/buttonTheme.css";
+
 
 
 
@@ -28,13 +24,7 @@ function App() {
       <ThemeProvider theme={lightTheme}>
         <CssBaseline />
         <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }}>
-          <Grid item xs={0} sm={3} md={3} sx={{ position: 'sticky', paddingTop: '20px', top: 0, height: '100vh', backgroundColor: '#f7f1e8', boxShadow: 3, zIndex: 1, display: isSmallScreen ? 'none' : 'block' }}>
-            <Box sx={{ textAlign: 'center', fontSize: 'calc(10px + 2vmin)', color: '#454545' }}>
-              <Link to="/" style={{ textDecoration: 'none', color: '#454545' }}>Is arbitrage dead ?</Link>
-              <AwesomeButton className='infoButton' type="secondary" size="icon" onPress={() => window.location.href = "/about"} style={{ position: 'absolute', right: '20px', width: '40px', height: '40px' }}>
-                <InfoOutlined />
-              </AwesomeButton>
-            </Box>
+          <Grid item xs={0} sm={3} md={3} sx={{ position: 'sticky', top: 0, height: '100vh', backgroundColor: '#f7f1e8', boxShadow: 3, zIndex: 1, display: isSmallScreen ? 'none' : 'block' }}>
             <SidePanel onSearchChange={setSearchParams} currentBlock={currentBlockNumber} />
           </Grid>
           <Grid item xs={12} sm={9} md={9} sx={{ backgroundColor: '#eae6e1' }}>

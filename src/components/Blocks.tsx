@@ -240,9 +240,12 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
               No blocks to be shown
             </Typography>
           )}
-          <Box sx={{ position: 'absolute', top:0,right: 16, zIndex: 1, paddingTop: '20px' }}>
-            <AwesomeButton className='upArrowButton' type="primary" size="icon" onPress={() => scrollToTop()} style={{ position: 'absolute', right: '20px', width: '40px', height: '40px' }}><ArrowUpward/></AwesomeButton>
+          <Box sx={{ display: 'flex', flexDirection: 'column', position: 'absolute', top: 0, right: 40, zIndex: 1, paddingTop: '20px' }}>
+            <AwesomeButton className='upArrowButton' type="primary" size="icon" onPress={() => scrollToTop()} style={{ width: '40px', height: '40px' }}>
+              <ArrowUpward />
+            </AwesomeButton>
           </Box>
+
         </div>
       </Grid>
 

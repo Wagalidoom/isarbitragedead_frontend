@@ -5,6 +5,14 @@ import ClearIcon from '@mui/icons-material/Clear';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { LOCAL_IP_ADDRESS } from '../App';
 import lightTheme from '../styles/theme/lightTheme';
+
+import { AwesomeButton } from 'react-awesome-button';
+import "react-awesome-button/dist/styles.css";
+import "../styles/theme/buttonTheme.css";
+import { Link } from 'react-router-dom';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import NightsStayIcon from '@mui/icons-material/NightsStay';
+import { InfoOutlined } from '@mui/icons-material';
 export interface ISidePanel {
   onSearchChange: (searchParams: { searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean }) => void,
   currentBlock: number
@@ -103,6 +111,13 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
           width: isSmallScreen ? 0 : '100%',
         }}
       >
+        {/* Title and about Button */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', width: '100%', textAlign: 'center', fontSize: 'calc(10px + 2vmin)', color: '#454545', marginBottom: '10px' }}>
+          <Link to="/" style={{ textDecoration: 'none', color: '#454545' }}>Is arbitrage dead ?</Link>
+          <AwesomeButton className='infoButton' type="secondary" size="icon" onPress={() => window.location.href = "/about"} style={{ width: '40px', height: '40px' }}>
+            <WbSunnyIcon />
+          </AwesomeButton>
+        </Box>
         {/* Searchbar */}
         <TextField
           id="outlined-basic"
@@ -159,13 +174,7 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
         {/* Statistics block */}
         <Box
           sx={{
-            display: 'flex',
-            position: 'fixed',
-            flexDirection: 'column',
-            alignItems: 'center',
-            color: 'black',
-            bottom: '15%',
-            width: '100%',
+            color: 'black'
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 1, marginTop: 4, padding: isSmallScreen ? 0 : 4 }}>
@@ -196,15 +205,18 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
               </Box>
             </Box>
           </Typography>
-
-
-
-
         </Box>
       </Box>
-      <Box sx={{ position: 'absolute', bottom: 0, left: 0, zIndex: 1, color: 'black', width: '100%', textAlign: 'center' }}>
-          <Typography fontSize={'0.8vw'}>This website is for educational purposes only</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', position: 'absolute', bottom: 0, left: 0, zIndex: 1, color: 'black', width: '100%', padding: '5px', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Typography fontSize={'0.8vw'}>This website is for educational purposes only </Typography>
           <Typography fontSize={'0.8vw'}>By Lukas and Jordan</Typography>
+        </Box>
+        <Box>
+          <IconButton className='infoButton' style={{ width: '40px', height: '40px' }}>
+            <InfoOutlined />
+          </IconButton>
+        </Box>
       </Box>
 
     </>
