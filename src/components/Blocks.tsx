@@ -242,7 +242,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
             </Typography>
           )}
           <Box sx={{ display: 'flex', flexDirection: 'column', position: 'absolute', top: 0, right: 40, zIndex: 1, paddingTop: '20px' }}>
-            <AwesomeButton className='upArrowButton' type="primary" size="icon" onPress={() => scrollToTop()} style={{ width: '40px', height: '40px' }}>
+            <AwesomeButton className='upArrowButton' type="primary" size="icon" onPress={() => scrollToTop()} style={{ width: '40px', height: '40px', '--button-raise-level': '3px' }}>
               <ArrowUpward />
             </AwesomeButton>
           </Box>

@@ -7,7 +7,6 @@ import { LOCAL_IP_ADDRESS } from '../App';
 
 import { AwesomeButton } from 'react-awesome-button';
 import "react-awesome-button/dist/styles.css";
-import "../styles/theme/buttonTheme.css";
 import { Link } from 'react-router-dom';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
@@ -114,7 +113,7 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
         {/* Title and about Button */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', width: '100%', textAlign: 'center', fontSize: 'calc(10px + 2vmin)', marginBottom: '10px' }}>
           <Link to="/" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>Is arbitrage dead ?</Link>
-          <AwesomeButton className='infoButton' type="secondary" size="icon" onPress={() => window.location.href = "/about"} style={{ width: '40px', height: '40px' }}>
+          <AwesomeButton className='infoButton' type="secondary" size="icon" onPress={() => window.location.href = "/about"} style={{ width: '40px', height: '40px',  '--button-raise-level': '2px', '--button-secondary-color': theme.colors.backgroundSides, '--button-secondary-color-dark': theme.colors.buttonAccent, '--button-secondary-color-light': theme.colors.buttonAccent, '--button-secondary-color-hover': theme.colors.buttonHover,'--button-secondary-color-active': theme.colors.backgroundSides, '--button-secondary-border': `3px solid ${theme.colors.buttonAccent}` }}>
             <WbSunnyIcon />
           </AwesomeButton>
         </Box>

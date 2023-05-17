@@ -9,6 +9,8 @@ declare module '@mui/material/styles' {
       accentuation: string;
       textOnBlock: string;
       announceText: string;
+      buttonHover: string;
+      buttonAccent: string;
     };
   }
 
@@ -20,6 +22,8 @@ declare module '@mui/material/styles' {
       accentuation: string;
       textOnBlock: string;
       announceText: string;
+      buttonHover: string;
+      buttonAccent: string;
     };
   }
 }
@@ -37,6 +41,8 @@ const themes = {
       accentuation: '#faf7f2',
       textOnBlock: '#eae6e1',
       announceText: 'gray',
+      buttonHover: '#dccdbf',
+      buttonAccent: '#333232',
     },
     typography: {
       fontFamily: [
@@ -58,6 +64,8 @@ const themes = {
       accentuation: '#9c27b0',
       textOnBlock: '#eae6e1',
       announceText: 'gray',
+      buttonHover: '#dccdbf',
+      buttonAccent: '#333232',
     },
     typography: {
       fontFamily: [
