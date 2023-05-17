@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import Block from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import { BlockData } from './Blocks';
@@ -26,6 +26,7 @@ export const generateApiUrl = (searchInput: string | null, profitMin: string | n
 
 
 const Search: React.FC<{ searchParams: { searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean } }> = ({ searchParams }) => {
+  const theme = useTheme();
   const [searchResults, setSearchResults] = useState<BlockData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -46,7 +47,7 @@ const Search: React.FC<{ searchParams: { searchInput: string | null, profitMin: 
   }, [searchParams]);
 
   return (
-    <Grid container rowSpacing={5} sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#eae6e1' }}
+    <Grid container rowSpacing={5} sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.backgroundPrimary }}
     >
       {isLoading ? (
         <CircularProgress color="inherit" size={80} />
@@ -58,7 +59,7 @@ const Search: React.FC<{ searchParams: { searchInput: string | null, profitMin: 
           </Grid>
         ))
       ) : (
-        <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }}>
+        <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: theme.colors.announceText }}>
           No search results found
         </Typography>
       )}

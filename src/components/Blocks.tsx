@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
-import { Grid, Typography, Fade, Box, Fab } from '@mui/material';
+import { Grid, Typography, Fade, Box, Fab, useTheme } from '@mui/material';
 import { ArrowUpward } from '@mui/icons-material';
 
 import Block, { OpportunityData } from './Block';
@@ -50,6 +50,7 @@ const throttle = (func: (...args: any[]) => any, delay: number): ((...args: any[
 
 const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
   // État local et références
+  const theme = useTheme();
   const [lastDisplayedBlock, setLastDisplayedBlock] = useState(0);
   const [blockList, setBlockList] = useState<BlockData[]>([]);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -236,7 +237,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
             )
             )
           ) : (
-            <Typography variant="h3" sx={{ fontWeight: 'bold', color: 'gray', textAlign: 'center' }} >
+            <Typography variant="h3" sx={{ fontWeight: 'bold', color: theme.colors.announceText, textAlign: 'center' }} >
               No blocks to be shown
             </Typography>
           )}
@@ -256,7 +257,7 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
         onMouseUp={handleViewportMouseUp}
         onMouseMove={handleViewportMouseMove}
         position={'relative'}
-        sx={{ backgroundColor: '#f7f1e8', boxShadow: 4 }}>
+        sx={{ backgroundColor: theme.colors.backgroundSides, boxShadow: 4 }}>
         <Box
           id="viewport"
 

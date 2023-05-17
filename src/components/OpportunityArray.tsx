@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Grid } from '@mui/material';
+import { Box, Typography, Grid, useTheme } from '@mui/material';
 import { OpportunityData } from './Block';
 import { Link } from 'react-router-dom';
 
@@ -28,6 +28,7 @@ interface IOpportunityArray {
 }
 
 const OpportunityArray: React.FC<IOpportunityArray> = ({ opportunity }) => {
+    const theme = useTheme();
     const etherscanLink = 'https://etherscan.io/address/';
 
     return (
@@ -36,30 +37,30 @@ const OpportunityArray: React.FC<IOpportunityArray> = ({ opportunity }) => {
                 {blockDetailsConfig.map((detail, index) => {
                     const value: any = (opportunity as any)[detail.key];
                     const formattedValue = detail.format ? detail.format(value, opportunity) : value;
-                    const itemStyle = index % 2 === 0 ? '#faf7f2' : '#f7f1e8';
+                    const itemStyle = index % 2 === 0 ? theme.colors.accentuation : theme.colors.backgroundSides;
 
                     return (
                         <React.Fragment key={index}>
                             <Grid item xs={6} style={{ backgroundColor: itemStyle, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60px' }}>
-                                <Typography sx={{ color: 'black', fontSize: 19, fontWeight: 'bold' }} paddingBottom={2}>{detail.name}</Typography>
+                                <Typography sx={{ color: theme.palette.text.secondary, fontSize: 19, fontWeight: 'bold' }} paddingBottom={2}>{detail.name}</Typography>
                             </Grid>
                             <Grid item xs={6} style={{ backgroundColor: itemStyle, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60px' }}>
                                 {detail.link && !detail.logo && (
-                                    <Typography sx={{ color: 'black' }}>
+                                    <Typography sx={{ color: theme.palette.text.secondary }}>
                                         <Link to={`${etherscanLink}${value}`} style={{ color: 'inherit' }}>{value}</Link>
                                     </Typography>
                                 )}
                                 {detail.logo && !detail.link && (
                                     detail.logoKey ?
                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <Typography sx={{ color: 'black' }}>{value}</Typography>
+                                            <Typography sx={{ color: theme.palette.text.secondary }}>{value}</Typography>
                                             <img src={`${opportunity[detail.logoKey]}`} alt={`${detail.name}_logo`} width="40" height="40" style={{ marginLeft: '20px' }} />
                                         </Box> : (value !== '' ?
                                         <img src={value} alt={`${detail.name}_logo`} width="40" height="40" /> :
-                                        <Typography fontSize={18} sx={{ color: 'black' }}>N/A</Typography>)
+                                        <Typography fontSize={18} sx={{ color: theme.palette.text.secondary }}>N/A</Typography>)
                                 )}
                                 {!detail.link && !detail.logo && (
-                                    <Typography fontSize={18} sx={{ color: 'black' }}>{formattedValue}</Typography>
+                                    <Typography fontSize={18} sx={{ color: theme.palette.text.secondary }}>{formattedValue}</Typography>
                                 )}
                             </Grid>
                         </React.Fragment>

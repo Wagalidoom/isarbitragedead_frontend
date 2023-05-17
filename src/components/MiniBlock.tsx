@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, Paper, Typography, useTheme } from "@mui/material";
 import React from "react";
 import { BLOCK_MARGIN_TOP, BLOCK_MIN_HEIGHT, OPPORTUNITY_FULL_HEIGHT, heightScaleFactor } from "./constants";
 
@@ -9,6 +9,7 @@ const miniBlockBaseHeight = BLOCK_MIN_HEIGHT * heightScaleFactor;
 const miniBlockOpportunityHeight = OPPORTUNITY_FULL_HEIGHT * heightScaleFactor;
 
 const MiniBlock: React.FC<{ nbOpportunities: number }> = React.forwardRef(({ nbOpportunities }, ref) => {
+  const theme = useTheme();
   const miniBlockheight = nbOpportunities > 1 ?  miniBlockBaseHeight + miniBlockOpportunityHeight * (nbOpportunities - 1) : miniBlockBaseHeight;
 
   return (
@@ -27,14 +28,14 @@ const MiniBlock: React.FC<{ nbOpportunities: number }> = React.forwardRef(({ nbO
             height: `${miniBlockheight}px`,
             alignItems: "center",  
             justifyContent: "center", 
-            backgroundColor: "#6389be",
+            backgroundColor: theme.colors.blockColor,
             display: "flex",
             flexDirection: "column",
             margin: "auto",
             position: "relative",
           }}
         >
-          <Typography  sx={{ color: "#eae6e1" }}>
+          <Typography  sx={{ color: theme.colors.textOnBlock }}>
             <b>{nbOpportunities}</b>
           </Typography>
         </Paper>

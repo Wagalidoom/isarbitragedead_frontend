@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Typography, useMediaQuery } from '@mui/material';
+import { Box, CircularProgress, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { generateApiUrl } from './Search';
 import { BlockData } from './Blocks';
@@ -9,22 +9,23 @@ import ReactFlow, { Position } from 'reactflow';
 
 import 'reactflow/dist/style.css';
 import './overview.css';
-import lightTheme from '../styles/theme/lightTheme';
 import OpportunityArray from './OpportunityArray';
+import { Palette } from '@mui/icons-material';
 
 const proOptions = { hideAttribution: true };
 interface IBlockDetails {
 }
 
 const BlockDetails: React.FC<IBlockDetails> = () => {
+  const theme = useTheme();
   const { blockNumber = '0', opportunityIndex = '0' } = useParams();
   const [searchResults, setSearchResults] = useState<BlockData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [opportunity, setOpportunity] = useState<OpportunityData>();
   const [initialNodes, setInitialNodes] = useState<any[]>([]);
   const [initialEdges, setInitialEdges] = useState<any[]>([]);
-  const isMediumScreen = useMediaQuery(lightTheme.breakpoints.down('md'));
-  const isSmallScreen = useMediaQuery(lightTheme.breakpoints.down('sm'));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const apiRequest = async ({ searchInput }: { searchInput: string }) => {
     setIsLoading(true);
@@ -178,7 +179,7 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
           <CircularProgress color="inherit" size={80} />
         ) : opportunity ? (
           <>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '700px', height: '500px', boxShadow: 'inset 0 0 4px rgba(0, 0, 0, 0.25)', backgroundColor: '#f7f1e8', marginBottom: 5 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '700px', height: '500px', boxShadow: 'inset 0 0 4px rgba(0, 0, 0, 0.25)', backgroundColor: theme.colors.backgroundSides, marginBottom: 5 }}>
               <ReactFlow nodes={initialNodes} edges={initialEdges} panOnDrag={false} panOnScroll={false} zoomOnScroll={false} zoomOnPinch={false} zoomOnDoubleClick={false} proOptions={proOptions} />
             </Box>
             
@@ -188,7 +189,7 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
             </Box>
           </>
         ) : (
-          <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray', }}>
+          <Typography variant="h3" sx={{ textAlign: 'center', fontWeight: 'bold', color: theme.palette.text.primary }}>
             No search results found
           </Typography>
         )}

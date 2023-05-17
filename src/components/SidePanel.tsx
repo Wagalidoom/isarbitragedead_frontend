@@ -1,10 +1,9 @@
-import { Box, TextField, IconButton, InputAdornment, Typography, CircularProgress, useMediaQuery } from '@mui/material';
+import { Box, TextField, IconButton, InputAdornment, Typography, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
 import React, { ChangeEvent, useState, KeyboardEvent, useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { LOCAL_IP_ADDRESS } from '../App';
-import lightTheme from '../styles/theme/lightTheme';
 
 import { AwesomeButton } from 'react-awesome-button';
 import "react-awesome-button/dist/styles.css";
@@ -30,7 +29,8 @@ interface IArbStatistics {
 }
 
 const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
-  const isSmallScreen = useMediaQuery(lightTheme.breakpoints.down('sm'));
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [searchInput, setSearchInput] = useState<string | null>(null);
   const [profitMin, setProfitMin] = useState<string | null>(null);
   const [profitMax, setProfitMax] = useState<string | null>(null);
@@ -112,8 +112,8 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
         }}
       >
         {/* Title and about Button */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', width: '100%', textAlign: 'center', fontSize: 'calc(10px + 2vmin)', color: '#454545', marginBottom: '10px' }}>
-          <Link to="/" style={{ textDecoration: 'none', color: '#454545' }}>Is arbitrage dead ?</Link>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', width: '100%', textAlign: 'center', fontSize: 'calc(10px + 2vmin)', marginBottom: '10px' }}>
+          <Link to="/" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>Is arbitrage dead ?</Link>
           <AwesomeButton className='infoButton' type="secondary" size="icon" onPress={() => window.location.href = "/about"} style={{ width: '40px', height: '40px' }}>
             <WbSunnyIcon />
           </AwesomeButton>
@@ -126,7 +126,7 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
           value={searchInput || ''}
           onChange={handleSearchInput}
           onKeyPress={handleKeyPress}
-          sx={{ width: isSmallScreen ? 0 : '100%', '& input': { color: 'black' } }}
+          sx={{ width: isSmallScreen ? 0 : '100%', '& input': { color: theme.palette.text.primary } }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -152,7 +152,7 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
             value={profitMin || ''}
             onChange={handleProfitMinInput}
             onKeyPress={handleKeyPress}
-            sx={{ width: isSmallScreen ? 0 : '100%', '& input': { color: 'black' } }}
+            sx={{ width: isSmallScreen ? 0 : '100%', '& input': { color: theme.palette.text.primary } }}
           />
           <IconButton onClick={toggleCurrencyFilter}>
             {isDollarProfitFilter ? "$" : "Ξ"}
@@ -165,7 +165,7 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
             value={profitMax || ''}
             onChange={handleProfitMaxInput}
             onKeyPress={handleKeyPress}
-            sx={{ marginLeft: 1, '& input': { color: 'black' } }}
+            sx={{ marginLeft: 1, '& input': { color: theme.palette.text.primary } }}
           />
           <IconButton onClick={toggleCurrencyFilter}>
             {isDollarProfitFilter ? "$" : "Ξ"}
@@ -174,7 +174,7 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
         {/* Statistics block */}
         <Box
           sx={{
-            color: 'black'
+            color: theme.palette.text.secondary
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 1, marginTop: 4, padding: isSmallScreen ? 0 : 4 }}>
@@ -207,7 +207,7 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock }) => {
           </Typography>
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', position: 'absolute', bottom: 0, left: 0, zIndex: 1, color: 'black', width: '100%', padding: '5px', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', position: 'absolute', bottom: 0, left: 0, zIndex: 1, color: theme.palette.text.primary, width: '100%', padding: '5px', alignItems: 'center' }}>
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <Typography fontSize={'0.8vw'}>This website is for educational purposes only </Typography>
           <Typography fontSize={'0.8vw'}>By Lukas and Jordan</Typography>
