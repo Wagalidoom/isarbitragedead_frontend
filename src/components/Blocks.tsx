@@ -7,6 +7,7 @@ import Block, { OpportunityData } from './Block';
 import MiniBlock from './MiniBlock';
 import { LOCAL_IP_ADDRESS } from '../App';
 import { BLOCK_MARGIN_TOP, heightScaleFactor } from './constants';
+import { AwesomeButton } from 'react-awesome-button';
 
 // Constantes globales
 const INITIAL_DATA_TO_FETCH = 20;
@@ -239,10 +240,8 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
               No blocks to be shown
             </Typography>
           )}
-          <Box sx={{ position: 'absolute', top: 16, right: 16, zIndex: 1 }}>
-            <Fab color="secondary" onClick={scrollToTop}>
-              <ArrowUpward />
-            </Fab>
+          <Box sx={{ position: 'absolute', top:0,right: 16, zIndex: 1, paddingTop: '20px' }}>
+            <AwesomeButton className='upArrowButton' type="primary" size="icon" onPress={() => scrollToTop()} style={{ position: 'absolute', right: '20px', width: '40px', height: '40px' }}><ArrowUpward/></AwesomeButton>
           </Box>
         </div>
       </Grid>
@@ -252,8 +251,8 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
         onClick={handleViewportClick}
         onMouseDown={handleViewportMouseDown}
         onMouseUp={handleViewportMouseUp}
-        onMouseMove={handleViewportMouseMove} 
-        position={'relative'} 
+        onMouseMove={handleViewportMouseMove}
+        position={'relative'}
         sx={{ backgroundColor: '#f7f1e8', boxShadow: 4 }}>
         <Box
           id="viewport"
