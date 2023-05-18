@@ -4,37 +4,38 @@ import Block from './Block';
 import { LOCAL_IP_ADDRESS } from '../App';
 import { BlockData } from './Blocks';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useSearchParams } from 'react-router-dom';
 
-export const generateApiUrl = (searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean): string => {
-  let baseApiUrl = `http://${LOCAL_IP_ADDRESS}:3001/api/search?`;
-
+export const generateSearchUrl = (baseUrl: string, searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean): string => {
   if (searchInput) {
-    baseApiUrl += `&searchInput=${searchInput}`;
+    baseUrl += `&searchInput=${searchInput}`;
   }
 
   if (profitMin) {
-    baseApiUrl += `&profitMin=${profitMin}`;
+    baseUrl += `&profitMin=${profitMin}`;
   }
 
   if (profitMax) {
-    baseApiUrl += `&profitMax=${profitMax}`;
+    baseUrl += `&profitMax=${profitMax}`;
   }
-  baseApiUrl += `&isDollar=${isDollar}`;
+  baseUrl += `&isDollar=${isDollar}`;
 
-  return baseApiUrl;
+  return baseUrl;
 };
 
 
-const Search: React.FC<{ searchParams: { searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean } }> = ({ searchParams }) => {
+const Search: React.FC = () => {
   const theme = useTheme();
   const [searchResults, setSearchResults] = useState<BlockData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchParams] = useSearchParams();
 
-  const apiRequest = async ({ searchInput, profitMin, profitMax, isDollar }: { searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean }) => {
+  const apiRequest = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(generateApiUrl(searchInput, profitMin, profitMax, isDollar));
+      const response = await fetch(generateSearchUrl(`http://${LOCAL_IP_ADDRESS}:3001/api/search?`, searchParams.get('searchInput'), searchParams.get('profitMin'), searchParams.get('profitMax'), searchParams.get('isDollar') === 'true'));
       const data: BlockData[] = await response.json();
+      console.log(data)
       setSearchResults(data);
     } catch (error) {
       console.error('Error fetching search results:', error);
@@ -43,7 +44,7 @@ const Search: React.FC<{ searchParams: { searchInput: string | null, profitMin: 
   };
 
   useEffect(() => {
-    apiRequest(searchParams);
+    apiRequest();
   }, [searchParams]);
 
   return (
@@ -55,7 +56,6 @@ const Search: React.FC<{ searchParams: { searchInput: string | null, profitMin: 
         searchResults.map(({ blockNumber, opportunities }, index) => (
           <Grid item xs={12} md={12} key={index}>
             <Block blockNumber={blockNumber} opportunities={opportunities} />
-            {/* Passer null en ref ici ou autre chose ??? */}
           </Grid>
         ))
       ) : (

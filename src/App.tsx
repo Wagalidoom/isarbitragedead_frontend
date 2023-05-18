@@ -18,7 +18,6 @@ function App() {
   });
   const theme = isDarkMode ? themes.dark : themes.light;
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const [searchParams, setSearchParams] = useState<{ searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean }>({ searchInput: null, profitMin: null, profitMax: null, isDollar: true });
   const [currentBlockNumber, setCurrentBlockNumber] = useState<number>(0);
   const toggleTheme = () => { setIsDarkMode(!isDarkMode); };
 
@@ -32,11 +31,12 @@ function App() {
         <CssBaseline />
         <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }}>
           <Grid item xs={0} sm={3} md={3} sx={{ position: 'sticky', top: 0, height: '100vh', backgroundColor: theme.colors.backgroundSides, boxShadow: 3, zIndex: 1, display: isSmallScreen ? 'none' : 'block' }}>
-            <SidePanel onSearchChange={setSearchParams} currentBlock={currentBlockNumber} isDarkMode={isDarkMode} toggleTheme={toggleTheme}/>
+            <SidePanel currentBlock={currentBlockNumber} isDarkMode={isDarkMode} toggleTheme={toggleTheme}/>
           </Grid>
           <Grid item xs={12} sm={9} md={9} sx={{ backgroundColor: theme.colors.backgroundPrimary }}>
             <Routes>
-              <Route path="/" element={(searchParams.searchInput || searchParams.profitMin || searchParams.profitMax) ? <Search searchParams={searchParams} /> : <Blocks setCurrentBlockNumber={setCurrentBlockNumber} />} />
+              <Route path="/" element={<Blocks setCurrentBlockNumber={setCurrentBlockNumber} />} />
+              <Route path="/search" element={<Search />} />
               <Route path="/block/:blockNumber/opportunity/:opportunityIndex" element={<BlockDetails />} />
               <Route path="/about" element={<About />} />
             </Routes>

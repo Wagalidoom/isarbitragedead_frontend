@@ -7,12 +7,12 @@ import { LOCAL_IP_ADDRESS } from '../App';
 
 import { AwesomeButton } from 'react-awesome-button';
 import "react-awesome-button/dist/styles.css";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 import { InfoOutlined } from '@mui/icons-material';
+import { generateSearchUrl } from './Search';
 export interface ISidePanel {
-  onSearchChange: (searchParams: { searchInput: string | null, profitMin: string | null, profitMax: string | null, isDollar: boolean }) => void,
   currentBlock: number,
   isDarkMode: boolean,
   toggleTheme: () => void
@@ -29,8 +29,10 @@ interface IArbStatistics {
   }
 }
 
-const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock, isDarkMode, toggleTheme }) => {
+const SidePanel: React.FC<ISidePanel> = ({ currentBlock, isDarkMode, toggleTheme }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
+
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [searchInput, setSearchInput] = useState<string | null>(null);
   const [profitMin, setProfitMin] = useState<string | null>(null);
@@ -81,7 +83,8 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock, isDarkM
 
   const handleSearchSubmit = () => {
     if (searchInput || profitMin || profitMax) {
-      onSearchChange({ searchInput, profitMin, profitMax, isDollar: isDollarProfitFilter });
+      const searchUrl = generateSearchUrl('/search?', searchInput, profitMin, profitMax, isDollarProfitFilter);
+      navigate(searchUrl);
       setHasSearched(true);
     }
   };
@@ -90,7 +93,7 @@ const SidePanel: React.FC<ISidePanel> = ({ onSearchChange, currentBlock, isDarkM
     setSearchInput(null);
     setProfitMin(null);
     setProfitMax(null);
-    onSearchChange({ searchInput: null, profitMin: null, profitMax: null, isDollar: isDollarProfitFilter });
+    navigate('/');
     setHasSearched(false);
   };
 
