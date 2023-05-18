@@ -107,108 +107,85 @@ const SidePanel: React.FC<ISidePanel> = ({ currentBlock, isDarkMode, toggleTheme
     <>
       <Box
         sx={{
-          position: 'absolute',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          height: "100%",
           padding: isSmallScreen ? 0 : 2,
-          width: isSmallScreen ? 0 : '100%',
+          width: isSmallScreen ? 0 : "100%",
         }}
       >
-        {/* Title and about Button */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', width: '100%', textAlign: 'center', fontSize: 'calc(10px + 2vmin)', marginBottom: '10px' }}>
-          <Link to="/" style={{ textDecoration: 'none', color: theme.palette.text.primary }}>Is arbitrage dead ?</Link>
-          <AwesomeButton className='infoButton' type="secondary" size="icon" onPress={toggleTheme} style={{ width: '40px', height: '40px', '--button-raise-level': '2px', '--button-secondary-color': theme.colors.backgroundSides, '--button-secondary-color-dark': theme.colors.buttonAccent, '--button-secondary-color-light': theme.colors.buttonAccent, '--button-secondary-color-hover': theme.colors.buttonHover, '--button-secondary-color-active': theme.colors.backgroundSides, '--button-secondary-border': `3px solid ${theme.colors.buttonAccent}` }}>
-            {isDarkMode ? <WbSunnyIcon /> : <NightsStayIcon />}
-          </AwesomeButton>
-        </Box>
-        {/* Searchbar */}
-        <TextField
-          id="outlined-basic"
-          label="Search"
-          variant="outlined"
-          value={searchInput || ''}
-          onChange={handleSearchInput}
-          onKeyPress={handleKeyPress}
-          sx={{ width: isSmallScreen ? 0 : '100%', '& input': { color: theme.palette.text.primary } }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                {hasSearched ? (
-                  <IconButton edge="end" onClick={handleClearSearch}>
-                    <ClearIcon />
-                  </IconButton>
-                ) : (
-                  <IconButton edge="end" onClick={handleSearchSubmit}>
-                    <SearchIcon />
-                  </IconButton>
-                )}
-              </InputAdornment>
-            ),
-          }}
-        />
-        {/* Profit filters */}
-        <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', marginTop: 1 }}>
+        <Box>
+          {/* Title and about Button */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', width: '100%', textAlign: 'center', fontSize: 'calc(10px + 2vmin)', marginBottom: '10px' }}>
+            <Link to="/" style={{ textDecoration: 'none', color: theme.palette.text.primary, fontSize: "1.8vw" }}>Is arbitrage dead ?</Link>
+            <AwesomeButton className='infoButton' type="secondary" size="icon" onPress={toggleTheme} style={{ width: '40px', height: '40px', '--button-raise-level': '2px', '--button-secondary-color': theme.colors.backgroundSides, '--button-secondary-color-dark': theme.colors.buttonAccent, '--button-secondary-color-light': theme.colors.buttonAccent, '--button-secondary-color-hover': theme.colors.buttonHover, '--button-secondary-color-active': theme.colors.backgroundSides, '--button-secondary-border': `3px solid ${theme.colors.buttonAccent}` }}>
+              {isDarkMode ? <WbSunnyIcon /> : <NightsStayIcon />}
+            </AwesomeButton>
+          </Box>
+          {/* Searchbar */}
           <TextField
-
-            id="outlined-profitMin"
-            label="Profit Min"
-            value={profitMin || ''}
-            onChange={handleProfitMinInput}
+            id="outlined-basic"
+            label="Search"
+            variant="outlined"
+            value={searchInput || ''}
+            onChange={handleSearchInput}
             onKeyPress={handleKeyPress}
             sx={{ width: isSmallScreen ? 0 : '100%', '& input': { color: theme.palette.text.primary } }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {hasSearched ? (
+                    <IconButton edge="end" onClick={handleClearSearch}>
+                      <ClearIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton edge="end" onClick={handleSearchSubmit}>
+                      <SearchIcon />
+                    </IconButton>
+                  )}
+                </InputAdornment>
+              ),
+            }}
           />
-          <IconButton onClick={toggleCurrencyFilter}>
-            {isDollarProfitFilter ? "$" : "Ξ"}
-          </IconButton>
-          <TextField
-            fullWidth
-            id="outlined-profitMax"
-            label="Profit Max"
-            type="text"
-            value={profitMax || ''}
-            onChange={handleProfitMaxInput}
-            onKeyPress={handleKeyPress}
-            sx={{ marginLeft: 1, '& input': { color: theme.palette.text.primary } }}
-          />
-          <IconButton onClick={toggleCurrencyFilter}>
-            {isDollarProfitFilter ? "$" : "Ξ"}
-          </IconButton>
+          {/* Profit filters */}
+          <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', marginTop: 1 }}>
+            <TextField id="outlined-profitMin" label="Profit Min" value={profitMin || ""} onChange={handleProfitMinInput} onKeyPress={handleKeyPress} sx={{ width: isSmallScreen ? 0 : "100%", "& input": { color: theme.palette.text.primary } }} />
+            <IconButton onClick={toggleCurrencyFilter}>{isDollarProfitFilter ? "$" : "Ξ"}</IconButton>
+            <TextField fullWidth id="outlined-profitMax" label="Profit Max" type="text" value={profitMax || ""} onChange={handleProfitMaxInput} onKeyPress={handleKeyPress} sx={{ marginLeft: 1, "& input": { color: theme.palette.text.primary } }} />
+            <IconButton onClick={toggleCurrencyFilter}>{isDollarProfitFilter ? "$" : "Ξ"}</IconButton>
+          </Box>
         </Box>
         {/* Statistics block */}
-        <Box
-          sx={{
-            color: theme.palette.text.secondary
-          }}
-        >
+        <Box sx={{ color: theme.palette.text.secondary, display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "15vh" }}>
           <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 1, marginTop: 4, padding: isSmallScreen ? 0 : 4 }}>
             <FiberManualRecordIcon color="success" sx={{ marginRight: 1 }} />
-            <Typography sx={{ fontSize: '30px' }} component="div" >
+            <Typography sx={{ fontSize: "1.5vw" }} >
               Block  <b>{currentBlock !== 0 ? currentBlock : '...'}</b>
             </Typography>
           </Box>
-          <Typography component="div" sx={{ fontWeight: 'bold', padding: 2, fontSize: '2vw' }}>
-            Today
-          </Typography>
-          <Typography variant="body1" component="div" sx={{ padding: 1, fontSize: '1.35vw' }} >
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%", padding: 2 }}>
+            <Typography component="div" sx={{ fontWeight: "bold", fontSize: "1.9vw" }}>
+              Today
+            </Typography>
+          </Box>
+          <Typography variant="body1" component="div" sx={{ padding: 1, fontSize: '1.2vw' }} >
             Total potential profit: <b>{isLoading ? <CircularProgress size={20} /> : `${apiData?.totalProfit.toFixed(2)} $`}</b>
           </Typography>
-          <Typography variant="body1" component="div" sx={{ padding: 1, fontSize: '1.35vw' }}>
+          <Typography variant="body1" component="div" sx={{ padding: 1, fontSize: '1.2vw' }}>
             Number of opportunities: <b>{isLoading ? <CircularProgress size={20} /> : apiData?.nbOpportunities}</b>
           </Typography>
-          <Typography variant="body1" component="div" sx={{ padding: 1, fontSize: '1.35vw' }}>
-            Most arbitraged token:
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 1 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <b>{isLoading ? <CircularProgress size={20} /> : apiData?.mostArbitragedToken.tokenName}</b>
-                {apiData?.mostArbitragedToken.tokenLogo && (
-                  <Box sx={{ marginLeft: 1 }}>
-                    <img src={apiData?.mostArbitragedToken.tokenLogo} alt="top-token-logo" width="20" height="20" />
-                  </Box>
-                )}
-              </Box>
-            </Box>
-          </Typography>
+
+          <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+            <Typography variant="body1" sx={{ padding: 1, fontSize: "1.2vw" }}>
+              Most arbitraged token: <b>{isLoading ? <CircularProgress size={20} /> : apiData?.mostArbitragedToken.tokenName}</b>
+              {apiData?.mostArbitragedToken.tokenLogo && (
+                <Box sx={{ display: "inline", marginLeft: 1 }}>
+                  <img src={apiData?.mostArbitragedToken.tokenLogo} alt="top-token-logo" width="20" height="20" />
+                </Box>
+              )}
+            </Typography>
+          </Box>
         </Box>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', position: 'absolute', bottom: 0, left: 0, zIndex: 1, color: theme.palette.text.primary, width: '100%', padding: '5px', alignItems: 'center' }}>
