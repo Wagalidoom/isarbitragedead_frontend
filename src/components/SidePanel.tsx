@@ -157,8 +157,8 @@ const SidePanel: React.FC<ISidePanel> = ({ currentBlock, isDarkMode, toggleTheme
           </Box>
         </Box>
         {/* Statistics block */}
-        <Box sx={{ color: theme.palette.text.secondary, display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "15vh" }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 1, marginTop: 4, padding: isSmallScreen ? 0 : 4 }}>
+        <Box sx={{ color: theme.palette.text.secondary, display: "flex", flexDirection: "column", marginBottom: "15vh" }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: isSmallScreen ? 0 : 4 }}>
             <FiberManualRecordIcon color="success" sx={{ marginRight: 1 }} />
             <Typography sx={{ fontSize: "1.5vw" }} >
               Block  <b>{currentBlock !== 0 ? currentBlock : '...'}</b>
