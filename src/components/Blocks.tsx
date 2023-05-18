@@ -20,12 +20,8 @@ export interface BlockData {
   opportunities: OpportunityData[]
 }
 
-interface IBlocks {
-  setCurrentBlockNumber: (blockNumber: number) => void;
-}
-
 // Récupère l'historique des blocs à partir de l'API
-async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Promise<BlockData[]> {
+export async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Promise<BlockData[]> {
   try {
     const query = fromBlockNumber === undefined ? `limit=${limit}` : `fromBlockNumber=${fromBlockNumber}&limit=${limit}`
     const response = await fetch(`http://${LOCAL_IP_ADDRESS}:3001/api/blocks-history?${query}`);
@@ -48,7 +44,7 @@ const throttle = (func: (...args: any[]) => any, delay: number): ((...args: any[
   };
 };
 
-const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
+const Blocks: React.FC<{ currentBlockNumber: number }> = ({ currentBlockNumber }) => {
   // État local et références
   const theme = useTheme();
   const [lastDisplayedBlock, setLastDisplayedBlock] = useState(0);
@@ -116,7 +112,6 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {
       setBlockList((prevDataList) => [receivedData, ...prevDataList]);
-      setCurrentBlockNumber(receivedData.blockNumber);
     });
 
     // Update viewport to display it on page loading
@@ -134,16 +129,15 @@ const Blocks: React.FC<IBlocks> = ({ setCurrentBlockNumber }) => {
       // Remove global mouseup listener
       window.removeEventListener('mouseup', handleGlobalMouseUp);
     };
-  }, [setCurrentBlockNumber]);
+  }, []);
 
   // Récupère l'historique lors du chargement de la page
   useEffect(() => {
     const fetchInitialData = async () => {
-      const initialBlockNumber = await fetchDataHistory(INITIAL_DATA_TO_FETCH);
-      setCurrentBlockNumber(initialBlockNumber);
+      await fetchDataHistory(INITIAL_DATA_TO_FETCH);
     };
     fetchInitialData();
-  }, [setCurrentBlockNumber]);
+  }, []);
 
   // Fonctions pour le fonctionnement de la minimap
   const handleBlocksScroll = () => {

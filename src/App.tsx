@@ -1,6 +1,6 @@
 import './styles/globals.css';
 import { themes } from './styles/theme/theme';
-import Blocks from './components/Blocks';
+import Blocks, { BlockData, fetchBlocksHistory } from './components/Blocks';
 import { CssBaseline, Grid, ThemeProvider, useMediaQuery } from '@mui/material';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SidePanel from './components/SidePanel';
@@ -8,8 +8,14 @@ import { useEffect, useState } from 'react';
 import Search from './components/Search';
 import BlockDetails from './components/BlockDetails';
 import About from './components/About';
+import { io } from 'socket.io-client';
 
 export const LOCAL_IP_ADDRESS = process.env.REACT_APP_LOCAL_IP;
+
+async function getLastFetchedBlockNumber() {
+  const lastBlock = await fetchBlocksHistory(1);
+  return lastBlock[0].blockNumber;
+}
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -17,9 +23,27 @@ function App() {
     return savedMode === 'true';
   });
   const theme = isDarkMode ? themes.dark : themes.light;
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const [currentBlockNumber, setCurrentBlockNumber] = useState<number>(0);
   const toggleTheme = () => { setIsDarkMode(!isDarkMode); };
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  
+  const [currentBlockNumber, setCurrentBlockNumber] = useState<number>(0);
+  useEffect(() => {
+    // Initial value for smoothness purposes
+    getLastFetchedBlockNumber().then(setCurrentBlockNumber);
+    
+    // Connect to the Websocket server
+    const socket = io(`http://${LOCAL_IP_ADDRESS}:3030`);
+
+    // Listen for the 'block-data' event
+    socket.on('block-data', (receivedData: BlockData) => {
+      setCurrentBlockNumber(receivedData.blockNumber);
+    });
+
+    // Clean up the socket connection when the component is unmounted or when isSearchActive changes
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(isDarkMode));
@@ -35,7 +59,7 @@ function App() {
           </Grid>
           <Grid item xs={12} sm={9} md={9} sx={{ backgroundColor: theme.colors.backgroundPrimary }}>
             <Routes>
-              <Route path="/" element={<Blocks setCurrentBlockNumber={setCurrentBlockNumber} />} />
+              <Route path="/" element={<Blocks currentBlockNumber={currentBlockNumber} />} />
               <Route path="/search" element={<Search />} />
               <Route path="/block/:blockNumber/opportunity/:opportunityIndex" element={<BlockDetails />} />
               <Route path="/about" element={<About />} />
