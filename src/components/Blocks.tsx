@@ -5,7 +5,7 @@ import { ArrowUpward } from '@mui/icons-material';
 
 import Block, { OpportunityData } from './Block';
 import MiniBlock from './MiniBlock';
-import { LOCAL_IP_ADDRESS } from '../App';
+import { IP_ADDRESS, API_PORT, SOCKET_PORT } from '../App';
 import { BLOCK_MARGIN_TOP, heightScaleFactor } from './constants';
 import { AwesomeButton } from 'react-awesome-button';
 
@@ -24,7 +24,7 @@ export interface BlockData {
 export async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Promise<BlockData[]> {
   try {
     const query = fromBlockNumber === undefined ? `limit=${limit}` : `fromBlockNumber=${fromBlockNumber}&limit=${limit}`
-    const response = await fetch(`http://${LOCAL_IP_ADDRESS}:3001/api/blocks-history?${query}`);
+    const response = await fetch(`http://${IP_ADDRESS}:${API_PORT}/api/blocks-history?${query}`);
     const data: BlockData[] = await response.json();
     return data;
   } catch (error) {
@@ -107,7 +107,7 @@ const Blocks: React.FC<{ currentBlockNumber: number }> = ({ currentBlockNumber }
   // Établit la connexion WebSocket
   useEffect(() => {
     // Connect to the Websocket server
-    const socket = io(`http://${LOCAL_IP_ADDRESS}:3030`);
+    const socket = io(`http://${IP_ADDRESS}:${SOCKET_PORT}`);
 
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {

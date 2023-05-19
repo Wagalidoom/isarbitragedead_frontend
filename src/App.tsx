@@ -10,7 +10,9 @@ import BlockDetails from './components/BlockDetails';
 import About from './components/About';
 import { io } from 'socket.io-client';
 
-export const LOCAL_IP_ADDRESS = process.env.REACT_APP_LOCAL_IP;
+export const IP_ADDRESS = process.env.REACT_APP_IP;
+export const API_PORT = process.env.REACT_APP_API_PORT;
+export const SOCKET_PORT = process.env.REACT_APP_SOCKET_PORT;
 
 async function getLastFetchedBlockNumber() {
   const lastBlock = await fetchBlocksHistory(1);
@@ -32,7 +34,7 @@ function App() {
     getLastFetchedBlockNumber().then(setCurrentBlockNumber);
     
     // Connect to the Websocket server
-    const socket = io(`http://${LOCAL_IP_ADDRESS}:3030`);
+    const socket = io(`http://${IP_ADDRESS}:${SOCKET_PORT}`);
 
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {
