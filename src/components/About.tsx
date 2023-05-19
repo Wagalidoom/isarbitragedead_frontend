@@ -1,5 +1,5 @@
 import { Typography, Box } from '@mui/material';
-import { AwesomeButton, AwesomeButtonProgress, AwesomeButtonSocial } from "react-awesome-button";
+import { AwesomeButtonSocial } from "react-awesome-button";
 import { useTheme } from '@mui/material/styles';
 
 const About = () => {

@@ -30,20 +30,19 @@ const Search: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams] = useSearchParams();
 
-  const apiRequest = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(generateSearchUrl(`http://${LOCAL_IP_ADDRESS}:3001/api/search?`, searchParams.get('searchInput'), searchParams.get('profitMin'), searchParams.get('profitMax'), searchParams.get('isDollar') === 'true'));
-      const data: BlockData[] = await response.json();
-      console.log(data)
-      setSearchResults(data);
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-    }
-    setIsLoading(false);
-  };
-
   useEffect(() => {
+    const apiRequest = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(generateSearchUrl(`http://${LOCAL_IP_ADDRESS}:3001/api/search?`, searchParams.get('searchInput'), searchParams.get('profitMin'), searchParams.get('profitMax'), searchParams.get('isDollar') === 'true'));
+        const data: BlockData[] = await response.json();
+        setSearchResults(data);
+      } catch (error) {
+        console.error('Error fetching search results:', error);
+      }
+      setIsLoading(false);
+    };
+
     apiRequest();
   }, [searchParams]);
 
