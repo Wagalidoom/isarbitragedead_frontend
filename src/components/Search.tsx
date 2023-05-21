@@ -34,7 +34,7 @@ const Search: React.FC = () => {
     const apiRequest = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(generateSearchUrl(`http://${IP_ADDRESS}:${API_PORT}/api/search?`, searchParams.get('searchInput'), searchParams.get('profitMin'), searchParams.get('profitMax'), searchParams.get('isDollar') === 'true'));
+        const response = await fetch(generateSearchUrl(`https://${IP_ADDRESS}:${API_PORT}/api/search?`, searchParams.get('searchInput'), searchParams.get('profitMin'), searchParams.get('profitMax'), searchParams.get('isDollar') === 'true'));
         const data: BlockData[] = await response.json();
         setSearchResults(data);
       } catch (error) {

@@ -24,7 +24,7 @@ export interface BlockData {
 export async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Promise<BlockData[]> {
   try {
     const query = fromBlockNumber === undefined ? `limit=${limit}` : `fromBlockNumber=${fromBlockNumber}&limit=${limit}`
-    const response = await fetch(`http://${IP_ADDRESS}:${API_PORT}/api/blocks-history?${query}`);
+    const response = await fetch(`https://${IP_ADDRESS}:${API_PORT}/api/blocks-history?${query}`);
     const data: BlockData[] = await response.json();
     return data;
   } catch (error) {
@@ -107,7 +107,7 @@ const Blocks: React.FC<{ currentBlockNumber: number }> = ({ currentBlockNumber }
   // Établit la connexion WebSocket
   useEffect(() => {
     // Connect to the Websocket server
-    const socket = io(`http://${IP_ADDRESS}:${SOCKET_PORT}`);
+    const socket = io(`https://${IP_ADDRESS}:${SOCKET_PORT}`);
 
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {

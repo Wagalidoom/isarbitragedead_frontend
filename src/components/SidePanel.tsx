@@ -46,7 +46,7 @@ const SidePanel: React.FC<ISidePanel> = ({ currentBlock, isDarkMode, toggleTheme
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://${IP_ADDRESS}:${API_PORT}/api/stats`);
+        const response = await fetch(`https://${IP_ADDRESS}:${API_PORT}/api/stats`);
         const data = await response.json();
         setApiData({
           totalProfit: data.totalPotentialProfit,
