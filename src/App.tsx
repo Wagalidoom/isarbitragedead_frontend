@@ -34,7 +34,7 @@ function App() {
     getLastFetchedBlockNumber().then(setCurrentBlockNumber);
     
     // Connect to the Websocket server
-    const socket = io(`http:s//${IP_ADDRESS}:${SOCKET_PORT}`);
+    const socket = io(`http://${IP_ADDRESS}:${SOCKET_PORT}`);
 
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {
