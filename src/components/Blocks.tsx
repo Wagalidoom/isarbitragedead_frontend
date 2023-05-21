@@ -10,7 +10,7 @@ import { BLOCK_MARGIN_TOP, heightScaleFactor } from './constants';
 import { AwesomeButton } from 'react-awesome-button';
 
 // Constantes globales
-const INITIAL_DATA_TO_FETCH = 20;
+const INITIAL_DATA_TO_FETCH = 60;
 const SCROLLING_DATA_TO_FETCH = 50;
 const PX_HOT_LOADING_LIMIT = 100;
 const THROTTLE = 20;
