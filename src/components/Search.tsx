@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Typography, useTheme } from '@mui/material';
 import Block from './Block';
-import { API_PORT, IP_ADDRESS } from '../App';
+import { API_PORT, IP_ADDRESS, IS_PRODUCTION } from '../App';
 import { BlockData } from './Blocks';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useSearchParams } from 'react-router-dom';
@@ -34,7 +34,8 @@ const Search: React.FC = () => {
     const apiRequest = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(generateSearchUrl(`https://${IP_ADDRESS}:${API_PORT}/api/search?`, searchParams.get('searchInput'), searchParams.get('profitMin'), searchParams.get('profitMax'), searchParams.get('isDollar') === 'true'));
+        const apiBaseSearchUrl = IS_PRODUCTION ? `https://${IP_ADDRESS}:${API_PORT}/api/search?` : `http://${IP_ADDRESS}:${API_PORT}/api/search?`;
+        const response = await fetch(generateSearchUrl(apiBaseSearchUrl, searchParams.get('searchInput'), searchParams.get('profitMin'), searchParams.get('profitMax'), searchParams.get('isDollar') === 'true'));
         const data: BlockData[] = await response.json();
         setSearchResults(data);
       } catch (error) {

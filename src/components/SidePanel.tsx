@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState, KeyboardEvent, useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { API_PORT, IP_ADDRESS } from '../App';
+import { API_PORT, IP_ADDRESS, IS_PRODUCTION } from '../App';
 
 import { AwesomeButton } from 'react-awesome-button';
 import "react-awesome-button/dist/styles.css";
@@ -46,7 +46,8 @@ const SidePanel: React.FC<ISidePanel> = ({ currentBlock, isDarkMode, toggleTheme
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://${IP_ADDRESS}:${API_PORT}/api/stats`);
+        const apiStatsUrl = IS_PRODUCTION ? `https://${IP_ADDRESS}:${API_PORT}/api/stats` : `http://${IP_ADDRESS}:${API_PORT}/api/stats`;
+        const response = await fetch(apiStatsUrl);
         const data = await response.json();
         setApiData({
           totalProfit: data.totalPotentialProfit,

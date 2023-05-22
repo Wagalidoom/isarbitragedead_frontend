@@ -8,8 +8,9 @@ import { useEffect, useState } from 'react';
 import Search from './components/Search';
 import BlockDetails from './components/BlockDetails';
 import About from './components/About';
-import { io } from 'socket.io-client';
+import { Socket, io } from 'socket.io-client';
 
+export const IS_PRODUCTION = process.env.REACT_APP_ENV === "production";
 export const IP_ADDRESS = process.env.REACT_APP_IP;
 export const API_PORT = process.env.REACT_APP_API_PORT;
 export const SOCKET_PORT = process.env.REACT_APP_SOCKET_PORT;
@@ -34,7 +35,12 @@ function App() {
     getLastFetchedBlockNumber().then(setCurrentBlockNumber);
     
     // Connect to the Websocket server
-    const socket = io(`https://${IP_ADDRESS}:${SOCKET_PORT}`);
+    let socket: Socket;
+    if (IS_PRODUCTION) {
+      socket = io(`https://${IP_ADDRESS}:${SOCKET_PORT}`);
+    } else {
+      socket = io(`http://${IP_ADDRESS}:${SOCKET_PORT}`);
+    }
 
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {

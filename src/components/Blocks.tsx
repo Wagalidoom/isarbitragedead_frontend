@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import { Grid, Typography, Fade, Box, useTheme } from '@mui/material';
 import { ArrowUpward } from '@mui/icons-material';
 
 import Block, { OpportunityData } from './Block';
 import MiniBlock from './MiniBlock';
-import { IP_ADDRESS, API_PORT, SOCKET_PORT } from '../App';
+import { IP_ADDRESS, API_PORT, SOCKET_PORT, IS_PRODUCTION } from '../App';
 import { BLOCK_MARGIN_TOP, heightScaleFactor } from './constants';
 import { AwesomeButton } from 'react-awesome-button';
 
@@ -23,8 +23,9 @@ export interface BlockData {
 // Récupère l'historique des blocs à partir de l'API
 export async function fetchBlocksHistory(limit: number, fromBlockNumber?: number): Promise<BlockData[]> {
   try {
-    const query = fromBlockNumber === undefined ? `limit=${limit}` : `fromBlockNumber=${fromBlockNumber}&limit=${limit}`
-    const response = await fetch(`https://${IP_ADDRESS}:${API_PORT}/api/blocks-history?${query}`);
+    const query = fromBlockNumber === undefined ? `limit=${limit}` : `fromBlockNumber=${fromBlockNumber}&limit=${limit}`;
+    const apiBlocksUrl = IS_PRODUCTION ? `https://${IP_ADDRESS}:${API_PORT}/api/blocks-history?${query}` : `http://${IP_ADDRESS}:${API_PORT}/api/blocks-history?${query}`;
+    const response = await fetch(apiBlocksUrl);
     const data: BlockData[] = await response.json();
     return data;
   } catch (error) {
@@ -107,7 +108,13 @@ const Blocks: React.FC<{ currentBlockNumber: number }> = ({ currentBlockNumber }
   // Établit la connexion WebSocket
   useEffect(() => {
     // Connect to the Websocket server
-    const socket = io(`https://${IP_ADDRESS}:${SOCKET_PORT}`);
+    let socket: Socket;
+    if (IS_PRODUCTION) {
+      socket = io(`https://${IP_ADDRESS}:${SOCKET_PORT}`);
+    } else {
+      socket = io(`http://${IP_ADDRESS}:${SOCKET_PORT}`);
+    }
+
 
     // Listen for the 'block-data' event
     socket.on('block-data', (receivedData: BlockData) => {

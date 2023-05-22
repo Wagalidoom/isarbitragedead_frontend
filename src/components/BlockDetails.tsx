@@ -10,7 +10,7 @@ import ReactFlow, { Position } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './overview.css';
 import OpportunityArray from './OpportunityArray';
-import { IP_ADDRESS, API_PORT } from '../App';
+import { IP_ADDRESS, API_PORT, IS_PRODUCTION } from '../App';
 
 const proOptions = { hideAttribution: true };
 interface IBlockDetails {
@@ -30,7 +30,8 @@ const BlockDetails: React.FC<IBlockDetails> = () => {
   const apiRequest = async ({ searchInput }: { searchInput: string }) => {
     setIsLoading(true);
     try {
-      const response = await fetch(generateSearchUrl(`https://${IP_ADDRESS}:${API_PORT}/api/search?`, searchInput, null, null, true));
+      const apiBaseSearchUrl = IS_PRODUCTION ? `https://${IP_ADDRESS}:${API_PORT}/api/search?` : `http://${IP_ADDRESS}:${API_PORT}/api/search?`;
+      const response = await fetch(generateSearchUrl(apiBaseSearchUrl, searchInput, null, null, true));
       const data: BlockData[] = await response.json();
       setSearchResults(data);
     } catch (error) {
