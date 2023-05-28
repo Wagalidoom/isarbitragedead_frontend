@@ -1,4 +1,4 @@
-import { Box, TextField, IconButton, InputAdornment, Typography, CircularProgress, useMediaQuery, useTheme } from '@mui/material';
+import { Box, TextField, IconButton, InputAdornment, Typography, CircularProgress, useTheme } from '@mui/material';
 import React, { ChangeEvent, useState, KeyboardEvent, useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -33,7 +33,6 @@ const SidePanel: React.FC<ISidePanel> = ({ currentBlock, isDarkMode, toggleTheme
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const [searchInput, setSearchInput] = useState<string | null>(null);
   const [profitMin, setProfitMin] = useState<string | null>(null);
   const [profitMax, setProfitMax] = useState<string | null>(null);
@@ -112,8 +111,8 @@ const SidePanel: React.FC<ISidePanel> = ({ currentBlock, isDarkMode, toggleTheme
           flexDirection: "column",
           justifyContent: "space-between",
           height: "100%",
-          padding: isSmallScreen ? 0 : 2,
-          width: isSmallScreen ? 0 : "100%",
+          padding: 2,
+          width: "100%",
         }}
       >
         <Box>
@@ -132,7 +131,7 @@ const SidePanel: React.FC<ISidePanel> = ({ currentBlock, isDarkMode, toggleTheme
             value={searchInput || ''}
             onChange={handleSearchInput}
             onKeyPress={handleKeyPress}
-            sx={{ width: isSmallScreen ? 0 : '100%', '& input': { color: theme.palette.text.primary } }}
+            sx={{ width: '100%', '& input': { color: theme.palette.text.primary } }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -151,7 +150,7 @@ const SidePanel: React.FC<ISidePanel> = ({ currentBlock, isDarkMode, toggleTheme
           />
           {/* Profit filters */}
           <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', marginTop: 1 }}>
-            <TextField id="outlined-profitMin" label="Profit Min" value={profitMin || ""} onChange={handleProfitMinInput} onKeyPress={handleKeyPress} sx={{ width: isSmallScreen ? 0 : "100%", "& input": { color: theme.palette.text.primary } }} />
+            <TextField id="outlined-profitMin" label="Profit Min" value={profitMin || ""} onChange={handleProfitMinInput} onKeyPress={handleKeyPress} sx={{ width: "100%", "& input": { color: theme.palette.text.primary } }} />
             <IconButton onClick={toggleCurrencyFilter}>{isDollarProfitFilter ? "$" : "Ξ"}</IconButton>
             <TextField fullWidth id="outlined-profitMax" label="Profit Max" type="text" value={profitMax || ""} onChange={handleProfitMaxInput} onKeyPress={handleKeyPress} sx={{ marginLeft: 1, "& input": { color: theme.palette.text.primary } }} />
             <IconButton onClick={toggleCurrencyFilter}>{isDollarProfitFilter ? "$" : "Ξ"}</IconButton>
@@ -159,7 +158,7 @@ const SidePanel: React.FC<ISidePanel> = ({ currentBlock, isDarkMode, toggleTheme
         </Box>
         {/* Statistics block */}
         <Box sx={{ color: theme.palette.text.secondary, display: "flex", flexDirection: "column", marginBottom: "15vh" }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: isSmallScreen ? 0 : 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 4 }}>
             <FiberManualRecordIcon color="success" sx={{ marginRight: 1 }} />
             <Typography sx={{ fontSize: "1.5vw" }} >
               Block  <b>{currentBlock !== 0 ? currentBlock : '...'}</b>

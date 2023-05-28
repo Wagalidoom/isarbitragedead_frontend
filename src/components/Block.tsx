@@ -1,4 +1,4 @@
-import { Box, Link, Paper, Typography, useTheme } from '@mui/material';
+import { Box, Link, Paper, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
 import { BlockData } from './Blocks';
 import { useNavigate } from 'react-router-dom';
@@ -44,6 +44,10 @@ const Opportunity: React.FC<OpportunityData & { opportunityIndex: number, blockN
   const opportunityLink = `/block/${blockNumber}/opportunity/${opportunityIndex}`;
   const navigate = useNavigate();
 
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fontSize = isSmallScreen ? '0.5em' : '1.2em';
+  const imgSize = isSmallScreen ? '20' : '40';
+
   const handleClick = () => {
     navigate(opportunityLink);
   };
@@ -51,11 +55,11 @@ const Opportunity: React.FC<OpportunityData & { opportunityIndex: number, blockN
   return (
     <Paper elevation={1} onClick={handleClick} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '95%', height: `${opportunityHeight}px`,  backgroundColor: theme.colors.accentuation, marginBottom: `${opportunityMarginBottom}px`, borderRadius: '3px', padding: '10px', cursor: 'pointer' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-        <img src={buyMarketLogo} alt="Exchange 1 Logo" width="40" height="40" />
-        <Typography sx={{ color: theme.palette.text.secondary, marginLeft: '2vw', marginRight: '2vw', fontSize: '1.2em' }}> <b>{deltaYa.toFixed(4)}</b> {baseSymbol}  → <b>{-deltaXa.toFixed(2)}</b> {tokenSymbol}  → <b>{-deltaYb.toFixed(4)}</b> {baseSymbol}  </Typography>
-        <img src={sellMarketLogo} alt="Exchange 2 Logo" width="40" height="40" />
+        <img src={buyMarketLogo} alt="Exchange 1 Logo" width={imgSize} height={imgSize} />
+        <Typography sx={{ color: theme.palette.text.secondary, marginLeft: '2vw', marginRight: '2vw', fontSize: fontSize }}> <b>{deltaYa.toFixed(4)}</b> {baseSymbol}  → <b>{-deltaXa.toFixed(2)}</b> {tokenSymbol}  → <b>{-deltaYb.toFixed(4)}</b> {baseSymbol}  </Typography>
+        <img src={sellMarketLogo} alt="Exchange 2 Logo" width={imgSize} height={imgSize} />
       </Box>
-      <Typography variant="body1" sx={{ color: theme.palette.text.secondary, fontSize: '1.2em' }}>Profit: <b>{profitDol.toFixed(2)} $</b></Typography>
+      <Typography variant="body1" sx={{ color: theme.palette.text.secondary, fontSize: fontSize }}>Profit: <b>{profitDol.toFixed(2)} $</b></Typography>
     </Paper>
   );  
 };
@@ -63,15 +67,20 @@ const Opportunity: React.FC<OpportunityData & { opportunityIndex: number, blockN
 
 const Block: React.FC<BlockData> = React.memo(({ blockNumber, opportunities }) => {
   const theme = useTheme();
+
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const fontSize = isSmallScreen ? '15px' : '30px';
+  const adjustedBlockNumberFontSize = isSmallScreen ? blockNumberFontSize / 1.5 : blockNumberFontSize;
+
   const content = opportunities.length === 0
-    ? (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%'  }}><Typography  sx={{ color: theme.colors.textOnBlock, fontSize: "30px" }}>No opportunities at this block</Typography></Box>)
+    ? (<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%'  }}><Typography  sx={{ color: theme.colors.textOnBlock, fontSize: fontSize }}>No opportunities at this block</Typography></Box>)
     : (opportunities.map((opportunity, index) => <Opportunity key={index} opportunityIndex={index} blockNumber={blockNumber} {...opportunity} />));
 
   return (
     <>
       <Box data-block-number={blockNumber} sx={{ display: 'flex', alignItems: 'center'}}>
         <Paper square sx={{ paddingLeft: 1, paddingRight: 1, width: '70%', minHeight: `${BLOCK_MIN_HEIGHT}px`, backgroundColor: theme.colors.blockColor, display: 'flex', flexDirection: 'column', alignItems: 'start', margin: 'auto', position: 'relative' }}>
-          <Typography  sx={{ height:`${blockNumberContainerSize}px`, fontSize: `${blockNumberFontSize}px`, color: '#eae6e1' }}><b>{blockNumber}</b></Typography>
+          <Typography  sx={{ height:`${blockNumberContainerSize}px`, fontSize: `${adjustedBlockNumberFontSize}px`, color: '#eae6e1' }}><b>{blockNumber}</b></Typography>
           <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
             {content}
           </Box>

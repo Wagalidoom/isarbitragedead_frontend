@@ -1,8 +1,8 @@
 import './styles/globals.css';
 import { themes } from './styles/theme/theme';
 import Blocks, { BlockData, fetchBlocksHistory } from './components/Blocks';
-import { CssBaseline, Grid, ThemeProvider, useMediaQuery } from '@mui/material';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { CssBaseline, Grid, ThemeProvider } from '@mui/material';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SidePanel from './components/SidePanel';
 import { useEffect, useState } from 'react';
 import Search from './components/Search';
@@ -35,8 +35,7 @@ function App() {
       label: isDarkMode ? "Light Mode" : "Dark Mode"
     });
   };
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  
+
   const [currentBlockNumber, setCurrentBlockNumber] = useState<number>(0);
   useEffect(() => {
     // Initial value for smoothness purposes
@@ -70,10 +69,10 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Grid container columnSpacing={0} sx={{ width: '100%', height: '100%' }}>
-          <Grid item xs={0} sm={3} md={3} sx={{ position: 'sticky', top: 0, height: '100vh', backgroundColor: theme.colors.backgroundSides, boxShadow: 3, zIndex: 1, display: isSmallScreen ? 'none' : 'block' }}>
+          <Grid item xs={3} sm={3} md={3} sx={{ position: 'sticky', top: 0, height: '100vh', backgroundColor: theme.colors.backgroundSides, boxShadow: 3, zIndex: 1, display: 'block' }}>
             <SidePanel currentBlock={currentBlockNumber} isDarkMode={isDarkMode} toggleTheme={toggleTheme}/>
           </Grid>
-          <Grid item xs={12} sm={9} md={9} sx={{ backgroundColor: theme.colors.backgroundPrimary }}>
+          <Grid item xs={9} sm={9} md={9} sx={{ backgroundColor: theme.colors.backgroundPrimary }}>
             <Routes>
               <Route path="/" element={<Blocks currentBlockNumber={currentBlockNumber} />} />
               <Route path="/search" element={<Search />} />

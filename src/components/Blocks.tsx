@@ -220,7 +220,7 @@ const Blocks: React.FC<{ currentBlockNumber: number }> = ({ currentBlockNumber }
   return (
     <Grid container columnSpacing={0} sx={{ width: '100%' }} >
       {/* Composant principal de défilement des blocks */}
-      <Grid item xs={12} sm={11} md={11} position="relative" onMouseMove={handleViewportMouseMove} >
+      <Grid item xs={11} sm={11} md={11} position="relative" onMouseMove={handleViewportMouseMove} >
         <div ref={blocksScrollRef} onScroll={handleBlocksScroll} style={{ height: '100vh', overflowY: 'scroll' }}>
           {blockList.length > 0 ? (
             blockList.map(({ blockNumber, opportunities }, index) => (
@@ -260,7 +260,7 @@ const Blocks: React.FC<{ currentBlockNumber: number }> = ({ currentBlockNumber }
       </Grid>
 
       {/* Minimap */}
-      <Grid item xs={0} sm={1} md={1}
+      <Grid item xs={1} sm={1} md={1}
         onClick={handleViewportClick}
         onMouseDown={handleViewportMouseDown}
         onMouseUp={handleViewportMouseUp}
