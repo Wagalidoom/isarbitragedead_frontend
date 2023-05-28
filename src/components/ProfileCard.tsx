@@ -3,6 +3,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import EmailIcon from "@mui/icons-material/Email";
 import { styled } from "@mui/system";
+import ReactGA from 'react-ga4';
 
 interface IProfileCard {
     imageUrl: string;
@@ -57,13 +58,34 @@ const ProfileCard: React.FC<IProfileCard> = ({ imageUrl, name, title, domain, li
                 </PersonDetails>
             </PersonInfo>
             <IconContainer>
-                <IconButton onClick={() => window.open(linkedin, "_blank")}>
+                <IconButton onClick={() => {
+                    window.open(linkedin, "_blank");
+                    ReactGA.event({
+                        category: "Contact",
+                        action: "Clicked",
+                        label: `LinkedIn of ${name}`
+                    });
+                    }}>
                     <LinkedInIcon />
                 </IconButton>
-                <IconButton onClick={() => window.open(github, "_blank")}>
+                <IconButton onClick={() => {
+                    window.open(github, "_blank");
+                    ReactGA.event({
+                        category: "Contact",
+                        action: "Clicked",
+                        label: `GitHub of ${name}`
+                    });
+                    }}>
                     <GitHubIcon />
                 </IconButton>
-                <IconButton onClick={() => window.open(`mailto:${email}`, "_blank")}>
+                <IconButton onClick={() => {
+                    window.open(`mailto:${email}`, "_blank");
+                    ReactGA.event({
+                        category: "Contact",
+                        action: "Clicked",
+                        label: `Email of ${name}`
+                    });
+                    }}>
                     <EmailIcon />
                 </IconButton>
             </IconContainer>

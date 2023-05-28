@@ -2,13 +2,14 @@ import './styles/globals.css';
 import { themes } from './styles/theme/theme';
 import Blocks, { BlockData, fetchBlocksHistory } from './components/Blocks';
 import { CssBaseline, Grid, ThemeProvider, useMediaQuery } from '@mui/material';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import SidePanel from './components/SidePanel';
 import { useEffect, useState } from 'react';
 import Search from './components/Search';
 import BlockDetails from './components/BlockDetails';
 import About from './components/About';
 import { Socket, io } from 'socket.io-client';
+import ReactGA from 'react-ga4';
 
 export const IS_PRODUCTION = process.env.REACT_APP_ENV === "production";
 export const IP_ADDRESS = process.env.REACT_APP_IP;
@@ -26,7 +27,14 @@ function App() {
     return savedMode === 'true';
   });
   const theme = isDarkMode ? themes.dark : themes.light;
-  const toggleTheme = () => { setIsDarkMode(!isDarkMode); };
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+    ReactGA.event({
+      category: "Theme",
+      action: "Toggle",
+      label: isDarkMode ? "Light Mode" : "Dark Mode"
+    });
+  };
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   
   const [currentBlockNumber, setCurrentBlockNumber] = useState<number>(0);

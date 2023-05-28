@@ -1,5 +1,4 @@
 import { Typography, Box, Link } from '@mui/material';
-import { AwesomeButtonSocial } from "react-awesome-button";
 import { useTheme } from '@mui/material/styles';
 import ProfileCard from './ProfileCard';
 
